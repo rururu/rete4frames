@@ -109,9 +109,9 @@ Fact, associated with this variable, will be updated in the working memory with 
 Functions
 ----
 The functions section contains ordinary clojure function definitions optionally prepended with namespace definition (ns <namespace>)
-See examples of function definitions in example [waltz.clj] (https://github.com/rururu/rete/blob/master/examples/mab_cli.clj).
+See examples of function definitions in example [waltz.clj] (https://github.com/rururu/rete4frames/blob/master/examples/waltz.clj).
 
-Application program interface described in [API] (https://github.com/rururu/rete).
+Application program interface described in [API] (https://github.com/rururu/rete4frames/blob/master/doc/api.md).
 
 Copyright © 2013 Ruslan Sorokin.
 

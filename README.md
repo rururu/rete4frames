@@ -26,7 +26,9 @@ To get the results run in REPL:
 (in-ns 'rete.core)
 (-main "run:asynch" "examples/manners.clj" "examples/manners_f8.clj")
 ```
-For further information see [Documentation] (https://github.com/rururu/rete/blob/master/doc/intro.md)
+The benchmark table for Waltz algorithm is in [Waltz Benchmark Table] (https://github.com/rururu/rete4frames/blob/master/doc/waltz_benchmark.md)
+
+For further information see [Documentation] (https://github.com/rururu/rete4frames/blob/master/doc/intro.md)
 
 Copyright and license
 ----
