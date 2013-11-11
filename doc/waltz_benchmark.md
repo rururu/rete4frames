@@ -1,18 +1,13 @@
-Rete for Frames
-====
 
-Clojure RETE implementation for frames
-
-Manners Benchmark Table
+Waltz Benchmark Table
 ----
 
 <table>
 <tr><td>Test</td><td>CLIPS (msec)</td><td>rete (msec)</td><td>factor</td></tr>
-<tr><td>manners8</td><td>1.4</td><td>65</td><td>x 46</td></tr>
-<tr><td>manners16</td><td>18</td><td>244</td><td>x 14</td></tr>
-<tr><td>manners32</td><td>264</td><td>1412</td><td>x 5</td></tr>
-<tr><td>manners64</td><td>9030</td><td>9588</td><td>x 1</td></tr>
-<tr><td>manners128</td><td>320036</td><td>98637</td><td>x 0.3</td></tr>
+<tr><td>waltz12</td><td>2025</td><td>181174</td><td>x 90</td></tr>
+<tr><td>waltz25</td><td>10400</td><td>686950</td><td>x 66</td></tr>
+<tr><td>waltz37</td><td>28035</td><td>1479687</td><td>x 53</td></tr>
+<tr><td>waltz50</td><td>66215</td><td>2677225</td><td>x 40</td></tr>
 </table>
 
 Test results obtained on the same hardware.
@@ -24,7 +19,7 @@ To get the results run in REPL:
 ```
 (require 'rete.core)
 (in-ns 'rete.core)
-(-main "run:asynch" "examples/manners.clj" "examples/manners_f8.clj")
+(-main "run:asynch" "examples/waltz.clj" "examples/waltz_f12.clj")
 ```
 For further information see [Documentation] (https://github.com/rururu/rete/blob/master/doc/intro.md)
 

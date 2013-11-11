@@ -1,0 +1,10 @@
+value:
+ ?: {? {? {? {? 33}}}}
+solution:
+ ?: {? {? {zebra {? {? 26}}, ? {water {? 28}, ? {? 27}}}}}
+avh:
+ smokes: {kools {? 20}, parliaments {? 18}, lucky-strikes {? 15}, chesterfields {? 13}, old-golds {? 8}}
+ drink: {water {? 23}, orange-juice {? 16}, tea {? 11}, milk {? 7}, coffee {? 6}}
+ pet: {zebra {? 24}, horse {? 19}, fox {? 14}, snails {? 9}, dog {? 3}}
+ color: {blue {? 22}, yellow {? 21}, green {? 5}, ivory {? 4}, red {? 1}}
+ nationality: {japanese {? 17}, norwegian {? 12}, ukrainian {? 10}, spaniard {? 2}, englishman {? 0}}
