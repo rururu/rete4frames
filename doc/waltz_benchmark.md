@@ -12,7 +12,6 @@ Waltz Benchmark Table
 
 Test results obtained on the same hardware.
 As can be seen from the results, rete initially far behind and then starts to catch up CLIPS.
-On the most difficult test rete three times superior to CLIPS.
 
 To get the results run in REPL:
 
@@ -21,11 +20,5 @@ To get the results run in REPL:
 (in-ns 'rete.core)
 (-main "run:asynch" "examples/waltz.clj" "examples/waltz_f12.clj")
 ```
-For further information see [Documentation] (https://github.com/rururu/rete/blob/master/doc/intro.md)
+For further information see [Documentation] (https://github.com/rururu/rete4frames/blob/master/doc/intro.md)
 
-Copyright and license
-----
-
-Copyright © 2013 Ruslan Sorokin.
-
-Licensed under the EPL (see the file epl.html).
