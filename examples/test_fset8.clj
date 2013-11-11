@@ -1,5 +1,0 @@
-((boiler status hot)
-(boiler valve open)
-(tube status hot)
-(tube valve open)
-(context state test2))
