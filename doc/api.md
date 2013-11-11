@@ -1,8 +1,11 @@
 # Application Program Interface (API)
 
-1. 	(-main <modes> <application-file>)
-	(-main <modes> <application-file> <facts-file>)
-	
+1.Function -main
+----
+```
+(-main <modes> <application-file>)
+(-main <modes> <application-file> <facts-file>)
+```
 	Run the application. 
 	<application-file> - string - a path to a file containing a list of templates, rules, functions and facts.
 	<facts-file> - string - a path to a file containing a list of facts. If used, this list of facts replaces the list of facts from the <application-file>.
