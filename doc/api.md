@@ -75,7 +75,7 @@ Assert a fact into the working memory.
 (retract-fact <fact-id>
 ```
 Retract a facct from the working memory.
--fact-id (integer) - index of the fact in the working memory.
+- fact-id (integer) - index of the fact in the working memory.
 
 ### 10. Function fire ###
 ```
