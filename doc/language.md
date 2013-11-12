@@ -13,9 +13,9 @@ Facts can be loaded into the application from a separate file.
 
 Frames, Facts and Patterns
 ----
-The frame is the basic concept for the representation of knowledge in the language. It is used to represent the facts and patterns of facts.
+The frame is a basic concept for the representation of knowledge in the language. It is used to represent the facts and patterns of facts.
 The frame has a type and slots. The slot has  a name and a value. The frame represented as a list. 
-First element of the list is the type of the frame. Other elements of the list are the slot names and values alternately:
+First element of the list is the type of the frame. Other elements of the list are slot names and values alternately:
 ```
 (type slot1 value1 slot2 value2 ... )
 ```
@@ -60,7 +60,7 @@ The name is a symbol or a string.
 The salience(priority) is an integer number, positive or negative.
 Conditions are bare patterns or patterns with tests. 
 Function calls are calls to ordinary Clojure functions and also calls to functions "asser", "retract" and "modify".
-The rule "fires" when all conditions are fulfiled. In this case all function calls accomplished consecutively.
+The rule "fires" when all conditions are fulfilled. In this case all function calls accomplished consecutively.
 Example of the rule:
 ```
 (walk-holding-object 0
@@ -82,8 +82,8 @@ The condition is a bare patterns or a pattern with test.
 If some condition contains a test the test is a last element of the list.
 The test is a predicate call or a list of tests or a vector of tests.
 The predicate is any Clojure function that returns true or false values, and also nil and not nil values that can be considered as true and false.
-The list of test is interpreted as conjunction of tests. The vector of tests is interpreted as disjunction of tests.
-The condition is fulfiled if the pattern is match some fact and the test returns true or not nil value. 
+The list of tests is interpreted as conjunction of tests. The vector of tests is interpreted as disjunction of tests.
+The condition is fulfilled if the pattern is match some fact and the test returns true or not nil value. 
 If the test is absent, the pattern matching is sufficient for the condition fulfilment.
 The condition can be preceded with a variable which is used in a right hand side of rule in calls to functions "modify" and "retract".
 A value of the such variable is a fact that have been matched with the pattern.
