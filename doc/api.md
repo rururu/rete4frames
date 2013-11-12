@@ -1,7 +1,6 @@
-Application Program Interface (API)
-----
-1.Function -main
---
+# Application Program Interface (API) #
+
+## 1.Function -main ##
 ```
 (-main <modes> <application-file>)
 (-main <modes> <application-file> <facts-file>)
