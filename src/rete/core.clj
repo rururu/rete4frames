@@ -737,8 +737,8 @@
 
 (defn fact-list []
   "List of facts"
-  (filter #(not= % '(nil))
-          (for [i (range (get-glo :FCNT))](frame-by-id i))))
+  (filter #(not= (second %) nil)
+          (for [i (range (get-glo :FCNT))](cons i (frame-by-id i)))))
           
 (defn facts []
   (let [fl (fact-list)]
