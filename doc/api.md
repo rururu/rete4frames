@@ -17,9 +17,9 @@ Run the application.
 	
 In the modes with the tracing in a root directory are created three files:
 	
- alpha-net-plan.txt	 - describes alpha part of the rete network.
- beta-net-plan.txt	 - describes beta part of the rete network.
- alpha-beta-links.txt - describes the links between alpha part and beta part of the rete network.
+- alpha-net-plan.txt	 - describes alpha part of the rete network.
+- beta-net-plan.txt	 - describes beta part of the rete network.
+- alpha-beta-links.txt - describes the links between alpha part and beta part of the rete network.
 	
 ### 2.Function facts ###
 ```
