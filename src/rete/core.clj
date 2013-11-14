@@ -6,21 +6,27 @@
 (declare GLOMEM)
   
 (defn get-glo [k]
+  "Get from global memory (HashMap cell)"
   (.get GLOMEM k))
 
 (defn put-glo [k v]
+  "Put to global memory (HashMap cell)"
   (.put GLOMEM k v))
 
 (defn concat-glo [k v]
+  "Concat to global memory (HashMap cell)"
   (.put GLOMEM k (concat v (.get GLOMEM k))))
 
 (defn filter-glo [k fn]
+  "Filter global memory (HashMap cell)"
   (.put GLOMEM k (filter fn (.get GLOMEM k))))
 
 (defn inc-glo [k]
+  "Add 1 to global memory (HashMap cell)"
   (.put GLOMEM k (inc (.get GLOMEM k))))
 
 (defn assoc-glo [m k v]
+  "Assoc with global memory (HashMap cell)"
   (.put GLOMEM m (assoc (.get GLOMEM m) k v)))
 
 (def TRACE nil)
@@ -38,9 +44,11 @@
   (rest condition))
 
 (defn vari? [x]
+  "Is x variable?"
   (and (symbol? x) (.startsWith (name x) "?")))
 
 (defn func? [sym]
+  "Is symbol function?"
   (if (resolve sym) sym))
 
 (defn prod-name [prod]
@@ -78,6 +86,7 @@
 	condition))
 
 (defn mk-typmap [frame]
+  "Create Typmap (list of type and map) from frame (list of type and keys with values)"
   (let [[typ & rst] frame
         mp (apply hash-map rst)]
     (list typ mp)))
@@ -786,9 +795,7 @@
       (let [los (first ss)]
         (if (symbol? los)
           (recur (inc i) (nnext ss) (assoc mp los i) (conj nlhs (first (next ss))))
-          (if (func? (first los))
-            (recur i (next ss) mp (conj nlhs los))
-            (recur (inc i) (next ss) mp (conj nlhs los)) ) ))
+          (recur (inc i) (next ss) mp (conj nlhs los))))
       [nlhs mp])))
       
 (defn trans-rhs

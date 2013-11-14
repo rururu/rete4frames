@@ -23,7 +23,7 @@ In the modes with the tracing in a root directory are created three files:
 	
 ### 2.Function facts ###
 ```
-(fact)
+(facts)
 ```
 Pretty prints a list of facts in a working memory.
 
