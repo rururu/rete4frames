@@ -805,13 +805,16 @@
    (loop [ss rhs nrhs []]
      (if (seq ss)
        (cond
+         (= (ffirst ss) 'asser)
+           (recur (next ss) (conj nrhs
+             (cons 'rete.core/asser (rest (first ss)))))
          (= (ffirst ss) 'retract)
            (recur (next ss) (conj nrhs 
-             (cons 'retract (cons ':FIDS 
+             (cons 'rete.core/retract (cons ':FIDS 
                (map #(mp %) (rest (first ss))) ) )))
          (= (ffirst ss) 'modify)
            (recur (next ss) (conj nrhs 
-             (cons 'modify (cons ':FIDS
+             (cons 'rete.core/modify (cons ':FIDS
                 (cons (mp (first (rest (first ss))))
                   (nnext (first ss))) ) )))
          true
