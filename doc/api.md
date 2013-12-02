@@ -74,17 +74,26 @@ Assert a fact into the working memory.
 ```
 (retract-fact <fact-id>
 ```
-Retract a facct from the working memory.
+Retract a fact from the working memory.
 - fact-id (integer) - index of the fact in the working memory.
 
-### 10. Function fire ###
+### 10. Function modify-fact ###
+```
+(modify-fact <fact-id> <slot-value-map>)
+```
+Modify a fact in the working memory.
+- fact-id (integer) - index of the fact in the working memory.
+- <slot-value-map> - map of slots and their values.
+During modification the old fact is deleted and a new fact created with the changed values ​​of slots according to map.
+
+### 11. Function fire ###
 ```
 (fire <number>)
 (fire)
 ```
 Fire a number of active rules. If the number is ommited fire till the very end.
 
-### 11. Function reset ###
+### 12. Function reset ###
 ```
 (reset)
 ```

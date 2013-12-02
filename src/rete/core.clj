@@ -529,7 +529,6 @@
   "Evaluation for right hand side"
   ;;(println [:EVAL-THEN-MP mp expr])
   (cond
-    (vector? expr)(vec (map #(eval-then-mp mp %) expr))
     (seq? expr) (apply (resolve (first expr)) (map #(eval-then-mp mp %) (rest expr)))
     true (or (mp expr) expr)))
 
