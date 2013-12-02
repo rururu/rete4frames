@@ -528,9 +528,9 @@
 (defn eval-then-mp [mp expr]
   "Evaluation for right hand side"
   ;;(println [:EVAL-THEN-MP mp expr])
-  (cond
-    (seq? expr) (apply (resolve (first expr)) (map #(eval-then-mp mp %) (rest expr)))
-    true (or (mp expr) expr)))
+  (if (seq? expr)
+    (apply (resolve (first expr)) (map #(eval-then-mp mp %) (rest expr)))
+    (or (mp expr) expr)))
 
 (defn fire-resolved [reso]
   "Fire resolved production"

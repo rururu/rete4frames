@@ -83,7 +83,7 @@ Retract a fact from the working memory.
 ```
 Modify a fact in the working memory.
 - fact-id (integer) - index of the fact in the working memory.
-- <slot-value-map> - map of slots and their values.
+- slot-value-map - map of slots and their values.
 During modification the old fact is deleted and a new fact created with the changed values ​​of slots according to map.
 
 ### 11. Function fire ###
