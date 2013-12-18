@@ -11,7 +11,7 @@ Manners Benchmark Table
 <tr><td>manners8</td><td>1.4</td><td>54</td><td>x 39</td></tr>
 <tr><td>manners16</td><td>18</td><td>194</td><td>x 11</td></tr>
 <tr><td>manners32</td><td>264</td><td>1133</td><td>x 4</td></tr>
-<tr><td>manners64</td><td>9030</td><td>7974</td><td>x 0.0</td></tr>
+<tr><td>manners64</td><td>9030</td><td>7974</td><td>x 0.9</td></tr>
 <tr><td>manners128</td><td>320036</td><td>84685</td><td>x 0.26</td></tr>
 </table>
 
