@@ -285,6 +285,7 @@
   (def =AMEM= (object-array (get-glo :ACNT)))
   (def =BMEM= (object-array =BCNT=))
   (def =FMEM= (create-fmem =TEMPL=))
+  (def =FMMB= (create-fmem =TEMPL=))
   (def =FIDS= (HashMap.))
   (put-glo :CFSET nil)
   (put-glo :FCNT 0))
@@ -296,33 +297,37 @@
     (let [msk (=TEMPL= typ)
           fmem (.get =FMEM= typ)
           f-cnt (get-glo :FCNT)]
-      (mk-fact msk fmem mp)
+      (mk-fact typ mp msk fmem nil)
       (let [fcnt2 (get-glo :FCNT)] 
         (if (> fcnt2 f-cnt)
           (concat (list typ mp) (list (dec fcnt2))) ) )))
-  ([msk fmem mp]
-    ;;(println [:MK-FACT msk fmem mp])
+  ([typ mp msk fmem bkhm]
+    ;;(println [:MK-FACT typ mp msk fmem bhm])
     (let [val (mp (first msk))
           msk2 (rest msk)
           fmem2 (.get fmem val)]
       (cond 
         (empty? msk2)
           (if (nil? fmem2)
-            (let [k (or val '?)]
-              (.put fmem k (get-glo :FCNT))
-              (inc-glo :FCNT)))
+            (let [k (or val '?)
+                  fid (get-glo :FCNT)
+                  bmem (.get =FMMB= typ)]
+              (inc-glo :FCNT)
+              (.put fmem k fid)
+              (.put bmem fid (cons [k fmem] bkhm))))
         (nil? val)
           (if-let [fmem3 (.get fmem '?)]
-            (mk-fact msk2 fmem3 mp)
+            (mk-fact typ mp msk2 fmem3 (cons ['? fmem] bkhm))
             (let [fmem3 (HashMap.)]
               (.put fmem '? fmem3)
-              (mk-fact msk2 fmem3 mp)))
+              (mk-fact typ mp msk2 fmem3 (cons ['? fmem] bkhm))))
         (nil? fmem2)
-          (let [fmem3 (HashMap.)]
-            (.put fmem (or val '?) fmem3)
-            (mk-fact msk2 fmem3 mp))
+          (let [fmem3 (HashMap.)
+                k (or val '?)]
+            (.put fmem k fmem3)
+            (mk-fact typ mp msk2 fmem3 (cons [k fmem] bkhm)))
         true 
-          (mk-fact msk2 fmem2 mp)))))
+          (mk-fact typ mp msk2 fmem2 (cons [val fmem] bkhm))))))
 
 (defn amem
   "Return an alpha memory cell for a given index <i>"
@@ -593,63 +598,45 @@
             (if (or (= eix 'i) (= eix 'x))
               (recur ni))) )) )))
                
-(defn frame-by-id
+(defn frame-by-id [fid]
   "Extracts frame for fact id from facts memory"
-  ([fid]
-    (let [vals (frame-by-id =FMEM= fid)
-          typ (first vals)
-          slots (=TEMPL= typ)
-          pairs (interleave slots (rest vals))]
-      (cons typ pairs)))
-  ([fmem fid]
-    (loop [keyl (.keySet fmem)]
-      (if (seq keyl)
-        (let [key (first keyl)
-              fmem2 (.get fmem key)
-              res
-                (cond
-                  (number? fmem2)
-                    (if (= fmem2 fid) [key])
-                  (not (nil? fmem2))
-                    (if-let [fmem3 (frame-by-id fmem2 fid)]
-                      (cons key fmem3)))]
-          (if (nil? res)
-            (recur (rest keyl))
-            res)) )) ))
+  (loop [ks (.keySet =FMMB=)]
+    (if (seq ks)
+      (let [typ (first ks)
+            ff (.get =FMMB= typ)]
+        (if-let [bkhm (.get ff fid)]
+          (let [vv (map first bkhm)]
+            (cons typ (interleave (=TEMPL= typ) (reverse vv))))
+          (recur (rest ks))) ) )))
+
+(defn typmapfids
+  "List of facts [for given type] in form: (typ {slot-value-map} fact-id)"
+  ([]
+   (mapcat typmapfids (.keySet =FMMB=)))
+  ([typ]
+   (for [[fid bkhm] (.get =FMMB= typ)]
+     (let [vv (map first bkhm)]
+       (list typ (zipmap (=TEMPL= typ) (reverse vv)) fid)) ) ))
             
-(defn remove-fmem
+(defn remove-fmem [fid]
   "Remove fact from facts memory by fact id.
    Returns typmap of removed fact"
-  ([fid]
-    ;;(println [:REMOVE-FMEM fid])
-    (loop [tt (.keySet =FMEM=)]
-      (if (seq tt)
-        (let [typ (first tt)
-              msk (=TEMPL= typ)
-              [ufmem rvv] (remove-fmem typ =FMEM= (.get =FMEM= typ) fid 0)]
-          (if (nil? ufmem)
-            (recur (rest tt))
-            (list typ (apply hash-map (interleave msk (rest rvv))) ))) )))
-  ([skey sfmem fmem fid cnt]
-    ;;(println [:REMOVE-FMEM skey sfmem fmem fid])
-    (loop [keyl (.keySet fmem)]
-      (if (seq keyl)
-        (let [key (first keyl)
-              val (.get fmem key)
-              [ufmem rvv]
-                (if (number? val)
-                  (if (= val fid)
-                    (do (.remove fmem key)
-                      [fmem [key]])
-                    [nil nil])
-                  (remove-fmem key fmem val fid (inc cnt)))]
-          (if (nil? ufmem)
-            (recur (rest keyl))
-            (do
-              (if (and (.isEmpty ufmem) (> cnt 0))
-                (.remove sfmem skey)
-                (.put sfmem skey ufmem))
-              [sfmem (cons skey rvv)]))) ))))
+  (loop [ks (.keySet =FMMB=)]
+    (if (seq ks)
+      (let [typ (first ks)
+            ff (.get =FMMB= typ)]
+        (if-let [bkhm (.get ff fid)]
+          (let [[k hm] (first bkhm)]
+            (.remove hm k)
+            (loop [khm (rest bkhm) vv (list k)]
+              (if (seq khm)
+                (let [[k hm] (first khm)]
+                  (if (.isEmpty (.get hm k))
+                    (.remove hm k))
+                  (recur (rest khm) (cons k vv)))
+                (do (.remove ff fid)
+                  (list typ (zipmap (=TEMPL= typ) vv))))))
+          (recur (rest ks))) ) )))
 
 (defn retract-fact [fid]
   "Retract fact for given fact-id by removing it from alpha, beta and fact memory,
