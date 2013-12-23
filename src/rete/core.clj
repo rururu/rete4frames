@@ -550,7 +550,7 @@
   ([typ mp]
     (let [msk (=TEMPL= typ)
           ant (get (get-glo :ANET) typ)]
-      (a-indices msk ant mp)))
+      (set (a-indices msk ant mp))))
   ([msk ant mp]
     ;;(println [:A-INDICES msk ant mp])
     (cond 

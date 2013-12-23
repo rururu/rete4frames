@@ -1,4 +1,3 @@
-(load-file "src/rete/core.clj")
 (-main "trace:asynch" "examples/test.clj")
 (load-file "src/rete/core.clj")
 (-main "trace:asynch" "examples/test.clj")
@@ -498,3 +497,4 @@
 (-main "run:asynch" "examples/manners.clj" "examples/manners_f32.clj")
 (-main "run:asynch" "examples/manners.clj" "examples/manners_f64.clj")
 (-main "run:asynch" "examples/manners.clj" "examples/manners_f128.clj")
+(-main "run:asynch" "examples/waltz.clj" "examples/waltz_f12.clj")
