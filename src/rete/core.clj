@@ -782,37 +782,53 @@
           (recur (inc i) (next ss) mp (conj nlhs los))))
       [nlhs mp])))
 
-(defn qq [aa]
+(defn qq [aa vars]
+  "Add call to quote for symbols not variables"
   (let [f1 (fn [x]
              (if (and (symbol? x)
-                      (not (vari? x)))
+                      (not (or (vari? x) (some #{x} vars))))
                (list 'quote x)
                x))]
     (map f1 aa)))
 
-(defn trans-rhs
+(defn trans-asser [x vars]
+  (cons 'rete.core/asser (qq (rest x) vars)))
+
+(defn trans-retract [x mp]
+  (cons 'rete.core/retract
+        (cons '?fids
+               (map #(mp %) (rest x)) ) ))
+
+(defn trans-modify [x vars mp]
+  (cons 'rete.core/modify
+        (cons '?fids
+                (cons (mp (first (rest x)))
+                      (qq (nnext x) vars)) ) ))
+
+(declare trans-rhs)
+
+(defn trans-let [x vars mp]
+  (let [binds (second x)
+        pairs (partition 2 binds)
+        vars2 (map first pairs)
+        vars3 (concat vars vars2)]
+    (cons 'let
+          (cons binds (trans-rhs (nnext x) vars3 mp)))))
+
+(defn trans-rhs [x vars mp]
   "Translate right hand side of rule by replacing in retract and modify statements
    labels of left hand side statements with their indexes using corresponding map"
-   [rhs mp]
-   (loop [ss rhs nrhs []]
-     (if (seq ss)
-       (cond
-         (= (ffirst ss) 'asser)
-           (recur (next ss) (conj nrhs
-             (cons 'rete.core/asser (qq (rest (first ss))))))
-         (= (ffirst ss) 'retract)
-           (recur (next ss) (conj nrhs
-             (cons 'rete.core/retract (cons '?fids
-               (map #(mp %) (qq (rest (first ss))) )) )))
-         (= (ffirst ss) 'modify)
-           (recur (next ss) (conj nrhs
-             (cons 'rete.core/modify (cons '?fids
-                (cons (mp (first (rest (first ss))))
-                  (qq (nnext (first ss))) )) )))
-         true
-           (recur (next ss) (conj nrhs
-             (first ss))))
-       nrhs)))
+  ;;(println [:TRANS-RHS x vars mp])
+  (cond
+   (list? x)
+     (condp = (first x)
+      'asser (trans-asser x vars)
+      'retract (trans-retract x mp)
+      'modify (trans-modify x vars mp)
+      'let (trans-let x vars mp)
+      (map #(trans-rhs % vars mp) x))
+   (vector? x) (vec (map #(trans-rhs % vars mp) x))
+   true x))
 
 (defn trans-rule
   "Translate rule by translating lhs and rhs of rule"
@@ -822,7 +838,7 @@
         lsd (lhs rule)
         rsd (rhs rule)
         [lsd2 mp] (trans-lhs lsd)
-        rsd2 (trans-rhs rsd mp)]
+        rsd2 (trans-rhs rsd nil mp)]
     (concat [nam] [sal] lsd2 ['=>] rsd2)))
 
 (declare RULES FACTS)
