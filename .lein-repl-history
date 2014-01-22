@@ -1,6 +1,3 @@
-(load-file "src/rete/core.clj")
-(-main "run:synch" "examples/manners2.clj" "examples/manners_f128.clj")
-(load-file "src/rete/core.clj")
 (-main "run:synch" "examples/manners2.clj" "examples/manners_f128.clj")
 (load-file "src/rete/core.clj")
 (-main "run:synch" "examples/manners2.clj" "examples/manners_f128.clj")
@@ -498,3 +495,6 @@ ex
 (-main "run:asynch" "examples/waltz.clj" "examples/waltz_f50.clj")
 (-main "run:asynch" "examples/zebra.clj")
 (-main "run:synch" "examples/zebra.clj")
+(-main "run:asynch" "examples/manners.clj" "examples/manners_f128.clj")
+(-main "run:asynch" "examples/waltz.clj")
+(-main "run:asynch" "examples/mab.clj")

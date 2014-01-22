@@ -104,7 +104,7 @@ Facts, associated with these variables, will be removed from the working memory 
 The function "modify" has a first argument representing  a fact variable from the left hand side of the rule. Rest arguments are slots and their new values.
 Fact, associated with this variable, will be updated in the working memory with new values of slots during its execution.
 
-Remark: Because Clojure functions can not have more than 20 parametrs, you can split rules with more then 20 variables in left hand side on several rules with the same right hand side. See [zebra.clj] (https://github.com/rururu/rete4frames/blob/master/examples/zebra.clj) example.
+Remark: Because Clojure functions can not have more than 20 parametrs, you can split rules with more then 20 variables in the right hand side on several rules with the same left hand side. See [zebra.clj] (https://github.com/rururu/rete4frames/blob/master/examples/zebra.clj) example.
 
 Functions
 ----

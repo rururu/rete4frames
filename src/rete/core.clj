@@ -533,13 +533,6 @@
           'x (exit-a-action bi pattern tail b-mem a-mem)
           'ex (enex-a-action bi pattern tail a-mem))) )))
 
-(defn eval-then-mp [mp expr]
-  "Evaluation for right hand side"
-  ;;(println [:EVAL-THEN-MP mp expr])
-  (if (seq? expr)
-    (apply (resolve (first expr)) (map #(eval-then-mp mp %) (rest expr)))
-    (or (mp expr) expr)))
-
 (defn var-vals [mp vals]
   "take values from map mp in order of list of keys"
   (map #(mp %) vals))
