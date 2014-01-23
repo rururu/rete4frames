@@ -144,13 +144,13 @@
   (asser solution pet zebra house ?p5))
 
 (who-owns-zebra 0
-  (solution nationality ?n house ?h (not (vari? ?n)))
+  (solution nationality ?n house ?h (not (nil? ?n)))
   (solution pet zebra house ?h)
   =>
   (println (str ?n " owns the zebra")))
 
 (who-dtinks-water 0
-  (solution nationality ?n house ?h (not (vari? ?n)))
+  (solution nationality ?n house ?h (not (nil? ?n)))
   (solution drink water house ?h)
   =>
   (println (str ?n " drinks water")))

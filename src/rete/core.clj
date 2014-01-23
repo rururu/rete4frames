@@ -145,21 +145,6 @@
           (and (map? ant2) (seq msk2))
             (a-indexof-pattern msk2 ant2 mp))) )))
 
-(defn mk-pattern-and-test [condition]
-  "Make pattern or test"
-  ;;(println [:MK-PATTERN-AND-TEST condition])
-  (let [[p & aa] condition]
-    (let [[frame test]
-            (if (even? (count condition))
-              [(butlast condition) (last condition)]
-              [condition nil])
-            patt (concat (mk-typmap frame) [test])
-            apid (a-indexof-pattern patt)]
-        (list apid patt))))
-
-(defn enl [lst]
-  (map cons (range (count lst)) lst))
-
 (defn collect-vars
   "Returns vector of variables in expression"
   ([ex]
@@ -172,10 +157,61 @@
     (vari? ex) (cons ex yet)
     true yet)))
 
+(defn qq [aa vars]
+  "Add call to quote for symbols not variables"
+  (let [f1 (fn [x]
+             (if (and (symbol? x)
+                      (not (or (vari? x) (some #{x} vars))))
+               (list 'quote x)
+               x))]
+    (map f1 aa)))
+
+(defn and-or [x]
+  "Translate list-vector form of condition to and-or form"
+  (cond
+   (list? x)
+     (cond
+      (= (first x) 'not-exists) (cons 'rete.core/not-exists (qq (rest x) nil))
+      (symbol? (first x)) (cons (first x) (qq (rest x) nil))
+      true (cons 'and (map and-or x)))
+   (vector? x) (cons 'or (map and-or x))
+   true x))
+
+(defn mk-test-func [tst vrs]
+  (let [aof (and-or tst)
+        df (list 'fn vrs aof)]
+    (if TRACE (println [:TEST-FUNCTION df]))
+    (let [cf (eval df)]
+      (if TRACE (println [:COMPILED cf]))
+      cf)))
+
+(defn mk-pattern-and-test [condition]
+  "Make pattern or test"
+  ;;(println [:MK-PATTERN-AND-TEST condition])
+  (let [[p & aa] condition]
+    (let [[frame test]
+            (if (even? (count condition))
+              [(butlast condition) (last condition)]
+              [condition nil])
+          rst (if test
+                (let [vrs (collect-vars test)]
+                  [vrs (mk-test-func test vrs)])
+                [nil nil])
+          patt (concat (mk-typmap frame) rst)
+          apid (a-indexof-pattern patt)]
+        (list apid patt))))
+
+(defn enl [lst]
+  "Add numbers to lists"
+  (map cons (range (count lst)) lst))
+
 (defn mk-rhs-func [vrs rhs]
   "Create function from vector of variables and right hand side"
   (let [df (cons 'fn (cons vrs rhs))]
-    (eval df)))
+    (if TRACE (println [:RHS-FUNCTION df]))
+    (let [cf (eval df)]
+      (if TRACE (println [:COMPILED cf]))
+      cf)))
 
 (defn beta-net-plan
   "Create a plan of the beta net that will be used to its building.
@@ -191,6 +227,7 @@
              (rhs %))
            pset)))
   ([pname sal lhs rhs]
+    (if TRACE (println [:PRODUCTION pname]))
     (let [pts (map mk-pattern-and-test lhs)
           fir (concat (first pts) [pname])
           mid (butlast (rest pts))
@@ -355,50 +392,9 @@
   "Set a beta memory cell with a value <v> for a given index <i>"
   (aset =BMEM= i v))
 
-(declare eval-exp)
-
-(defn andf [test ctx]
-  (if (empty? test)
-    true
-    (if (eval-exp (first test) ctx)
-      (andf (rest test) ctx)
-      false)))
-
-(defn orf [test ctx]
-  (if (empty? test)
-    false
-    (if (eval-exp (first test) ctx)
-      true
-      (orf (rest test) ctx))))
-
-(defn eval-exp [exp ctx]
-  "Evaluate expression with respect to ctx = variable-value map"
-  ;;(println [:EVAL-EXP exp ctx (seq? exp) (vector? exp)])
-  (cond
-    (vector? exp)
-      (orf exp ctx)
-    (seq? exp)
-      (let [func (first exp)]
-        (if (symbol? func)
-          (apply (resolve func) (map #(eval-exp % ctx) (rest exp)))
-          (andf exp ctx)))
-    (number? exp)
-      exp
-    true
-      (or (ctx exp) exp)))
-
-(defn apply-test
-  "Apply <test> to context <ctx> that is calculate arguments of the test
-   with respect to variable values in the context and apply a function
-   on predicate place of the test to these arguments"
-  [test ctx]
-  ;;(println [:APPLY-TEST test :CTX (count ctx)])
-  (try
-    (eval-exp test ctx)
-    (catch Exception ex
-      (println [:EXCEPTION-EVAL :TEST test :ON ctx])
-      (println ex)
-      nil)))
+(defn var-vals [mp vals]
+  "take values from map mp in order of list of keys"
+  (map #(mp %) vals))
 
 (defn match [p f ctx]
   "Match two atoms against context"
@@ -415,16 +411,16 @@
 
 (defn match-ctx [fact pattern ctx bi]
   "Match fact with pattern with respect to context"
-  ;; (println [:MATCH-CTX :FACT fact]) ;; :PATTERN pattern :CTX ctx :BI bi])
+  ;;(println [:MATCH-CTX :FACT fact :PATTERN pattern :CTX ctx :BI bi])
   (let [[ftyp fmp fid] fact
-        [ptyp pmp test] pattern]
+        [ptyp pmp vrs func] pattern]
     (if (= ftyp ptyp)
       (if-let [ctx2 (loop [msk (=TEMPL= ftyp) xtc ctx]
                       (if (and xtc (seq msk))
                         (let [ms1 (first msk)]
                           (recur (rest msk) (match (pmp ms1) (fmp ms1) xtc)))
                         xtc))]
-        (if (or (nil? test) (apply-test test ctx2))
+        (if (or (nil? func) (apply func (var-vals ctx2 vrs)))
           (let [ctx3 (assoc ctx2 '?fids (cons fid ('?fids ctx2)))
                 fids (.get =FIDS= fid)]
             (if (not (some #{bi} fids))
@@ -437,7 +433,6 @@
 
 (defn fact-id [fact]
   "Get id of fact"
-  ;;(println [:FID fact])
   (nth fact 2))
 
 (defn add-to-confset
@@ -532,10 +527,6 @@
           'i (inter-a-action bi pattern b-mem a-mem)
           'x (exit-a-action bi pattern tail b-mem a-mem)
           'ex (enex-a-action bi pattern tail a-mem))) )))
-
-(defn var-vals [mp vals]
-  "take values from map mp in order of list of keys"
-  (map #(mp %) vals))
 
 (defn fire-resolved [reso]
   "Fire resolved production"
@@ -782,15 +773,6 @@
           (recur (inc i) (next ss) mp (conj nlhs los))))
       [nlhs mp])))
 
-(defn qq [aa vars]
-  "Add call to quote for symbols not variables"
-  (let [f1 (fn [x]
-             (if (and (symbol? x)
-                      (not (or (vari? x) (some #{x} vars))))
-               (list 'quote x)
-               x))]
-    (map f1 aa)))
-
 (defn trans-asser [x vars]
   (cons 'rete.core/asser (qq (rest x) vars)))
 
@@ -818,9 +800,9 @@
 (defn trans-rhs [x vars mp]
   "Translate right hand side of rule by replacing in retract and modify statements
    labels of left hand side statements with their indexes using corresponding map"
-  ;;(println [:TRANS-RHS x vars mp])
+  ;;(println [:TRANS-RHS x (type x) vars mp])
   (cond
-   (list? x)
+   (seq? x)
      (condp = (first x)
       'asser (trans-asser x vars)
       'retract (trans-retract x mp)

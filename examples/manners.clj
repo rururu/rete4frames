@@ -27,7 +27,7 @@
             seat 1)
    (modify ?cnt c (inc ?c))
    (println (str "seat 1 " ?n " " ?n " 1 " ?c " 0 1")))
-  
+
 (Mann-Find-Seating
   0
   ?ctx (context state assign_seats)
@@ -44,7 +44,7 @@
            sex ?s2
            hobby ?h1
     ((not= ?s1 ?s2)
-     (not-exists Path id ?id 
+     (not-exists Path id ?id
   		   name ?g2)
      (not-exists Chosen id ?id
   		   name ?g2
@@ -59,7 +59,7 @@
            id ?c
            pid ?id
            path_done no)
-  (asser Path id ?c 
+  (asser Path id ?c
   		   name ?g2
            seat (inc ?seat2))
   (asser Chosen id ?id
@@ -82,7 +82,7 @@
   (asser Path id ?id
   		   name ?n1
            seat ?s))
-  
+
 (Mann-Path-Done
   0
   ?ctx (context state make_path)
@@ -90,7 +90,7 @@
   =>
   (modify ?ctx state check_done)
   (modify ?sea path_done yes))
-  
+
 (Mann-Are-We-Done
   1
   ?ctx (context state check_done)
@@ -99,7 +99,7 @@
   =>
   (modify ?ctx state print_results)
   (println "Yes, we are done!!"))
-  
+
 (Mann-Continue
   0
   ?ctx (context state check_done)
@@ -116,8 +116,8 @@
             seat  ?s)
   =>
   (retract ?pth)
-  (println (str ?n " " ?s)))      
-  
+  (println (str ?n " " ?s)))
+
 (Mann-All-Done
   0
   (context state print_results)
@@ -149,5 +149,5 @@
 (Last seat 8)
 (Count c 1)
 (context state start)
-))  
-  
+))
+

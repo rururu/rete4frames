@@ -1,14 +1,16 @@
-chest:
- ?: {? {? 46}}
-monkey:
- ?: {floor {? 64, blank 62}, ladder {blank 29}, ? {blank 78, ? 84}}
-thing:
- ladder: {? {? {? 28}, floor {? 24}}}
- ?: {? {ceiling {light 27}, floor {? 12}, ? {? 85, light 54}}}
-goal-is-to:
- eat: {? {? 83}}
- on: {? {? 79}, floor {? 65}}
- walk-to: {? {? 63}}
- move: {? {? 55}}
- hold: {blank {? 42}, ? {? 39}}
- unlock: {? {? 14}}
+Last:
+ ?: 19
+Path:
+ ?: {? {? 20}}
+Seating:
+ ?: {? {? {? {? {? {? 18, no 12, yes 4}}}}}}
+Count:
+ ?: 7
+Guest:
+ ?: {? {? 6}}
+context:
+ print_results: 21
+ check_done: 16
+ make_path: 11
+ assign_seats: 3
+ start: 0
