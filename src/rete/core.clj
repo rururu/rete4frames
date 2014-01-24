@@ -786,6 +786,12 @@
         (cons '?fids
                 (cons (mp (first (rest x)))
                       (qq (nnext x) vars)) ) ))
+(defn destruct [v]
+  "Destructuring support: collect symbols inside vectors"
+  (cond
+   (vector? v) (mapcat destruct v)
+   (= v '&) []
+   true [v]))
 
 (declare trans-rhs)
 
@@ -793,9 +799,10 @@
   (let [binds (second x)
         pairs (partition 2 binds)
         vars2 (map first pairs)
-        vars3 (concat vars vars2)]
+        vars3 (mapcat destruct (vec vars2))
+        vars4 (concat vars vars3)]
     (cons 'let
-          (cons binds (trans-rhs (nnext x) vars3 mp)))))
+          (cons binds (trans-rhs (nnext x) vars4 mp)))))
 
 (defn trans-rhs [x vars mp]
   "Translate right hand side of rule by replacing in retract and modify statements
