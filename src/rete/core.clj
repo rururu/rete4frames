@@ -151,7 +151,7 @@
    (vec (set (collect-vars ex nil))))
   ([ex yet]
    (cond
-    (and (or (seq? ex) (vector? ex))
+    (and (or (seq? ex) (vector? ex) (= (type ex) clojure.lang.PersistentHashSet))
          (not (empty? ex)))
       (collect-vars (first ex) (collect-vars (rest ex) yet))
     (vari? ex) (cons ex yet)
