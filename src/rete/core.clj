@@ -725,9 +725,22 @@
           (for [i (range (get-glo :FCNT))](cons i (frame-by-id i)))))
 
 (defn facts []
+  "Prints facts"
   (let [fl (fact-list)]
     (doall (map println fl))
     (count fl)))
+
+(defn ppr [typ]
+  "Pretty prints facts of type typ or all facts when typ = :all"
+  (let [all (fact-list)
+        sel (if (= typ :all) all (filter #(= (second %) typ) all))]
+    (doseq [fact sel]
+      (println)
+      (let [[[n typ] & rp] (partition-all 2 fact)]
+        (println (str "Fact" n " " typ))
+        (doseq [sv rp]
+          (println (str "  " (first sv) " " (second sv))) )) )
+    (count sel)))
 
 (defn run-synch
  [tset pset fset]
@@ -801,7 +814,7 @@
         vars2 (map first pairs)
         vars3 (mapcat destruct (vec vars2))
         vars4 (concat vars vars3)]
-    (cons 'let
+    (cons (first x)
           (cons binds (trans-rhs (nnext x) vars4 mp)))))
 
 (defn trans-rhs [x vars mp]
@@ -815,6 +828,9 @@
       'retract (trans-retract x mp)
       'modify (trans-modify x vars mp)
       'let (trans-let x vars mp)
+      'if-let (trans-let x vars mp)
+      'when-let (trans-let x vars mp)
+      'loop (trans-let x vars mp)
       (map #(trans-rhs % vars mp) x))
    (vector? x) (vec (map #(trans-rhs % vars mp) x))
    true x))
