@@ -1,33 +1,21 @@
 (ns rete.core
   (:use clojure.java.io)
   (:import java.util.HashMap)
-  (:gen-class))
+  (:gen-class
+    :name rete.core
+    :methods [#^{:static true} [reteApp [String String] void]
+              #^{:static true} [reteAppString [String String] void]
+              #^{:static true} [reteAppFacts [String String String] void]
+              #^{:static true} [reteAppStringFacts [String String String] void]
+              #^{:static true} [allFacts [] java.util.HashMap]
+              #^{:static true} [factsOfType [String] clojure.lang.Cons]
+              #^{:static true} [assertFact [String java.util.HashMap] void]
+              #^{:static true} [fireAll [] void]
+              #^{:static true} [fire [int] void]
+              #^{:static true} [trace [] void]
+              #^{:static true} [untrace [] void]]))
 
-(declare GLOMEM)
-
-(defn get-glo [k]
-  "Get from global memory (HashMap cell)"
-  (.get GLOMEM k))
-
-(defn put-glo [k v]
-  "Put to global memory (HashMap cell)"
-  (.put GLOMEM k v))
-
-(defn concat-glo [k v]
-  "Concat to global memory (HashMap cell)"
-  (.put GLOMEM k (concat v (.get GLOMEM k))))
-
-(defn filter-glo [k fn]
-  "Filter global memory (HashMap cell)"
-  (.put GLOMEM k (filter fn (.get GLOMEM k))))
-
-(defn inc-glo [k]
-  "Add 1 to global memory (HashMap cell)"
-  (.put GLOMEM k (inc (.get GLOMEM k))))
-
-(defn assoc-glo [m k v]
-  "Assoc with global memory (HashMap cell)"
-  (.put GLOMEM m (assoc (.get GLOMEM m) k v)))
+(declare =TEMPL= ACNT ANET)
 
 (def TRACE nil)
 
@@ -70,8 +58,8 @@
 (defn acnt
   "Alpha memory count calculated during creation of the alpha net and used for creation of the alpha memory"
   []
-  (let [ac (get-glo :ACNT)]
-    (inc-glo :ACNT)
+  (let [ac @ACNT]
+    (swap! ACNT inc)
     ac))
 
 (defn merge-lst [ls1 ls2]
@@ -91,8 +79,6 @@
         mp (apply hash-map rst)]
     (list typ mp)))
 
-(declare =TEMPL=)
-
 (defn add-anet-entry
   "If condition in a left hand side of a rule is a pattern (not test with a function on the predicate place)
    adds a new entry to the map representing the alpha net.
@@ -101,9 +87,9 @@
     ;;(println [:ADD-ANET-ENTRY :COND condition])
     (let [[typ mp] (mk-typmap (template condition))
           msk (=TEMPL= typ)
-          ant (or (get (get-glo :ANET) typ) {})]
+          ant (or (get @ANET typ) {})]
       (if (seq msk)
-        (assoc-glo :ANET typ (add-anet-entry msk ant mp)) ) ))
+        (swap! ANET assoc typ (add-anet-entry msk ant mp)) ) ))
   ([msk ant mp]
     ;;(println [:ADD-ANET-ENTRY msk ant mp])
     (if (seq msk)
@@ -131,7 +117,7 @@
     ;;(println [:A-INDEXOF-PATTERN :PATTERN pattern])
     (let [[typ mp] pattern
           msk (=TEMPL= typ)
-          ant (get (get-glo :ANET) typ)]
+          ant (get @ANET typ)]
       (a-indexof-pattern msk ant mp)))
   ([msk ant mp]
     (if (seq msk)
@@ -290,8 +276,8 @@
   [tset pset]
   (try
     (def GLOMEM (HashMap.))
-    (put-glo :ANET {})
-    (put-glo :ACNT 0)
+    (def ANET (atom {}))
+    (def ACNT (atom 0))
     (if TRACE (println ".... Creating TEMPLATES for Pset ...."))
     (def =TEMPL=
       (apply hash-map (mapcat #(list (first %) (rest %)) tset)))
@@ -299,17 +285,17 @@
     (anet-for-pset pset)
     (if TRACE (println ".... Creating BNET PLAN for Pset ...."))
     (def =BPLAN= (beta-net-plan pset))
-    (def =ABLINK= (object-array (get-glo :ACNT)))
+    (def =ABLINK= (object-array @ACNT))
     (def =BCNT= (count =BPLAN=))
     (def =BNET= (object-array =BCNT=))
     (fill-bnet =BNET= =BPLAN=)
     (fill-ablink =ABLINK= =BPLAN=)
     (reset)
     (when TRACE
-      (log-rete (get-glo :ANET) =BPLAN= =ABLINK=)
+      (log-rete @ANET =BPLAN= =ABLINK=)
       (println ".... Log Files Created ....")
       (println ".... RETE Created and Reset ...."))
-    [(get-glo :ACNT) =BCNT=]
+    [@ACNT =BCNT=]
     (catch Throwable twe
       (println twe)
       nil)))
@@ -322,13 +308,13 @@
 
 (defn reset []
   "Reset: clear and initialize all memories"
-  (def =AMEM= (object-array (get-glo :ACNT)))
+  (def =AMEM= (object-array @ACNT))
   (def =BMEM= (object-array =BCNT=))
   (def =FMEM= (create-fmem =TEMPL=))
   (def =FMMB= (create-fmem =TEMPL=))
   (def =FIDS= (HashMap.))
-  (put-glo :CFSET nil)
-  (put-glo :FCNT 0))
+  (def CFSET (atom nil))
+  (def FCNT (atom 0)))
 
 (defn mk-fact
   "Make fact"
@@ -336,9 +322,9 @@
     ;;(println [:MK-FACT typ mp])
     (let [msk (=TEMPL= typ)
           fmem (.get =FMEM= typ)
-          f-cnt (get-glo :FCNT)]
+          f-cnt @FCNT]
       (mk-fact typ mp msk fmem nil)
-      (let [fcnt2 (get-glo :FCNT)]
+      (let [fcnt2 @FCNT]
         (if (> fcnt2 f-cnt)
           (concat (list typ mp) (list (dec fcnt2))) ) )))
   ([typ mp msk fmem bkhm]
@@ -350,9 +336,9 @@
         (empty? msk2)
           (if (nil? fmem2)
             (let [k (or val '?)
-                  fid (get-glo :FCNT)
+                  fid @FCNT
                   bmem (.get =FMMB= typ)]
-              (inc-glo :FCNT)
+              (swap! FCNT inc)
               (.put fmem k fid)
               (.put bmem fid (cons [k fmem] bkhm))))
         (nil? val)
@@ -442,7 +428,7 @@
   [aprod match-list]
   ;;(println [:ADD-TO-CONFSET :APROD aprod]) ;; :MATCH-LIST match-list])
   (let [alist (map #(list aprod %) match-list)]
-    (concat-glo :CFSET alist)))
+    (swap! CFSET concat alist)))
 
 (defn only-old-facts [ai new-fid]
   "Take alpha memory cell content and excludes new fact if appropriate"
@@ -539,7 +525,7 @@
   "For an asserted typmap find all suitable alpha memory cells"
   ([typ mp]
     (let [msk (=TEMPL= typ)
-          ant (get (get-glo :ANET) typ)]
+          ant (get @ANET typ)]
       (set (a-indices msk ant mp))))
   ([msk ant mp]
     ;;(println [:A-INDICES msk ant mp])
@@ -639,7 +625,7 @@
       (doseq [ai ais]
         (set-amem ai (doall (remove #(= (fact-id %) fid) (amem ai)) ) ))
       (retract-b fid (.get  =FIDS= fid))
-      (filter-glo :CFSET #(not (some #{fid} ('?fids (second %)))))
+      (reset! CFSET (filter #(not (some #{fid} ('?fids (second %)))) @CFSET))
       (.remove  =FIDS= fid)
       frame)))
 
@@ -683,13 +669,13 @@
 (defn fire
   "Fire!"
   ([]
-    (while (not (empty? (get-glo :CFSET)))
+    (while (not (empty? @CFSET))
       (fire 1)))
   ([n]
     (dotimes [i n]
-      (if (not (empty? (get-glo :CFSET)))
-        (let [[reso & remain] (sort-by #(- (salience (first %))) (get-glo :CFSET))]
-          (put-glo :CFSET remain)
+      (if (not (empty? @CFSET))
+        (let [[reso & remain] (sort-by #(- (salience (first %))) @CFSET)]
+          (reset! CFSET remain)
           (fire-resolved reso)) ) )))
 
 (defn asser
@@ -722,7 +708,7 @@
 (defn fact-list []
   "List of facts"
   (filter #(not= (second %) nil)
-          (for [i (range (get-glo :FCNT))](cons i (frame-by-id i)))))
+          (for [i (range @FCNT)](cons i (frame-by-id i)))))
 
 (defn facts []
   "Prints facts"
@@ -896,5 +882,84 @@
         (run-with-modes (first args) trufs facts))
     2 (run-with-modes (first args) (read-string (slurp (second args))))
     (println "Number of arguments: 2 or 3, see documentation!")))
+
+(defn frames-of-type [typ]
+  "Extracts frames for type of fact from facts memory"
+  (let [ff (.get =FMMB= typ)
+        ks (.keySet ff)]
+    (for [k ks]
+      (let [bkhm (.get ff k)
+            vv (map first bkhm)]
+        (cons typ (interleave (=TEMPL= typ) (reverse vv)))))))
+
+(defn symbol-if [s]
+  "Convert string into symbol if it begins with quote symbol"
+  (if (.startsWith s "'")
+    (symbol (.substring s 1))
+    s))
+
+;;------------------------ Java Interface ------------------------------;;
+
+(defn -reteApp [modes trff-path-url]
+  "Callable from Java function - run rete4frames with modes on templates, rules, functions and facts from file on trff-path or -url"
+  (let [trff (slurp trff-path-url)]
+    (run-with-modes modes (read-string trff))))
+
+(defn -reteAppString [modes trff]
+  "Callable from Java function - run rete4frames with modes on templates, rules, functions and facts from string trff"
+  (run-with-modes modes (read-string trff)))
+
+(defn -reteAppFacts [modes trf-path-url f-path-url]
+  "Callable from Java function - run rete4frames with modes on templates, rules and functions from file on trf-path or -url, facts from f-path or -url"
+  (let [trf (slurp trf-path-url)
+        f (slurp f-path-url)]
+    (run-with-modes modes (read-string trf) (read-string f))))
+
+(defn -reteAppStringFacts [modes trf f-path-url]
+  "Callable from Java function - run rete4frames with modes on templates, rules and functions from string trf, facts from from f-path or -url"
+  (let [f (slurp f-path-url)]
+    (run-with-modes modes (read-string trf) (read-string f))))
+
+(defn -assertFact [typ slot-value-hm]
+  "Callable from Java function - assert fact in form of type and HashMaps of slot values"
+  (let [mp (into {} slot-value-hm)
+        mp2 (reduce-kv #(assoc %1 (symbol %2) (symbol-if %3)) {} mp)]
+    (activate-a (ais-for-frame (symbol typ) mp2))))
+
+(defn -fireAll []
+  "Callable from Java function - fire rules while exist activations"
+  (fire))
+
+(defn -fire [n]
+  "Callable from Java function - fire rules n times"
+  (fire n))
+
+(defn -trace []
+  "Callable from Java function - swith on tracing"
+  (trace))
+
+(defn -untrace []
+  "Callable from Java function - swith on tracing"
+  (untrace))
+
+(defn -factsOfType [typ]
+  "Callable from Java function - collection of HashMaps representing facts of specific type"
+  (seq (for [fot (frames-of-type (symbol typ))]
+    (let [hm (HashMap.)]
+      (doseq [[k v] (partition 2 (rest fot))]
+        (.put hm (name k) v))
+      hm))))
+
+(defn -allFacts []
+  "Callable from Java function - HashMap with keys of existing facts and vlues of collection of HashMaps representing facts of those type"
+  (let [ks (.keySet =FMMB=)
+        ksn (map name ks)
+        hm (HashMap.)]
+    (doseq [kn ksn]
+      (if-let [fot (seq (-factsOfType kn))]
+        (.put hm kn fot)))
+    hm))
+
+
 
 

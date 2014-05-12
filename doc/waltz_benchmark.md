@@ -3,15 +3,14 @@ Waltz Benchmark Table
 ----
 
 <table>
-<tr><td>Test</td><td>CLIPS (msec)</td><td>rete (msec)</td><td>factor</td></tr>
-<tr><td>waltz12</td><td>2025</td><td>80991</td><td>x 40</td></tr>
-<tr><td>waltz25</td><td>10400</td><td>296088</td><td>x 28</td></tr>
-<tr><td>waltz37</td><td>28035</td><td>628024</td><td>x 22</td></tr>
-<tr><td>waltz50</td><td>66215</td><td>1167842</td><td>x 18</td></tr>
+<tr><td>Test</td><td>CLIPS (msec)</td><td>rete4frames (msec)</td><td>factor</td></tr>
+<tr><td>waltz12</td><td>2258</td><td>91195</td><td>x 40</td></tr>
+<tr><td>waltz25</td><td>10270</td><td>346225</td><td>x 34</td></tr>
+<tr><td>waltz37</td><td>23912</td><td>713376</td><td>x 30</td></tr>
+<tr><td>waltz50</td><td>45312</td><td>1307099</td><td>x 29</td></tr>
 </table>
 
-Test results obtained on the same hardware 18 december 2013.
-As can be seen from the results, rete initially far behind and then starts to catch up CLIPS.
+Test results obtained on the same hardware OS (Linus Mint, Petra) 12 may 2014.
 
 To get the results run in REPL:
 
