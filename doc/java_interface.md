@@ -1,9 +1,9 @@
 ## Java Interface ##
 
 Java interface consists of static methods in rete.core class.
-```
+<b>
 Important note: you need to put your calls of rete.core methods into Var.pushThreadBindings()/ Var.popThreadBindings() wrapper to prevent exception on modification of namespace variable *ns* from root. See example in [Eclipse project] (https://github.com/rururu/rete4frames/blob/master/Rete4framesEclipseTest/src/test/ReteTest.java).
-```
+</b>
 
 ### 1. static void rete.core.reteApp(String modes, String trff-path-or-url) ###
 
