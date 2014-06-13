@@ -1,43 +1,14 @@
 (ns rete.core
   (:use clojure.java.io)
-  (:import java.util.HashMap)
-  (:gen-class
-    :name rete.core
-    :methods [#^{:static true} [reteApp [String String] void]
-              #^{:static true} [reteAppString [String String] void]
-              #^{:static true} [reteAppFacts [String String String] void]
-              #^{:static true} [reteAppStringFacts [String String String] void]
-              #^{:static true} [allFacts [] java.util.HashMap]
-              #^{:static true} [factsOfType [String] clojure.lang.Cons]
-              #^{:static true} [assertFact [String java.util.HashMap] void]
-              #^{:static true} [fireAll [] void]
-              #^{:static true} [fire [int] void]
-              #^{:static true} [trace [] void]
-              #^{:static true} [untrace [] void]]))
+  (:import java.util.HashMap))
 
-(declare =TEMPL= ACNT ANET)
+(declare TEMPL ACNT ANET AMEM)
 
 (def TRACE nil)
-
-(defn throw-mess [mess]
-  "Throw message"
-  (Throwable. (str mess)))
-
-(defn pred [condition]
-  "Get predicate of condition"
-  (first condition))
-
-(defn args [condition]
-  "Get arguments of condition"
-  (rest condition))
 
 (defn vari? [x]
   "Is x variable?"
   (and (symbol? x) (.startsWith (name x) "?")))
-
-(defn func? [sym]
-  "Is symbol function?"
-  (if (resolve sym) sym))
 
 (defn prod-name [prod]
   "Get name of production"
@@ -55,23 +26,49 @@
   "Get right hand side of production"
   (rest (drop-while #(not (=  % '=>)) prod)))
 
-(defn acnt
-  "Alpha memory count calculated during creation of the alpha net and used for creation of the alpha memory"
-  []
-  (let [ac @ACNT]
-    (swap! ACNT inc)
-    ac))
+(defn dissoc-in
+  "Dissociates an entry from a nested associative structure returning a new
+  nested structure. keys is a sequence of keys. Any empty maps that result
+  will not be present in the new structure. (clojure.incubator)"
+  [m [k & ks :as keys]]
+  (if ks
+    (if-let [nextmap (get m k)]
+      (let [newmap (dissoc-in nextmap ks)]
+        (if (seq newmap)
+          (assoc m k newmap)
+          (dissoc m k)))
+      m)
+    (dissoc m k)))
 
-(defn merge-lst [ls1 ls2]
-  "Merge two lists"
-  (seq (set (concat ls1 ls2))))
+(defn templ-map [slots]
+  "Created sorted map from list of slots with '? values"
+  (let [itl (interleave slots (repeat '?))]
+    (apply sorted-map itl)))
+
+(defn mapmem-put [typ mp value mem]
+  "Put into tree-like from map made memory"
+  (let [templ (TEMPL typ)
+        canon (cons typ (seq (merge templ mp)))]
+    (reset! mem (assoc-in @mem canon value))))
+
+(defn mapmem-get [typ mp mem]
+  "Get from tree-like from map made memory"
+  (let [templ (TEMPL typ)
+        canon (cons typ (seq (merge templ mp)))]
+    (get-in @mem canon)))
+
+(defn mapmem-rem [typ mp mem]
+  "Remove from tree-like from map made memory"
+  (let [templ (TEMPL typ)
+        canon (cons typ (seq (merge templ mp)))]
+    (reset! mem (dissoc-in @mem canon))))
 
 (defn template
   "Select template part of condition"
   [condition]
   (if (even? (count condition))
-	(butlast condition)
-	condition))
+    (butlast condition)
+    condition))
 
 (defn mk-typmap [frame]
   "Create Typmap (list of type and map) from frame (list of type and keys with values)"
@@ -79,28 +76,19 @@
         mp (apply hash-map rst)]
     (list typ mp)))
 
+(defn univars [cond]
+  "Reduces all different variables to '?"
+  (map #(if (vari? %) '? %) cond))
+
 (defn add-anet-entry
   "If condition in a left hand side of a rule is a pattern (not test with a function on the predicate place)
-   adds a new entry to the map representing the alpha net.
-   If test contains call to 'not-exist', for its args also adds entries"
+  adds a new entry to the map representing the alpha net.@
+  If test contains call to 'not-exist', for its args also adds entries"
   ([condition]
-    ;;(println [:ADD-ANET-ENTRY :COND condition])
-    (let [[typ mp] (mk-typmap (template condition))
-          msk (=TEMPL= typ)
-          ant (or (get @ANET typ) {})]
-      (if (seq msk)
-        (swap! ANET assoc typ (add-anet-entry msk ant mp)) ) ))
-  ([msk ant mp]
-    ;;(println [:ADD-ANET-ENTRY msk ant mp])
-    (if (seq msk)
-      (let [val (mp (first msk))
-            k (if (or (nil? val) (vari? val)) '? val)
-            ant2 (or (ant k) {})
-            msk2 (rest msk)]
-        (assoc ant k
-          (if (seq msk2)
-            (add-anet-entry msk2 ant2 mp)
-            (acnt))) ) )))
+   (let [[typ mp] (mk-typmap (univars (template condition)))]
+     (when (nil? (mapmem-get typ mp ANET))
+       (mapmem-put typ mp @ACNT ANET)
+       (swap! ACNT inc)))))
 
 (defn anet-for-pset
   "Build the alpha net for the given production set (rule set) <pset> as a map"
@@ -111,25 +99,11 @@
 		(if TRACE (println [:condition condition]))
 	    (add-anet-entry condition)) ))
 
-(defn a-indexof-pattern
+(defn a-indexof-pattern [pattern]
   "Find an alpha memory cell index for a pattern from a left hand side of some rule"
-  ([pattern]
-    ;;(println [:A-INDEXOF-PATTERN :PATTERN pattern])
-    (let [[typ mp] pattern
-          msk (=TEMPL= typ)
-          ant (get @ANET typ)]
-      (a-indexof-pattern msk ant mp)))
-  ([msk ant mp]
-    (if (seq msk)
-      (let [val (mp (first msk))
-            k (if (or (nil? val) (vari? val)) '? val)
-            ant2 (ant k)
-            msk2 (rest msk)]
-        (cond
-          (and (number? ant2) (empty? msk2))
-            ant2
-          (and (map? ant2) (seq msk2))
-            (a-indexof-pattern msk2 ant2 mp))) )))
+  ;;(println [:A-INDEXOF-PATTERN :PATTERN pattern])
+  (let [[typ mp] (mk-typmap (univars pattern))]
+    (mapmem-get typ mp ANET)))
 
 (defn collect-vars
   "Returns vector of variables in expression"
@@ -184,7 +158,7 @@
                   [vrs (mk-test-func test vrs)])
                 [nil nil])
           patt (concat (mk-typmap frame) rst)
-          apid (a-indexof-pattern patt)]
+          apid (a-indexof-pattern (template condition))]
         (list apid patt))))
 
 (defn enl [lst]
@@ -275,108 +249,49 @@
   "Create RETE from a production set and reset"
   [tset pset]
   (try
-    (def GLOMEM (HashMap.))
     (def ANET (atom {}))
     (def ACNT (atom 0))
     (if TRACE (println ".... Creating TEMPLATES for Pset ...."))
-    (def =TEMPL=
-      (apply hash-map (mapcat #(list (first %) (rest %)) tset)))
+    (def TEMPL
+      (apply hash-map (mapcat #(list (first %) (templ-map (rest %))) tset)))
     (if TRACE (println ".... Creating ANET PLAN for Pset ...."))
     (anet-for-pset pset)
     (if TRACE (println ".... Creating BNET PLAN for Pset ...."))
-    (def =BPLAN= (beta-net-plan pset))
-    (def =ABLINK= (object-array @ACNT))
-    (def =BCNT= (count =BPLAN=))
-    (def =BNET= (object-array =BCNT=))
-    (fill-bnet =BNET= =BPLAN=)
-    (fill-ablink =ABLINK= =BPLAN=)
+    (def BPLAN (beta-net-plan pset))
+    (def ABLINK (object-array @ACNT))
+    (def BCNT (count BPLAN))
+    (def BNET (object-array BCNT))
+    (fill-bnet BNET BPLAN)
+    (fill-ablink ABLINK BPLAN)
     (reset)
     (when TRACE
-      (log-rete @ANET =BPLAN= =ABLINK=)
+      (log-rete @ANET BPLAN ABLINK)
       (println ".... Log Files Created ....")
       (println ".... RETE Created and Reset ...."))
-    [@ACNT =BCNT=]
+    [@ACNT BCNT]
     (catch Throwable twe
       (println twe)
       nil)))
 
-(defn create-fmem [templs]
-  (let [fmem (HashMap.)]
-    (doseq [[k v] (map #(list (first %) (HashMap.)) (seq templs))]
-      (.put fmem k v))
-    fmem))
-
 (defn reset []
   "Reset: clear and initialize all memories"
-  (def =AMEM= (object-array @ACNT))
-  (def =BMEM= (object-array =BCNT=))
-  (def =FMEM= (create-fmem =TEMPL=))
-  (def =FMMB= (create-fmem =TEMPL=))
-  (def =FIDS= (HashMap.))
+  (def AMEM (object-array @ACNT))
+  (def BMEM (object-array BCNT))
+  (def FIDS (HashMap.))
   (def CFSET (atom nil))
+  (def IDFACT (atom {}))
+  (def FMEM (atom {}))
   (def FCNT (atom 0)))
 
-(defn mk-fact
-  "Make fact"
-  ([typ mp]
-    ;;(println [:MK-FACT typ mp])
-    (let [msk (=TEMPL= typ)
-          fmem (.get =FMEM= typ)
-          f-cnt @FCNT]
-      (mk-fact typ mp msk fmem nil)
-      (let [fcnt2 @FCNT]
-        (if (> fcnt2 f-cnt)
-          (concat (list typ mp) (list (dec fcnt2))) ) )))
-  ([typ mp msk fmem bkhm]
-    ;;(println [:MK-FACT typ mp msk fmem bhm])
-    (let [val (mp (first msk))
-          msk2 (rest msk)
-          fmem2 (.get fmem val)]
-      (cond
-        (empty? msk2)
-          (if (nil? fmem2)
-            (let [k (or val '?)
-                  fid @FCNT
-                  bmem (.get =FMMB= typ)]
-              (swap! FCNT inc)
-              (.put fmem k fid)
-              (.put bmem fid (cons [k fmem] bkhm))))
-        (nil? val)
-          (if-let [fmem3 (.get fmem '?)]
-            (mk-fact typ mp msk2 fmem3 (cons ['? fmem] bkhm))
-            (let [fmem3 (HashMap.)]
-              (.put fmem '? fmem3)
-              (mk-fact typ mp msk2 fmem3 (cons ['? fmem] bkhm))))
-        (nil? fmem2)
-          (let [fmem3 (HashMap.)
-                k (or val '?)]
-            (.put fmem k fmem3)
-            (mk-fact typ mp msk2 fmem3 (cons [k fmem] bkhm)))
-        true
-          (mk-fact typ mp msk2 fmem2 (cons [val fmem] bkhm))))))
-
-(defn amem
-  "Return an alpha memory cell for a given index <i>"
-  [i]
-  (aget =AMEM= i))
-
-(defn set-amem [i v]
-  "Set an alpha memory cell with a value <v> for a given index <i>"
-  (aset =AMEM= i v))
-
-(defn bnet
-  "Returns a beta net cell (beta node) for a given index <i>"
-  [i]
-  (aget =BNET= i))
-
-(defn bmem
-  "Returns a beta memory cell for a given index <i>"
-  [i]
-  (aget =BMEM= i))
-
-(defn set-bmem [i v]
-  "Set a beta memory cell with a value <v> for a given index <i>"
-  (aset =BMEM= i v))
+(defn mk-fact [typ mp]
+  "Make fact. Returns new fact id or nil if same fact exists"
+  ;;(println [:MK-FACT typ mp])
+  (if (nil? (mapmem-get typ mp FMEM))
+    (let [fid @FCNT]
+      (mapmem-put typ mp fid FMEM)
+      (swap! IDFACT assoc fid [typ mp])
+      (swap! FCNT inc)
+      [typ mp fid])))
 
 (defn var-vals [mp vals]
   "take values from map mp in order of list of keys"
@@ -401,16 +316,16 @@
   (let [[ftyp fmp fid] fact
         [ptyp pmp vrs func] pattern]
     (if (= ftyp ptyp)
-      (if-let [ctx2 (loop [msk (=TEMPL= ftyp) xtc ctx]
+      (if-let [ctx2 (loop [msk (keys (TEMPL ftyp)) xtc ctx]
                       (if (and xtc (seq msk))
                         (let [ms1 (first msk)]
                           (recur (rest msk) (match (pmp ms1) (fmp ms1) xtc)))
                         xtc))]
         (if (or (nil? func) (apply func (var-vals ctx2 vrs)))
           (let [ctx3 (assoc ctx2 '?fids (cons fid ('?fids ctx2)))
-                fids (.get =FIDS= fid)]
+                fids (.get FIDS fid)]
             (if (not (some #{bi} fids))
-              (.put =FIDS= fid (cons bi fids)))
+              (.put FIDS fid (cons bi fids)))
             ctx3)) )) ))
 
 (defn match-ctx-list [facts pattern ctx bi]
@@ -433,7 +348,7 @@
 (defn only-old-facts [ai new-fid]
   "Take alpha memory cell content and excludes new fact if appropriate"
   ;;(println [:ONLY-OLD-FACTS ai new-fid])
-  (let [ofacts (amem ai)]
+  (let [ofacts (aget AMEM ai)]
     (cond
       (nil? new-fid) ofacts
       (= new-fid (fact-id (first ofacts))) (rest ofacts)
@@ -448,7 +363,7 @@
    already activated by a new fact with an index <new-fid>"
   [bi ctx-list new-fid]
   ;;(println [:ACTIVATE-B :BI bi :CTX-LIST ctx-list :NEW-FID new-fid])
-  (let [bnode (bnet bi)
+  (let [bnode (aget BNET bi)
         [eix bal pattern & tail] bnode]
     (let [ofacts (only-old-facts bal new-fid)
           ml (mk-match-list ofacts pattern ctx-list bi)]
@@ -457,7 +372,7 @@
         (condp = eix
           'x (add-to-confset tail ml)
           'i (do
-               (set-bmem bi (concat ml (bmem bi)))
+               (aset BMEM bi (concat ml (aget BMEM bi)))
                (activate-b (inc bi) ml nil))) ) )))
 
 (defn entry-a-action [bi pattern b-mem a-mem]
@@ -465,31 +380,31 @@
   ;;(println [:ENTRY-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :AMEM a-mem])
   (let [new-fact (first a-mem)
         ctx (match-ctx new-fact pattern {} bi)]
-    (set-bmem bi (cons ctx b-mem))
+    (aset BMEM bi (cons ctx b-mem))
     (activate-b (inc bi) (list ctx) (fact-id new-fact))))
 
 (defn inter-a-action [bi pattern b-mem a-mem]
   "Intermediate alpha activation"
   ;;(println [:INTER-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :AMEM a-mem])
-  (let [ctx-list (bmem (dec bi))]
+  (let [ctx-list (aget BMEM (dec bi))]
     (if (seq ctx-list)
       (let [new-fact (first a-mem)
             ml (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list))]
         (when (seq ml)
           ;; remember matching context for both a-nodes and n-nodes
-          (set-bmem bi (concat ml b-mem)))
+          (aset BMEM bi (concat ml b-mem)))
           ;; activate only a-nodes, not n-nodes
           (activate-b (inc bi) ml (fact-id new-fact))) )))
 
 (defn exit-a-action [bi pattern tail b-mem a-mem]
   "Exit alpha activation"
   ;;(println [:EXIT-A-ACTION :BI bi :PATTERN pattern :TAIL tail :AMEM a-mem])
-  (let [ctx-list (bmem (dec bi))]
+  (let [ctx-list (aget BMEM (dec bi))]
     (if (seq ctx-list)
       (let [ml (filter seq (map #(match-ctx (first a-mem) pattern % bi) ctx-list))]
         (when (seq ml)
           ;; remember matching context for both a-nodes and n-nodes, not for f-nodes
-          (set-bmem bi (concat ml b-mem)))
+          (aset BMEM bi (concat ml b-mem)))
           ;; add to conflicting set only for a-nodes and f-nodes, not for n-nodes
           (add-to-confset tail ml)) ) ))
 
@@ -504,9 +419,9 @@
   [ais]
   ;;(println [:ACTIVATE-A :AIS ais])
   (doseq [ai ais]
-    (let [ablinks (aget =ABLINK= ai)
-          bnms (map #(list % (bnet %) (bmem %)) ablinks)
-          a-mem (amem ai)]
+    (let [ablinks (aget ABLINK ai)
+          bnms (map #(list % (aget BNET %) (aget BMEM %)) ablinks)
+          a-mem (aget AMEM ai)]
       (doseq [[bi [eix bal pattern & tail] b-mem] bnms]
         (condp = eix
           'e (entry-a-action bi pattern b-mem a-mem)
@@ -521,41 +436,39 @@
     (if TRACE (println [:FIRE pn :CONTEXT ctx]))
     (apply func (var-vals ctx vars))))
 
-(defn a-indices
-  "For an asserted typmap find all suitable alpha memory cells"
-  ([typ mp]
-    (let [msk (=TEMPL= typ)
-          ant (get @ANET typ)]
-      (set (a-indices msk ant mp))))
-  ([msk ant mp]
-    ;;(println [:A-INDICES msk ant mp])
-    (cond
-      (number? ant) (list ant)
-      (not (or (empty? msk) (empty? ant)))
-        (let [val (mp (first msk))
-              msk2 (rest msk)
-              ant2 (ant val)
-              ant3 (ant '?)]
-          ;;(println [:ANT2 ant2 :ANT3 ant3])
-          (concat (a-indices msk2 ant2 mp)
-                  (a-indices msk2 ant3 mp))) )))
+(defn pair-match? [[smem vmem] [spat vpat]]
+  "Compare pairs: slot-value from fact memory and pattern. Value in pattern can be '?"
+  (and (= smem spat) (or (= '? vpat) (= vmem vpat))))
 
-(defn fact-exists?
+(defn pair-exists? [[kmem vmem] [kpat & smp]]
+  "Compare keys of pairs: [slot-value]-map/number from fact memory with [slot-value] keys from pattern"
+  (if (pair-match? kmem kpat)
+    (if (number? vmem)
+      vmem
+      (some #(pair-exists? % smp) (seq vmem)))))
+
+(defn fact-exists? [typmap]
   "Find existing fact id for arbitrary typmap"
-  ([typmap]
-    (let [[typ mp] typmap
-          msk (=TEMPL= typ)
-          fmem (.get =FMEM= typ)]
-      (fact-exists? msk fmem mp)))
-  ([msk fmem mp]
-    (cond
-      (and (empty? mp) (not (nil? fmem)))
-        true
-      (and (seq msk) (not (nil? fmem)))
-        (let [k (first msk)]
-          (if-let [val (mp k)]
-            (fact-exists? (rest msk) (.get fmem val) (dissoc mp k))
-            (some #(fact-exists? (rest msk) % mp) (.values fmem))) ) )))
+  (let [[typ mp] typmap
+        fmem (seq (@FMEM typ))
+        templ (TEMPL typ)
+        smp (seq (merge templ mp))]
+    (if fmem
+      (some #(pair-exists? % smp) fmem))))
+
+(defn a-branch [[apair amap] [fpair & smp]]
+  (if (pair-match? fpair apair)
+    (if (number? amap)
+      [amap]
+      (mapcat #(a-branch % smp) (seq amap)))))
+
+(defn a-indices [typ mp]
+  "For an asserted typmap find all suitable alpha memory cells"
+  ;;(println [:A-INDICES typ mp])
+  (let [tree (seq (@ANET typ))
+        templ (TEMPL typ)
+        smp (seq (merge templ mp))]
+    (mapcat #(a-branch % smp) tree)))
 
 (defn remove-ctx-with [fid ctxlist]
   "Remove context for given fact id"
@@ -567,52 +480,32 @@
   ;;(println [:RETRACT-B :FID fid :BIS bis])
   (doseq [bi bis]
     (loop [i bi]
-      (set-bmem i (remove-ctx-with fid (bmem i)))
+      (aset BMEM i (remove-ctx-with fid (aget BMEM i)))
       (let [ni (inc i)]
-        (if (< ni =BCNT=)
-          (let [eix (first (bnet ni))]
+        (if (< ni BCNT)
+          (let [eix (first (aget BNET ni))]
             (if (or (= eix 'i) (= eix 'x))
               (recur ni))) )) )))
 
 (defn frame-by-id [fid]
   "Extracts frame for fact id from facts memory"
-  (loop [ks (.keySet =FMMB=)]
-    (if (seq ks)
-      (let [typ (first ks)
-            ff (.get =FMMB= typ)]
-        (if-let [bkhm (.get ff fid)]
-          (let [vv (map first bkhm)]
-            (cons typ (interleave (=TEMPL= typ) (reverse vv))))
-          (recur (rest ks))) ) )))
+  (let [[typ mp] (@IDFACT fid)]
+    (cons typ (flatten (seq mp)))))
 
 (defn typmapfids
   "List of facts [for given type] in form: (typ {slot-value-map} fact-id)"
   ([]
-   (mapcat typmapfids (.keySet =FMMB=)))
+   (map #(let [[fid [typ mp]] %] [typ mp fid]) (seq @IDFACT)))
   ([typ]
-   (for [[fid bkhm] (.get =FMMB= typ)]
-     (let [vv (map first bkhm)]
-       (list typ (zipmap (=TEMPL= typ) (reverse vv)) fid)) ) ))
+   (filter #(= (first %) typ) (typmapfids))))
 
 (defn remove-fmem [fid]
   "Remove fact from facts memory by fact id.
    Returns typmap of removed fact"
-  (loop [ks (.keySet =FMMB=)]
-    (if (seq ks)
-      (let [typ (first ks)
-            ff (.get =FMMB= typ)]
-        (if-let [bkhm (.get ff fid)]
-          (let [[k hm] (first bkhm)]
-            (.remove hm k)
-            (loop [khm (rest bkhm) vv (list k)]
-              (if (seq khm)
-                (let [[k hm] (first khm)]
-                  (if (.isEmpty (.get hm k))
-                    (.remove hm k))
-                  (recur (rest khm) (cons k vv)))
-                (do (.remove ff fid)
-                  (list typ (zipmap (=TEMPL= typ) vv))))))
-          (recur (rest ks))) ) )))
+  (let [[typ mp] (@IDFACT fid)]
+    (mapmem-rem typ mp FMEM)
+    (swap! IDFACT dissoc fid)
+    (list typ mp)))
 
 (defn retract-fact [fid]
   "Retract fact for given fact-id by removing it from alpha, beta and fact memory,
@@ -623,10 +516,10 @@
           ais (a-indices typ mp)]
       (if TRACE (println [:<== [typ mp] :id fid]))
       (doseq [ai ais]
-        (set-amem ai (doall (remove #(= (fact-id %) fid) (amem ai)) ) ))
-      (retract-b fid (.get  =FIDS= fid))
+        (aset AMEM ai (doall (remove #(= (fact-id %) fid) (aget AMEM ai)) ) ))
+      (retract-b fid (.get  FIDS fid))
       (reset! CFSET (filter #(not (some #{fid} ('?fids (second %)))) @CFSET))
-      (.remove  =FIDS= fid)
+      (.remove  FIDS fid)
       frame)))
 
 (defn ais-for-frame
@@ -642,9 +535,9 @@
     (if-let [fact (mk-fact typ mp)]
       (when-let [ais (a-indices typ mp)]
         (if TRACE (println [:==> [typ mp] :id (fact-id fact)]))
-        ;; fill alpha nodes
+        ;; fill alpha node
         (doseq [ai ais]
-          (set-amem ai (cons fact (amem ai)) ))
+          (aset AMEM ai (cons fact (aget AMEM ai)) ))
         ais))))
 
 (defn assert-frame [frame]
@@ -873,8 +766,13 @@
         (run-with modes temps rules facts))
       (println (str "Wrong file format!")) ) ))
 
-(defn -main
-  "I don't do a whole lot ... yet."
+(defn frames-of-type [typ]
+  "Extracts frames for type of fact from facts memory"
+  (let [tmfs (typmapfids typ)]
+    (map #(let [[typ mp fid] %] (cons typ (flatten (seq mp)))) tmfs)))
+
+(defn app
+  "rete application function"
   [& args]
   (condp = (count args)
     3 (let [trufs (read-string (slurp (nth args 1)))
@@ -882,84 +780,5 @@
         (run-with-modes (first args) trufs facts))
     2 (run-with-modes (first args) (read-string (slurp (second args))))
     (println "Number of arguments: 2 or 3, see documentation!")))
-
-(defn frames-of-type [typ]
-  "Extracts frames for type of fact from facts memory"
-  (let [ff (.get =FMMB= typ)
-        ks (.keySet ff)]
-    (for [k ks]
-      (let [bkhm (.get ff k)
-            vv (map first bkhm)]
-        (cons typ (interleave (=TEMPL= typ) (reverse vv)))))))
-
-(defn symbol-if [s]
-  "Convert string into symbol if it begins with quote symbol"
-  (if (.startsWith s "'")
-    (symbol (.substring s 1))
-    s))
-
-;;------------------------ Java Interface ------------------------------;;
-
-(defn -reteApp [modes trff-path-url]
-  "Callable from Java function - run rete4frames with modes on templates, rules, functions and facts from file on trff-path or -url"
-  (let [trff (slurp trff-path-url)]
-    (run-with-modes modes (read-string trff))))
-
-(defn -reteAppString [modes trff]
-  "Callable from Java function - run rete4frames with modes on templates, rules, functions and facts from string trff"
-  (run-with-modes modes (read-string trff)))
-
-(defn -reteAppFacts [modes trf-path-url f-path-url]
-  "Callable from Java function - run rete4frames with modes on templates, rules and functions from file on trf-path or -url, facts from f-path or -url"
-  (let [trf (slurp trf-path-url)
-        f (slurp f-path-url)]
-    (run-with-modes modes (read-string trf) (read-string f))))
-
-(defn -reteAppStringFacts [modes trf f-path-url]
-  "Callable from Java function - run rete4frames with modes on templates, rules and functions from string trf, facts from from f-path or -url"
-  (let [f (slurp f-path-url)]
-    (run-with-modes modes (read-string trf) (read-string f))))
-
-(defn -assertFact [typ slot-value-hm]
-  "Callable from Java function - assert fact in form of type and HashMaps of slot values"
-  (let [mp (into {} slot-value-hm)
-        mp2 (reduce-kv #(assoc %1 (symbol %2) (symbol-if %3)) {} mp)]
-    (activate-a (ais-for-frame (symbol typ) mp2))))
-
-(defn -fireAll []
-  "Callable from Java function - fire rules while exist activations"
-  (fire))
-
-(defn -fire [n]
-  "Callable from Java function - fire rules n times"
-  (fire n))
-
-(defn -trace []
-  "Callable from Java function - swith on tracing"
-  (trace))
-
-(defn -untrace []
-  "Callable from Java function - swith on tracing"
-  (untrace))
-
-(defn -factsOfType [typ]
-  "Callable from Java function - collection of HashMaps representing facts of specific type"
-  (seq (for [fot (frames-of-type (symbol typ))]
-    (let [hm (HashMap.)]
-      (doseq [[k v] (partition 2 (rest fot))]
-        (.put hm (name k) v))
-      hm))))
-
-(defn -allFacts []
-  "Callable from Java function - HashMap with keys of existing facts and vlues of collection of HashMaps representing facts of those type"
-  (let [ks (.keySet =FMMB=)
-        ksn (map name ks)
-        hm (HashMap.)]
-    (doseq [kn ksn]
-      (if-let [fot (seq (-factsOfType kn))]
-        (.put hm kn fot)))
-    hm))
-
-
 
 
