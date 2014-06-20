@@ -180,3 +180,4 @@ FCNT
 (app "run:asynch" "examples/manners.clj" "examples/manners_f32.clj")
 (app "run:asynch" "examples/manners.clj" "examples/manners_f64.clj")
 (app "run:asynch" "examples/manners.clj" "examples/manners_f128.clj")
+(app "run:asynch" "examples/waltz.clj" "examples/waltz_f12.clj")

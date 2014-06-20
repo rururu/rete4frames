@@ -7,7 +7,7 @@ Manners Benchmark Table
 ----
 
 <table>
-<tr><td>Test</td><td>CLIPS (msec)</td><td>rete4frames (msec)</td><td>factor</td></tr>
+<tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames (msec)</td><td>factor</td></tr>
 <tr><td>manners8</td><td>1.4</td><td>85</td><td>x 61</td></tr>
 <tr><td>manners16</td><td>18</td><td>259</td><td>x 14</td></tr>
 <tr><td>manners32</td><td>266</td><td>1393</td><td>x 5</td></tr>
@@ -16,8 +16,9 @@ Manners Benchmark Table
 </table>
 
 Test results obtained on the same hardware and OS (Linux Mint, Petra) 13 june 2014.
-As can be seen from the results, rete4frames initially far behind and then starts to catch up CLIPS.
-On the most difficult test rete4frames more then two times superior to CLIPS.
+As can be seen from the results, rete4frames initially far behind and then starts to catch up CLIPS v 6.24.
+On the most difficult test rete4frames more then two times superior to CLIPS v 6.24.
+(I must say CLIPS 6.30 is two orders faster than 6.24)
 
 To get the results run in REPL:
 

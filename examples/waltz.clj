@@ -14,15 +14,8 @@
     (asser edge p1 ?p2 p2 ?p1 joined FALSE label NIL plotted NIL)
 	(retract ?l))
 
-(r-done-reversing1 -10
+(r-done-reversing -10
 	?s (stage value duplicate)
-	=>
-    (println (str " FIRE: done-reversing"))
-	(modify ?s value detect-junctions))
-
-(r-done-reversing2 0
-	?s (stage value done-reversing1
-        (not-exists line p1 ?p1 p2 ?p2))
 	=>
     (println (str " FIRE: done-reversing"))
 	(modify ?s value detect-junctions))
