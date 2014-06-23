@@ -1,6 +1,5 @@
 (ns rete.core
-  (:use clojure.java.io)
-  (:import java.util.HashMap))
+  (:use clojure.java.io))
 
 (declare TEMPL ACNT ANET AMEM)
 
@@ -48,19 +47,19 @@
 (defn mapmem-put [typ mp value mem]
   "Put into tree-like from map made memory"
   (let [templ (TEMPL typ)
-        canon (cons typ (seq (merge templ mp)))]
+        canon (cons typ (vals (merge templ mp)))]
     (reset! mem (assoc-in @mem canon value))))
 
 (defn mapmem-get [typ mp mem]
   "Get from tree-like from map made memory"
   (let [templ (TEMPL typ)
-        canon (cons typ (seq (merge templ mp)))]
+        canon (cons typ (vals (merge templ mp)))]
     (get-in @mem canon)))
 
 (defn mapmem-rem [typ mp mem]
   "Remove from tree-like from map made memory"
   (let [templ (TEMPL typ)
-        canon (cons typ (seq (merge templ mp)))]
+        canon (cons typ (vals (merge templ mp)))]
     (reset! mem (dissoc-in @mem canon))))
 
 (defn template
@@ -277,11 +276,11 @@
   "Reset: clear and initialize all memories"
   (def AMEM (object-array @ACNT))
   (def BMEM (object-array BCNT))
-  (def FIDS (HashMap.))
   (def CFSET (atom nil))
   (def IDFACT (atom {}))
   (def FMEM (atom {}))
-  (def FCNT (atom 0)))
+  (def FCNT (atom 0))
+  (def FIDS (atom {})))
 
 (defn mk-fact [typ mp]
   "Make fact. Returns new fact id or nil if same fact exists"
@@ -323,9 +322,9 @@
                         xtc))]
         (if (or (nil? func) (apply func (var-vals ctx2 vrs)))
           (let [ctx3 (assoc ctx2 '?fids (cons fid ('?fids ctx2)))
-                fids (.get FIDS fid)]
+                fids (get @FIDS fid)]
             (if (not (some #{bi} fids))
-              (.put FIDS fid (cons bi fids)))
+              (reset! FIDS (assoc @FIDS fid (cons bi fids))))
             ctx3)) )) ))
 
 (defn match-ctx-list [facts pattern ctx bi]
@@ -436,39 +435,37 @@
     (if TRACE (println [:FIRE pn :CONTEXT ctx]))
     (apply func (var-vals ctx vars))))
 
-(defn pair-match? [[smem vmem] [spat vpat]]
-  "Compare pairs: slot-value from fact memory and pattern. Value in pattern can be '?"
-  (and (= smem spat) (or (= '? vpat) (= vmem vpat))))
-
-(defn pair-exists? [[kmem vmem] [kpat & smp]]
-  "Compare keys of pairs: [slot-value]-map/number from fact memory with [slot-value] keys from pattern"
-  (if (pair-match? kmem kpat)
-    (if (number? vmem)
-      vmem
-      (some #(pair-exists? % smp) (seq vmem)))))
+(defn f-branch [[fval tree] [pval & vls]]
+  ;;(println [:F-BRANCH fval tree pval vls])
+  (if (or (= '? pval) (= fval pval))
+    (if (number? tree)
+      true
+      (some #(f-branch % vls) (seq tree)))))
 
 (defn fact-exists? [typmap]
   "Find existing fact id for arbitrary typmap"
+  ;;(println [:FACT-EXISTS typmap])
   (let [[typ mp] typmap
-        fmem (seq (@FMEM typ))
+        fmem (@FMEM typ)
         templ (TEMPL typ)
-        smp (seq (merge templ mp))]
+        vls (vals (merge templ mp))]
     (if fmem
-      (some #(pair-exists? % smp) fmem))))
+      (some #(f-branch % vls) (seq fmem)))))
 
-(defn a-branch [[apair amap] [fpair & smp]]
-  (if (pair-match? fpair apair)
-    (if (number? amap)
-      [amap]
-      (mapcat #(a-branch % smp) (seq amap)))))
+(defn a-branch [[aval tree] [fval & vls]]
+  ;;(println [:A-BRANCH aval tree fval vls])
+  (if (or (= '? aval) (= fval aval))
+    (if (number? tree)
+      [tree]
+      (mapcat #(a-branch % vls) (seq tree)))))
 
 (defn a-indices [typ mp]
   "For an asserted typmap find all suitable alpha memory cells"
   ;;(println [:A-INDICES typ mp])
-  (let [tree (seq (@ANET typ))
+  (let [tree (@ANET typ)
         templ (TEMPL typ)
-        smp (seq (merge templ mp))]
-    (mapcat #(a-branch % smp) tree)))
+        vls (vals (merge templ mp))]
+    (mapcat #(a-branch % vls) (seq tree))))
 
 (defn remove-ctx-with [fid ctxlist]
   "Remove context for given fact id"
@@ -517,9 +514,9 @@
       (if TRACE (println [:<== [typ mp] :id fid]))
       (doseq [ai ais]
         (aset AMEM ai (doall (remove #(= (fact-id %) fid) (aget AMEM ai)) ) ))
-      (retract-b fid (.get  FIDS fid))
+      (retract-b fid (get @FIDS fid))
       (reset! CFSET (filter #(not (some #{fid} ('?fids (second %)))) @CFSET))
-      (.remove  FIDS fid)
+      (reset! FIDS (dissoc @FIDS fid))
       frame)))
 
 (defn ais-for-frame
