@@ -1,14 +1,14 @@
 chest:
- [contents ?]: {[name ?] {[unlocked-by ?] 6}}
+ ?: {? {? 5}}
 monkey:
- [holding blank]: {[location ?] {[on-top-of floor] 16, [on-top-of ?] 12, [on-top-of ladder] 11}}
- [holding ?]: {[location ?] {[on-top-of floor] 17, [on-top-of ?] 3}}
+ blank: {? {floor 15, ? 11, ladder 10}}
+ ?: {? {floor 16, ? 2}}
 thing:
- [location ?]: {[name ladder] {[on-top-of ?] {[weight ?] 10}, [on-top-of floor] {[weight ?] 9}}, [name ?] {[on-top-of ceiling] {[weight light] 8}, [on-top-of floor] {[weight ?] 5}, [on-top-of ?] {[weight ?] 4, [weight light] 2}}}
+ ?: {ladder {? {? 9}, floor {? 8}}, ? {ceiling {light 7}, floor {? 4}, ? {? 3, light 1}}}
 goal-is-to:
- [action eat]: {[argument1 ?] {[argument2 ?] 20}}
- [action on]: {[argument1 ?] {[argument2 ?] 19}, [argument1 floor] {[argument2 ?] 18}}
- [action walk-to]: {[argument1 ?] {[argument2 ?] 15}}
- [action move]: {[argument1 ?] {[argument2 ?] 14}}
- [action hold]: {[argument1 blank] {[argument2 ?] 13}, [argument1 ?] {[argument2 ?] 7}}
- [action unlock]: {[argument1 ?] {[argument2 ?] 1}}
+ eat: {? {? 19}}
+ on: {? {? 18}, floor {? 17}}
+ walk-to: {? {? 14}}
+ move: {? {? 13}}
+ hold: {blank {? 12}, ? {? 6}}
+ unlock: {? {? 0}}

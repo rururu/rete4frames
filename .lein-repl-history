@@ -225,3 +225,99 @@ FCNT
 (app "run:asynch" "examples/manners.clj" "examples/manners_f64.clj")
 (app "run:asynch" "examples/manners.clj" "examples/manners_f128.clj")
 (exit)
+(app "run:asynch" "examples/mab.clj")
+(app "run:synch" "examples/zebra.clj")
+(app "run:asynch" "examples/manners.clj" "examples/manners_f8.clj")
+(app "run:asynch" "examples/waltz.clj" "examples/waltz_f12.clj")
+(exit)
+(app "trace:asynch" "examples/mab.clj")
+(def x '(fn [x] (* x x)))
+(println (x 6))
+(println ((eval x) 6))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e#]
+       (if-let [[fun# & args#] e#]
+         (condp = fun#
+           (mapcat (fn [[n# f#]] [n# (apply f# args#)]) ~pp))))))
+(defn f1 [x] (+ x x))
+(defn f2 [x] (* x x))
+(macroexpand '(create-eval-for ['f1 f1 'f2 f2]))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e#]
+       (if-let [[fun# & args#] e#]
+         (condp = fun#
+           ~(mapcat (fn [[n# f#]] [n# (apply f# args#)]) ~pp))))))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e]
+       (if-let [[fun# & args#] e]
+         (condp = fun#
+           ~(mapcat (fn [[n# f#]] [n# (apply f# args#)]) ~pp))))))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e]
+       (if-let [[fun & args] e]
+         (condp = fun
+           ~(mapcat (fn [[n f]] [n (apply f args)]) ~pp))))))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e]
+       (if-let [[fun & args] e]
+         (condp = fun
+           ~(mapcat (fn [[n f]] [n (apply f (rest e))]) ~pp))))))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e]
+       (if-let [[fun & args] e]
+         (condp = fun
+           ~(mapcat (fn [[n f]] [n (apply f 'args)]) ~pp))))))
+(macroexpand '(create-eval-for ['f1 f1 'f2 f2]))
+(macroexpand '(create-eval-for ['n1 'f1 'n2 'f2]))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e]
+       (if-let [[fun & args] e]
+         (condp = fun
+           ~(mapcat (fn [[n f]] [n `(apply ~f args)]) ~pp))))))
+(macroexpand '(create-eval-for ['n1 'f1 'n2 'f2]))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e]
+       (if-let [[fun & args] e]
+         (condp = fun
+           ~(mapcat (fn [[n f]] [n `(apply ~f args)]) pp))))))
+(macroexpand '(create-eval-for ['n1 'f1 'n2 'f2]))
+(macroexpand '(create-eval-for ['f1 f1 'f2 f2]))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e]
+       (if-let [[fun & args] e]
+         (condp = fun
+           ~@(mapcat (fn [[n f]] [n `(apply ~f args)]) pp))))))
+(macroexpand '(create-eval-for ['f1 f1 'f2 f2]))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e]
+       (if-let [[fun# & args#] e]
+         (condp = fun#
+           ~@(mapcat (fn [[n f]] [n `(apply ~f args#)]) pp))))))
+(macroexpand '(create-eval-for ['f1 f1 'f2 f2]))
+(defmacro create-eval-for [pairs]
+  (let [pp (partition 2 pairs)]
+    `(defn ~'eval-funcall [e]
+       (if (seq e)
+         (condp = (first e)
+           ~@(mapcat (fn [[n f]] [n `(apply ~f (rest e))]) pp))))))
+(macroexpand '(create-eval-for ['f1 f1 'f2 f2]))
+(app 'trace:asynch" "examples/mab.clj")
+)
+))))))))
+(app "trace:asynch" "examples/mab.clj")
+(ffirst nil)
+(symbol? (ffirst nil))
+(symbol? (ffirst '((a b c))))
+(app "run:asynch" "examples/manners.clj" "examples_f32.clj")
+(app "run:asynch" "examples/manners.clj" "examples/manners_f32.clj")
+(app "run:asynch" "examples/mab.clj")
