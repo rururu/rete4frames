@@ -56,9 +56,10 @@ The rule is a description of a transformation. It is represented by a list of th
 ```
 The name is a symbol or a string.
 The salience(priority) is an integer number, positive or negative.
-Conditions are bare patterns or patterns with tests.
+Conditions are bare patterns, patterns with tests or negative conditions.
 The function body is an ordinary clojure function body which may contain, apart from everything else, the function call "asser", "retratct" and "modify".
 The rule "fires" when all conditions are fulfilled. In this case the function body accomplished with values for variables obtained during pattern-matching of conditional part.
+First condition in the rule cannot be negative.
 Example of the rule:
 ```
 (walk-holding-object 0
@@ -76,15 +77,17 @@ The part of the rule after the symbol "=>" is named "right hand side of the rule
 
 Conditions
 ----
-The condition is a bare patterns or a pattern with test.
+The condition is a bare patterns, a pattern with test or a negative condition.
 If some condition contains a test the test is a last element of the list.
 The test is a predicate call or a list of tests or a vector of tests.
 The predicate is any Clojure function that returns true or false values, and also nil and not nil values that can be considered as true and false.
 The list of tests is interpreted as conjunction of tests. The vector of tests is interpreted as disjunction of tests.
+The negative condition is a pattern preceding with the symbol "not".
 The condition is fulfilled if the pattern is match some fact and the test returns true or not nil value.
 If the test is absent, the pattern matching is sufficient for the condition fulfilment.
 The condition can be preceded with a variable which is used in a right hand side of rule in calls to functions "modify" and "retract".
 A value of the such variable is a fact that have been matched with the pattern.
+The negative condition is fulfilled if the pattern does not match any fact in the working memory.
 Example of the condition:
 ```
   (avh a color v blue h ?c5
@@ -93,6 +96,11 @@ Example of the condition:
         (not= ?c5 ?c2)
         (not= ?c5 ?c1)
         [(= ?c5 (- ?n4 1)) (= ?c5 (+ ?n4 1))]))
+```
+Example of the negative conditions:
+```
+  (not thing name ladder location ?place)
+  (not goal-is-to action move argument1 ladder argument2 ?place)
 ```
 
 Function Body

@@ -1,11 +1,18 @@
-repair:
- ?: 11
-battery:
- charged: 9
+junct:
+ ?: {? {? {? {fork 15, tee 14, arrow 10, L 9, ? 7}}}}
+limits:
+ ?: {? 6}
+edge:
+ ?: {MINUS {? {? {? 18}}}, B {? {? {? 17}}}, PLUS {? {? {? 16}}}, NIL {? {? {NIL 20, ? 13}}}, ? {? {? {NIL 22, ? 4}}}}
+ FALSE: {? {? {? {? 3}}}}
+line:
+ ?: {? 1}
 stage:
- start: 10
- diagnose: 2
-engine:
- does-not-rotate: {? {? {? 5}}}
- rotates: {? {? {? 4}}}
- ?: {does-not-spark {? {? 8}}, irregular-spark {? {? 6}}, ? {low-output {? 7}, ? {does-not-start 3, unsatisfactory 1, normal 0}}}
+ plot-remaining-edges: 21
+ plot-boundaries: 19
+ labeling: 12
+ find-second-boundary: 11
+ find-initial-boundary: 8
+ find-limits: 5
+ detect-junctions: 2
+ duplicate: 0

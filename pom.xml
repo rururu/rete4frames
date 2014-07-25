@@ -3,7 +3,7 @@
   <groupId>rete</groupId>
   <artifactId>rete</artifactId>
   <packaging>jar</packaging>
-  <version>4.3.1-SNAPSHOT</version>
+  <version>5.0.0-SNAPSHOT</version>
   <name>rete</name>
   <description>Clojure RETE implementation for frames</description>
   <url>https://github.com/rururu/rete4frames</url>
@@ -16,7 +16,7 @@
   <scm>
     <connection>scm:git:git://github.com/rururu/rete4frames.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/rururu/rete4frames.git</developerConnection>
-    <tag>b04fccc8584fce7a0bb6e6c7a956bb44e8eb371b
+    <tag>4548fc63763f7c0a116f4961e02c77ba48811e2d
 </tag>
     <url>https://github.com/rururu/rete4frames</url>
   </scm>

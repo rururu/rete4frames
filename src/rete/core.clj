@@ -127,24 +127,12 @@
               true  x))]
     (map f1 aa)))
 
-(defn qq-ne [aa vars]
-  "Add call to quote for symbols not variables.
-   Used in not-exists function"
-  (let [f1 (fn [x]
-             (cond
-              (some #{x} vars) x
-              (vari? x) :undefined
-              (symbol? x) (list 'quote x)
-              true  x))]
-    (map f1 aa)))
-
 (defn and-or [x vrs]
   "Translate list-vector form of condition to and-or form"
   ;;(println [:AND-OR x vrs])
   (cond
    (list? x)
      (cond
-      (= (first x) 'not-exists) (cons 'rete.core/not-exists (qq-ne (rest x) vrs))
       (symbol? (first x)) (cons (first x) (qq (rest x) vrs))
       true (cons 'and (map #(and-or % vrs) x)))
    (vector? x) (cons 'or (map #(and-or % vrs) x))
@@ -221,8 +209,9 @@
     (dotimes [i (count ablink)]
       (fill-ablink ablink bplan i)))
   ([ablink bplan i]
-    (let [flt (filter #(= (nth % 2) i) bplan)]
-      (aset ablink i (map first flt)) )))
+    (let [flt1 (filter #(= (nth % 2) i) bplan)
+          flt2 (filter #(not= (first (nth % 3)) 'not) flt1)]
+      (aset ablink i (map first flt2)) ) ))
 
 (defn fill-bnet [bnet bplan]
   "Fill beta net from beta net plan"
@@ -575,8 +564,9 @@
               true)))))))
 
 (defn ais-for-frame
-  "Create fact from frame, add it to alpha memory
-   and returns active list of  alpha memory cells"
+  "Create fact from frame and add it to alpha memory.
+  Filter conflict set from obtained on absence of such fact.
+  Returns list of activated alpha memory cells"
   ([frame]
     ;;(println [:AIS-FOR-FRAME frame])
     (let [[typ & rst] frame
@@ -585,7 +575,7 @@
   ([typ mp]
     ;;(println [:AIS-FOR-FRAME typ mp])
     (when-let [fact (mk-fact typ mp)]
-      (reset! CFSET (filter (fn [x] (not (some #(match-not-existed typ mp %) (:not-existed (second x))))) @CFSET))
+      (reset! CFSET (doall (filter (fn [x] (not (some #(match-not-existed typ mp %) (:not-existed (second x))))) @CFSET)))
       (when-let [ais (a-indices typ mp)]
         (if TRACE (println [:==> [typ mp] :id (fact-id fact)]))
         ;; fill alpha node
@@ -629,12 +619,6 @@
    It has arbitrary number of arguments that as a whole represent a frame"
   [& args]
   (assert-frame args))
-
-(defn not-exists
-  "Function for using in left hand side to find out if some fact exists"
-  [& args]
-  ;;(println [:NOT-EXISTS args])
-  (not (fact-exists? (mk-typmap args))))
 
 (defn retract [fids & indices]
   "Function for the facts retraction that can be used in the right hand side of the rule.
