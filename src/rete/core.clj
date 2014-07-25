@@ -84,10 +84,11 @@
   adds a new entry to the map representing the alpha net.@
   If test contains call to 'not-exist', for its args also adds entries"
   ([condition]
-   (let [[typ mp] (mk-typmap (univars (template condition)))]
-     (when (nil? (mapmem-get typ mp ANET))
-       (mapmem-put typ mp @ACNT ANET)
-       (swap! ACNT inc)))))
+   (if (not= (first condition) 'not)
+     (let [[typ mp] (mk-typmap (univars (template condition)))]
+       (when (nil? (mapmem-get typ mp ANET))
+         (mapmem-put typ mp @ACNT ANET)
+         (swap! ACNT inc))))))
 
 (defn anet-for-pset
   "Build the alpha net for the given production set (rule set) <pset> as a map"
@@ -119,25 +120,38 @@
 (defn qq [aa vars]
   "Add call to quote for symbols not variables"
   (let [f1 (fn [x]
-             (if (and (symbol? x)
-                      (not (or (vari? x) (some #{x} vars))))
-               (list 'quote x)
-               x))]
+             (cond
+              (some #{x} vars) x
+              (vari? x) x
+              (symbol? x) (list 'quote x)
+              true  x))]
     (map f1 aa)))
 
-(defn and-or [x]
+(defn qq-ne [aa vars]
+  "Add call to quote for symbols not variables.
+   Used in not-exists function"
+  (let [f1 (fn [x]
+             (cond
+              (some #{x} vars) x
+              (vari? x) :undefined
+              (symbol? x) (list 'quote x)
+              true  x))]
+    (map f1 aa)))
+
+(defn and-or [x vrs]
   "Translate list-vector form of condition to and-or form"
+  ;;(println [:AND-OR x vrs])
   (cond
    (list? x)
      (cond
-      (= (first x) 'not-exists) (cons 'rete.core/not-exists (qq (rest x) nil))
-      (symbol? (first x)) (cons (first x) (qq (rest x) nil))
-      true (cons 'and (map and-or x)))
-   (vector? x) (cons 'or (map and-or x))
+      (= (first x) 'not-exists) (cons 'rete.core/not-exists (qq-ne (rest x) vrs))
+      (symbol? (first x)) (cons (first x) (qq (rest x) vrs))
+      true (cons 'and (map #(and-or % vrs) x)))
+   (vector? x) (cons 'or (map #(and-or % vrs) x))
    true x))
 
 (defn mk-test-func [tst vrs]
-  (let [aof (and-or tst)
+  (let [aof (and-or tst vrs)
         df (list 'fn vrs aof)]
     (if TRACE (println [:TEST-FUNCTION df]))
     (let [cf (eval df)]
@@ -147,7 +161,9 @@
 (defn mk-pattern-and-test [condition]
   "Make pattern or test"
   ;;(println [:MK-PATTERN-AND-TEST condition])
-  (let [[p & aa] condition]
+  (if (= (first condition) 'not)
+    (let [[apid patt] (mk-pattern-and-test (rest condition))]
+      [apid (cons 'not patt)])
     (let [[frame test]
             (if (even? (count condition))
               [(butlast condition) (last condition)]
@@ -310,7 +326,7 @@
         ctx)) ))
 
 (defn match-ctx [fact pattern ctx bi]
-  "Match fact with pattern with respect to context"
+  "Match fact with pattern with respect to context and beta cell"
   ;;(println [:MATCH-CTX :FACT fact :PATTERN pattern :CTX ctx :BI bi])
   (let [[ftyp fmp fid] fact
         [ptyp pmp vrs func] pattern]
@@ -328,7 +344,8 @@
             ctx3)) )) ))
 
 (defn match-ctx-list [facts pattern ctx bi]
-  "Match list of facts with pattern with respect to context"
+  "Match list of facts with pattern with respect to context and beta cell.
+  Returns matching contexts"
   (map #(match-ctx % pattern ctx bi) facts))
 
 (defn fact-id [fact]
@@ -340,7 +357,7 @@
    that have activated this production <match-list>,
    a list of activations and concatenate them to the conflict set"
   [aprod match-list]
-  ;;(println [:ADD-TO-CONFSET :APROD aprod]) ;; :MATCH-LIST match-list])
+  ;;(println [:ADD-TO-CONFSET :APROD aprod :MATCH-LIST match-list])
   (let [alist (map #(list aprod %) match-list)]
     (swap! CFSET concat alist)))
 
@@ -354,64 +371,103 @@
       true ofacts)))
 
 (defn mk-match-list [ofacts pattern ctx-list bi]
-  "Make match-list"
+  "Make match-list of contexts"
   (filter seq (mapcat #(match-ctx-list ofacts pattern % bi) ctx-list)))
+
+(defn f-branch [[fval tree] [pval & vls]]
+  ;;(println [:F-BRANCH fval tree pval vls])
+  (if (or (= '? pval) (= :undefined pval) (= fval pval))
+    (if (number? tree)
+      true
+      (some #(f-branch % vls) (seq tree)))))
+
+(defn fact-exists? [typmap]
+  "Find existing fact id for arbitrary typmap"
+  ;;(println [:FACT-EXISTS typmap])
+  (let [[typ mp] typmap
+        fmem (@FMEM typ)
+        templ (TEMPL typ)
+        vls (vals (merge templ mp))]
+    (if fmem
+      (some #(f-branch % vls) (seq fmem)))))
+
+(defn ground [mp ctx]
+  "Substitute values of variables from context"
+  (reduce-kv #(assoc %1 %2 (get ctx %3)) {} mp))
+
+(defn not-exists-grounded [pattern ctx]
+  (let [[typ mp] pattern
+        gro (ground mp ctx)
+        ged [typ gro]]
+    (if (not (fact-exists? ged))
+      [(assoc ctx :not-existed (cons ged (:not-existed ctx)))] )))
+
+(defn mk-not-match-list [pattern ctx-list]
+  "Make match-list of not matching contexts"
+  (mapcat #(not-exists-grounded pattern %) ctx-list))
 
 (defn activate-b
   "Activate beta net cell of index <bi> with respect to a list of contexts
-   already activated by a new fact with an index <new-fid>"
-  [bi ctx-list new-fid]
-  ;;(println [:ACTIVATE-B :BI bi :CTX-LIST ctx-list :NEW-FID new-fid])
+  already activated by a new fact with an index <new-fid>"
+  [bi ctx-list new-fid new-fact]
+  ;;(println [:ACTIVATE-B :BI bi :CTX-LIST ctx-list :NEW-FID new-fid :NEW-FACT new-fact])
   (let [bnode (aget BNET bi)
-        [eix bal pattern & tail] bnode]
-    (let [ofacts (only-old-facts bal new-fid)
-          ml (mk-match-list ofacts pattern ctx-list bi)]
-      ;;(println [:ML ml])
-      (if (seq ml)
-        (condp = eix
-          'x (add-to-confset tail ml)
-          'i (do
-               (aset BMEM bi (concat ml (aget BMEM bi)))
-               (activate-b (inc bi) ml nil))) ) )))
+        [eix bal pattern & tail] bnode
+        ml (if (= (first pattern) 'not)
+             (mk-not-match-list (rest pattern) ctx-list)
+             (let [ofacts (only-old-facts bal new-fid)]
+               (mk-match-list ofacts pattern ctx-list bi)))]
+    ;;(println [:BI bi :PAT (first pattern) :ML ml])
+    (if (seq ml)
+      (condp = eix
+        'x (add-to-confset tail ml)
+        'i (do
+             (if (not= (first pattern) 'not)
+               (aset BMEM bi (concat ml (aget BMEM bi))))
+             (activate-b (inc bi) ml nil new-fact))) )))
 
 (defn entry-a-action [bi pattern b-mem a-mem]
   "Entry alpha activation"
   ;;(println [:ENTRY-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :AMEM a-mem])
-  (let [new-fact (first a-mem)
-        ctx (match-ctx new-fact pattern {} bi)]
-    (aset BMEM bi (cons ctx b-mem))
-    (activate-b (inc bi) (list ctx) (fact-id new-fact))))
+  (if (not= (first pattern) 'not)
+    (let [new-fact (first a-mem)
+          ctx (match-ctx new-fact pattern {} bi)]
+      (aset BMEM bi (cons ctx b-mem))
+      (activate-b (inc bi) (list ctx) (fact-id new-fact) new-fact))))
 
 (defn inter-a-action [bi pattern b-mem a-mem]
   "Intermediate alpha activation"
   ;;(println [:INTER-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :AMEM a-mem])
-  (let [ctx-list (aget BMEM (dec bi))]
-    (if (seq ctx-list)
-      (let [new-fact (first a-mem)
-            ml (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list))]
-        (when (seq ml)
-          ;; remember matching context for both a-nodes and n-nodes
-          (aset BMEM bi (concat ml b-mem)))
+  (if (not= (first pattern) 'not)
+    (let [ctx-list (aget BMEM (dec bi))]
+      (if (seq ctx-list)
+        (let [new-fact (first a-mem)
+              ml (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list))]
+          (when (seq ml)
+            ;; remember matching context for both a-nodes and n-nodes
+            (aset BMEM bi (concat ml b-mem)))
           ;; activate only a-nodes, not n-nodes
-          (activate-b (inc bi) ml (fact-id new-fact))) )))
+          (activate-b (inc bi) ml (fact-id new-fact) new-fact))) )))
 
 (defn exit-a-action [bi pattern tail b-mem a-mem]
   "Exit alpha activation"
   ;;(println [:EXIT-A-ACTION :BI bi :PATTERN pattern :TAIL tail :AMEM a-mem])
-  (let [ctx-list (aget BMEM (dec bi))]
-    (if (seq ctx-list)
-      (let [ml (filter seq (map #(match-ctx (first a-mem) pattern % bi) ctx-list))]
-        (when (seq ml)
-          ;; remember matching context for both a-nodes and n-nodes, not for f-nodes
-          (aset BMEM bi (concat ml b-mem)))
+  (if (not= (first pattern) 'not)
+    (let [ctx-list (aget BMEM (dec bi))]
+      (if (seq ctx-list)
+        (let [ml (filter seq (map #(match-ctx (first a-mem) pattern % bi) ctx-list))]
+          (when (seq ml)
+            ;; remember matching context for both a-nodes and n-nodes, not for f-nodes
+            (aset BMEM bi (concat ml b-mem)))
           ;; add to conflicting set only for a-nodes and f-nodes, not for n-nodes
-          (add-to-confset tail ml)) ) ))
+          (add-to-confset tail ml)) )) ))
 
 (defn enex-a-action [bi pattern tail a-mem]
   "Entry and exit alpha activation (for LHS with 1 pattern)"
   ;;(println [:ENEX-A-ACTION :PATTERN pattern :TAIL tail :AMEM a-mem])
-  (if-let [ctx (match-ctx (first a-mem) pattern {} bi)]
-    (add-to-confset tail (list ctx))))
+  (if (not= (first pattern) 'not)
+    (if-let [ctx (match-ctx (first a-mem) pattern {} bi)]
+      (add-to-confset tail (list ctx)))))
 
 (defn activate-a
   "Activate alpha net cells for index list <ais>"
@@ -434,23 +490,6 @@
   (let [[[pn sal vars func] ctx] reso]
     (if TRACE (println [:FIRE pn :CONTEXT ctx]))
     (apply func (var-vals ctx vars))))
-
-(defn f-branch [[fval tree] [pval & vls]]
-  ;;(println [:F-BRANCH fval tree pval vls])
-  (if (or (= '? pval) (= fval pval))
-    (if (number? tree)
-      true
-      (some #(f-branch % vls) (seq tree)))))
-
-(defn fact-exists? [typmap]
-  "Find existing fact id for arbitrary typmap"
-  ;;(println [:FACT-EXISTS typmap])
-  (let [[typ mp] typmap
-        fmem (@FMEM typ)
-        templ (TEMPL typ)
-        vls (vals (merge templ mp))]
-    (if fmem
-      (some #(f-branch % vls) (seq fmem)))))
 
 (defn a-branch [[aval tree] [fval & vls]]
   ;;(println [:A-BRANCH aval tree fval vls])
@@ -519,6 +558,22 @@
       (reset! FIDS (dissoc @FIDS fid))
       frame)))
 
+(defn match-not-existed [atp amp notexi]
+  "Match new asserted fact with 'not-existed'"
+  ;;(println [:MATCH-NOT-EXISTED :NEWASS [atp amp] :NOTEXI notexi])
+  (let [[ntp nmp] notexi]
+    (if (= atp ntp)
+      (let [akeys (keys amp)]
+        (if (= (set akeys) (set (keys nmp)))
+          (loop [kk akeys]
+            (if (seq kk)
+              (let [key (first kk)
+                    nval (nmp key)]
+                (if (or (nil? nval) (= nval (amp key)))
+                  (recur (rest kk))
+                  false))
+              true)))))))
+
 (defn ais-for-frame
   "Create fact from frame, add it to alpha memory
    and returns active list of  alpha memory cells"
@@ -529,7 +584,8 @@
       (ais-for-frame typ mp)))
   ([typ mp]
     ;;(println [:AIS-FOR-FRAME typ mp])
-    (if-let [fact (mk-fact typ mp)]
+    (when-let [fact (mk-fact typ mp)]
+      (reset! CFSET (filter (fn [x] (not (some #(match-not-existed typ mp %) (:not-existed (second x))))) @CFSET))
       (when-let [ais (a-indices typ mp)]
         (if TRACE (println [:==> [typ mp] :id (fact-id fact)]))
         ;; fill alpha node
@@ -566,7 +622,7 @@
       (if (not (empty? @CFSET))
         (let [[reso & remain] (sort-by #(- (salience (first %))) @CFSET)]
           (reset! CFSET remain)
-          (fire-resolved reso)) ) )))
+          (fire-resolved reso)) )) ))
 
 (defn asser
   "Function for the facts assertion that can be used in the right hand side of the rule.
