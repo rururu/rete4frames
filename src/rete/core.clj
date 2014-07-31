@@ -335,6 +335,7 @@
 (defn match-ctx-list [facts pattern ctx bi]
   "Match list of facts with pattern with respect to context and beta cell.
   Returns matching contexts"
+  ;;(println [:MATCH-CTX-LIST facts pattern ctx bi])
   (map #(match-ctx % pattern ctx bi) facts))
 
 (defn fact-id [fact]
@@ -428,13 +429,12 @@
   "Intermediate alpha activation"
   ;;(println [:INTER-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :AMEM a-mem])
   (if (not= (first pattern) 'not)
-    (let [ctx-list (aget BMEM (dec bi))]
-      (if (seq ctx-list)
-        (let [new-fact (first a-mem)
-              ml (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list))]
-          (when (seq ml)
-            ;; remember matching context for both a-nodes and n-nodes
-            (aset BMEM bi (concat ml b-mem)))
+    (if-let [ctx-list (seq (aget BMEM (dec bi)))]
+      (let [new-fact (first a-mem)
+            ml (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list))]
+        (when (seq ml)
+          ;; remember matching context for both a-nodes and n-nodes
+          (aset BMEM bi (concat ml b-mem))
           ;; activate only a-nodes, not n-nodes
           (activate-b (inc bi) ml (fact-id new-fact) new-fact))) )))
 
@@ -442,12 +442,11 @@
   "Exit alpha activation"
   ;;(println [:EXIT-A-ACTION :BI bi :PATTERN pattern :TAIL tail :AMEM a-mem])
   (if (not= (first pattern) 'not)
-    (let [ctx-list (aget BMEM (dec bi))]
-      (if (seq ctx-list)
-        (let [ml (filter seq (map #(match-ctx (first a-mem) pattern % bi) ctx-list))]
-          (when (seq ml)
-            ;; remember matching context for both a-nodes and n-nodes, not for f-nodes
-            (aset BMEM bi (concat ml b-mem)))
+    (if-let [ctx-list (seq (aget BMEM (dec bi)))]
+      (let [ml (filter seq (map #(match-ctx (first a-mem) pattern % bi) ctx-list))]
+        (when (seq ml)
+          ;; remember matching context for both a-nodes and n-nodes, not for f-nodes
+          (aset BMEM bi (concat ml b-mem))
           ;; add to conflicting set only for a-nodes and f-nodes, not for n-nodes
           (add-to-confset tail ml)) )) ))
 
