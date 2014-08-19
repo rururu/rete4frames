@@ -350,7 +350,6 @@
 (defn match-ctx-amem [amem pattern ctx bi]
   "Match list of facts with pattern with respect to context and beta cell.
   Returns matching contexts"
-<<<<<<< HEAD
   ;;(println [:MATCH-CTX-AMEM amem pattern ctx bi])
   (let [[typ mp vrs func] pattern
         templ (TEMPL typ)
@@ -358,10 +357,6 @@
     (if (seq mmm)
       (remove nil? (for [[fid ctx2] mmm]
                 (try-func-add-fid func fid ctx2 vrs bi))) )))
-=======
-  ;;(println [:MATCH-CTX-LIST facts pattern ctx bi])
-  (map #(match-ctx % pattern ctx bi) facts))
->>>>>>> a72244acd11a718bee04462dcbf667cfc48f69f7
 
 (defn mk-match-list [amem pattern ctx-list bi]
   "Make match-list of contexts"
@@ -433,43 +428,20 @@
   ;;(println [:INTER-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :NEW-FACT new-fact])
   (if (not= (first pattern) 'not)
     (if-let [ctx-list (seq (aget BMEM (dec bi)))]
-<<<<<<< HEAD
       (when-let [ml (seq (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list)))]
         (aset BMEM bi (concat ml b-mem))
         (activate-b (inc bi) ml (fact-id new-fact) new-fact)) ) ))
 
 (defn exit-a-action [bi pattern tail b-mem new-fact]
-=======
-      (let [new-fact (first a-mem)
-            ml (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list))]
-        (when (seq ml)
-          ;; remember matching context for both a-nodes and n-nodes
-          (aset BMEM bi (concat ml b-mem))
-          ;; activate only a-nodes, not n-nodes
-          (activate-b (inc bi) ml (fact-id new-fact) new-fact))) )))
-
-(defn exit-a-action [bi pattern tail b-mem a-mem]
->>>>>>> a72244acd11a718bee04462dcbf667cfc48f69f7
   "Exit alpha activation"
   ;;(println [:EXIT-A-ACTION :BI bi :PATTERN pattern :TAIL tail :NEW-FACT new-fact])
   (if (not= (first pattern) 'not)
     (if-let [ctx-list (seq (aget BMEM (dec bi)))]
-<<<<<<< HEAD
       (when-let [ml (seq (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list)))]
         (aset BMEM bi (concat ml b-mem))
         (add-to-confset tail ml)) ) ))
 
 (defn enex-a-action [bi pattern tail new-fact]
-=======
-      (let [ml (filter seq (map #(match-ctx (first a-mem) pattern % bi) ctx-list))]
-        (when (seq ml)
-          ;; remember matching context for both a-nodes and n-nodes, not for f-nodes
-          (aset BMEM bi (concat ml b-mem))
-          ;; add to conflicting set only for a-nodes and f-nodes, not for n-nodes
-          (add-to-confset tail ml)) )) ))
-
-(defn enex-a-action [bi pattern tail a-mem]
->>>>>>> a72244acd11a718bee04462dcbf667cfc48f69f7
   "Entry and exit alpha activation (for LHS with 1 pattern)"
   ;;(println [:ENEX-A-ACTION :PATTERN pattern :TAIL tail :NEW-FACT new-fact])
   (if (not= (first pattern) 'not)
