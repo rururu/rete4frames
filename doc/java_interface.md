@@ -74,6 +74,14 @@ Switch tracing on.
 
 Switch tracing off.
 
+### 12. static void rete.jin.strategyDepth() ###
+
+Set conflict resolution strategy to depth.
+
+### 13. static void rete.jin.strategyBreadth() ###
+
+Set conflict resolution strategy to breadth.
+
 Example of using Java interface to rete4frames is in [Eclipse project] (https://github.com/rururu/rete4frames/blob/master/Rete4framesEclipseTest/src/test/ReteTest.java).
 
 Copyright © 2014 Ruslan Sorokin.

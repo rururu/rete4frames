@@ -105,6 +105,18 @@ Fire a number of active rules. If the number is ommited fire till the very end.
 ```
 Clear and initialize the working memory.
 
+### 14. Function reset ###
+```
+(strategy-depth)
+```
+Set conflict resolution strategy to depth.
+
+### 15. Function reset ###
+```
+(strategy-breadth)
+```
+Set conflict resolution strategy to breadth.
+
 While embedding Rete for Frames into your code you can use other functions. See [source code] (https://github.com/rururu/rete4frames/blob/master/src/rete/core.clj).
 
 Copyright © 2013 Ruslan Sorokin.

@@ -12,7 +12,9 @@
               #^{:static true} [fireAll [] void]
               #^{:static true} [fire [int] void]
               #^{:static true} [trace [] void]
-              #^{:static true} [untrace [] void]])
+              #^{:static true} [untrace [] void]
+              #^{:static true} [strategyDepth [] void]
+              #^{:static true} [strategyBreadth [] void]])
   (:import java.util.HashMap))
 
 (defn symbol-if [s]
@@ -80,6 +82,15 @@
       (if-let [fot (seq (-factsOfType kn))]
         (.put hm kn fot)))
     hm))
+
+(defn -strategyDepth []
+  "Callable from Java function - set conflict resolution strategy to depth"
+  (rete/strategy-depth))
+
+(defn -strategyBreadth []
+  "Callable from Java function - set conflict resolution strategy to breadth"
+  (rete/strategy-breadth))
+
 
 
 

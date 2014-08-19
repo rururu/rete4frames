@@ -3,6 +3,8 @@
 
 (declare TEMPL ACNT ANET AMEM)
 
+(def STRATEGY 'DEPTH) ;; Alternative 'BREADTH
+
 (def TRACE nil)
 
 (defn vari? [x]
@@ -62,6 +64,27 @@
         canon (cons typ (vals (merge templ mp)))]
     (reset! mem (dissoc-in @mem canon))))
 
+(defn mapmem-matched [tkeys tmp ctx mem]
+  "Collect contexts matched on pattern and context within from map made memory"
+  ;;(println [:MAPMEM-MATCHED tkeys tmp ctx mem])
+  (loop [tkk tkeys mmp mem cctx []]
+    (if (number? mmp)
+      [[mmp (assoc ctx '?fids (cons mmp (ctx '?fids)))]]
+      (if (seq tkk)
+        (let [tv1 (tmp (first tkk))
+              tv2 (or (ctx tv1) tv1)]
+          (cond
+           (= tv2 '?)
+             (if-let [kk (keys mmp)]
+               (concat (mapcat #(mapmem-matched (rest tkk) tmp ctx (mmp %)) kk) cctx))
+           (vari? tv2)
+             (if-let [cc (filter #(not= % '?) (keys mmp))]
+               (concat (mapcat #(mapmem-matched (rest tkk) tmp (assoc ctx tv2 %) (mmp %)) cc) cctx))
+           true
+             (if-let [mmp2 (mmp tv2)]
+               (recur (rest tkk) mmp2 cctx))))
+        cctx))))
+
 (defn template
   "Select template part of condition"
   [condition]
@@ -84,11 +107,13 @@
   adds a new entry to the map representing the alpha net.@
   If test contains call to 'not-exist', for its args also adds entries"
   ([condition]
-   (if (not= (first condition) 'not)
-     (let [[typ mp] (mk-typmap (univars (template condition)))]
-       (when (nil? (mapmem-get typ mp ANET))
-         (mapmem-put typ mp @ACNT ANET)
-         (swap! ACNT inc))))))
+   (let [cnd (if (= (first condition) 'not)
+               (rest condition)
+               condition)
+         [typ mp] (mk-typmap (univars (template cnd)))]
+     (when (nil? (mapmem-get typ mp ANET))
+       (mapmem-put typ mp @ACNT ANET)
+       (swap! ACNT inc)))))
 
 (defn anet-for-pset
   "Build the alpha net for the given production set (rule set) <pset> as a map"
@@ -280,6 +305,7 @@
 (defn reset []
   "Reset: clear and initialize all memories"
   (def AMEM (object-array @ACNT))
+  (dotimes [i (alength AMEM)] (aset AMEM i [nil (atom {})]))
   (def BMEM (object-array BCNT))
   (def CFSET (atom nil))
   (def IDFACT (atom {}))
@@ -301,46 +327,66 @@
   "take values from map mp in order of list of keys"
   (map #(mp %) vals))
 
-(defn match [p f ctx]
-  "Match two atoms against context"
-  ;;(println [:MATCH p f ctx])
-  (if (nil? p)
-    ctx
-    (if (vari? p)
-      (if-let [v (ctx p)]
-        (if (= f v)
-          ctx)
-        (assoc ctx p f))
-      (if (= p f)
-        ctx)) ))
+(defn try-func-add-fid [func fid ctx vrs bi]
+  ;;(println [:TRY-FUNC-ADD-FID func ctx2 vrs bi])
+  (if (or (nil? func) (apply func (var-vals ctx vrs)))
+    (let [fids (get @FIDS fid)]
+      (if (not (some #{bi} fids))
+        (reset! FIDS (assoc @FIDS fid (cons bi fids))))
+      ctx)))
+
 
 (defn match-ctx [fact pattern ctx bi]
-  "Match fact with pattern with respect to context and beta cell"
+  "Match fact with pattern with respect to context"
   ;;(println [:MATCH-CTX :FACT fact :PATTERN pattern :CTX ctx :BI bi])
   (let [[ftyp fmp fid] fact
         [ptyp pmp vrs func] pattern]
     (if (= ftyp ptyp)
-      (if-let [ctx2 (loop [msk (keys (TEMPL ftyp)) xtc ctx]
-                      (if (and xtc (seq msk))
-                        (let [ms1 (first msk)]
-                          (recur (rest msk) (match (pmp ms1) (fmp ms1) xtc)))
-                        xtc))]
-        (if (or (nil? func) (apply func (var-vals ctx2 vrs)))
-          (let [ctx3 (assoc ctx2 '?fids (cons fid ('?fids ctx2)))
-                fids (get @FIDS fid)]
-            (if (not (some #{bi} fids))
-              (reset! FIDS (assoc @FIDS fid (cons bi fids))))
-            ctx3)) )) ))
+      (let [mem (assoc-in {} (vals (merge (TEMPL ftyp) fmp)) fid)]
+        (if-let [mm (seq (let [templ (TEMPL ptyp)]
+                                (mapmem-matched (keys templ) (merge templ pmp) ctx mem)))]
+          (try-func-add-fid func (ffirst mm) (second (first mm)) vrs bi))) )))
 
-(defn match-ctx-list [facts pattern ctx bi]
+(defn match-ctx-amem [amem pattern ctx bi]
   "Match list of facts with pattern with respect to context and beta cell.
   Returns matching contexts"
+<<<<<<< HEAD
+  ;;(println [:MATCH-CTX-AMEM amem pattern ctx bi])
+  (let [[typ mp vrs func] pattern
+        templ (TEMPL typ)
+        mmm (mapmem-matched (keys templ) (merge templ mp) ctx (typ @amem))]
+    (if (seq mmm)
+      (remove nil? (for [[fid ctx2] mmm]
+                (try-func-add-fid func fid ctx2 vrs bi))) )))
+=======
   ;;(println [:MATCH-CTX-LIST facts pattern ctx bi])
   (map #(match-ctx % pattern ctx bi) facts))
+>>>>>>> a72244acd11a718bee04462dcbf667cfc48f69f7
 
-(defn fact-id [fact]
-  "Get id of fact"
-  (nth fact 2))
+(defn mk-match-list [amem pattern ctx-list bi]
+  "Make match-list of contexts"
+  ;;(println [:MK-MATCH-LIST amem pattern ctx-list bi])
+  (if (not (empty? @amem))
+    (mapcat #(match-ctx-amem amem pattern % bi) ctx-list)))
+
+(defn ground [mp ctx]
+  "Substitute values of variables from context"
+  (reduce-kv #(assoc %1 %2 (get ctx %3)) {} mp))
+
+(defn not-match-ctx-amem [amem pattern ctx]
+  "If not match context alpha memory returns it with remembered what was not existed"
+  ;;(println [:NOT-MATCH-CTX-AMEM amem pattern ctx])
+  (let [[typ mp] pattern]
+    (if (or (empty? @amem)
+            (let [templ (TEMPL typ)
+                  mmm (mapmem-matched (keys templ) (merge templ mp) ctx (typ @amem))]
+              (empty? mmm)))
+      [(assoc ctx :not-existed (cons [typ (ground mp ctx)] (:not-existed ctx)))])))
+
+(defn mk-not-match-list [amem pattern ctx-list]
+  "Make match-list of not matching contexts"
+  ;;(println [:MK-NOT-MATCH-LIST pattern ctx-list])
+  (mapcat #(not-match-ctx-amem amem pattern %) ctx-list))
 
 (defn add-to-confset
   "Make from an activated production (rule) <aprod> and a list of contexts,
@@ -351,51 +397,6 @@
   (let [alist (map #(list aprod %) match-list)]
     (swap! CFSET concat alist)))
 
-(defn only-old-facts [ai new-fid]
-  "Take alpha memory cell content and excludes new fact if appropriate"
-  ;;(println [:ONLY-OLD-FACTS ai new-fid])
-  (let [ofacts (aget AMEM ai)]
-    (cond
-      (nil? new-fid) ofacts
-      (= new-fid (fact-id (first ofacts))) (rest ofacts)
-      true ofacts)))
-
-(defn mk-match-list [ofacts pattern ctx-list bi]
-  "Make match-list of contexts"
-  (filter seq (mapcat #(match-ctx-list ofacts pattern % bi) ctx-list)))
-
-(defn f-branch [[fval tree] [pval & vls]]
-  ;;(println [:F-BRANCH fval tree pval vls])
-  (if (or (= '? pval) (= :undefined pval) (= fval pval))
-    (if (number? tree)
-      true
-      (some #(f-branch % vls) (seq tree)))))
-
-(defn fact-exists? [typmap]
-  "Find existing fact id for arbitrary typmap"
-  ;;(println [:FACT-EXISTS typmap])
-  (let [[typ mp] typmap
-        fmem (@FMEM typ)
-        templ (TEMPL typ)
-        vls (vals (merge templ mp))]
-    (if fmem
-      (some #(f-branch % vls) (seq fmem)))))
-
-(defn ground [mp ctx]
-  "Substitute values of variables from context"
-  (reduce-kv #(assoc %1 %2 (get ctx %3)) {} mp))
-
-(defn not-exists-grounded [pattern ctx]
-  (let [[typ mp] pattern
-        gro (ground mp ctx)
-        ged [typ gro]]
-    (if (not (fact-exists? ged))
-      [(assoc ctx :not-existed (cons ged (:not-existed ctx)))] )))
-
-(defn mk-not-match-list [pattern ctx-list]
-  "Make match-list of not matching contexts"
-  (mapcat #(not-exists-grounded pattern %) ctx-list))
-
 (defn activate-b
   "Activate beta net cell of index <bi> with respect to a list of contexts
   already activated by a new fact with an index <new-fid>"
@@ -404,10 +405,9 @@
   (let [bnode (aget BNET bi)
         [eix bal pattern & tail] bnode
         ml (if (= (first pattern) 'not)
-             (mk-not-match-list (rest pattern) ctx-list)
-             (let [ofacts (only-old-facts bal new-fid)]
-               (mk-match-list ofacts pattern ctx-list bi)))]
-    ;;(println [:BI bi :PAT (first pattern) :ML ml])
+             (mk-not-match-list (second (aget AMEM bal)) (rest pattern) ctx-list)
+             (mk-match-list (second (aget AMEM bal)) pattern ctx-list bi))]
+    ;;(println [:ML ml])
     (if (seq ml)
       (condp = eix
         'x (add-to-confset tail ml)
@@ -416,20 +416,30 @@
                (aset BMEM bi (concat ml (aget BMEM bi))))
              (activate-b (inc bi) ml nil new-fact))) )))
 
-(defn entry-a-action [bi pattern b-mem a-mem]
+(defn fact-id [fact]
+  "Get id of fact"
+  (nth fact 2))
+
+(defn entry-a-action [bi pattern b-mem new-fact]
   "Entry alpha activation"
-  ;;(println [:ENTRY-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :AMEM a-mem])
+  ;;(println [:ENTRY-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :NEW-FACT new-fact])
   (if (not= (first pattern) 'not)
-    (let [new-fact (first a-mem)
-          ctx (match-ctx new-fact pattern {} bi)]
+    (when-let [ctx (match-ctx new-fact pattern {} bi)]
       (aset BMEM bi (cons ctx b-mem))
       (activate-b (inc bi) (list ctx) (fact-id new-fact) new-fact))))
 
-(defn inter-a-action [bi pattern b-mem a-mem]
+(defn inter-a-action [bi pattern b-mem new-fact]
   "Intermediate alpha activation"
-  ;;(println [:INTER-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :AMEM a-mem])
+  ;;(println [:INTER-A-ACTION :BI bi :PATTERN pattern :BMEM b-mem :NEW-FACT new-fact])
   (if (not= (first pattern) 'not)
     (if-let [ctx-list (seq (aget BMEM (dec bi)))]
+<<<<<<< HEAD
+      (when-let [ml (seq (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list)))]
+        (aset BMEM bi (concat ml b-mem))
+        (activate-b (inc bi) ml (fact-id new-fact) new-fact)) ) ))
+
+(defn exit-a-action [bi pattern tail b-mem new-fact]
+=======
       (let [new-fact (first a-mem)
             ml (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list))]
         (when (seq ml)
@@ -439,10 +449,18 @@
           (activate-b (inc bi) ml (fact-id new-fact) new-fact))) )))
 
 (defn exit-a-action [bi pattern tail b-mem a-mem]
+>>>>>>> a72244acd11a718bee04462dcbf667cfc48f69f7
   "Exit alpha activation"
-  ;;(println [:EXIT-A-ACTION :BI bi :PATTERN pattern :TAIL tail :AMEM a-mem])
+  ;;(println [:EXIT-A-ACTION :BI bi :PATTERN pattern :TAIL tail :NEW-FACT new-fact])
   (if (not= (first pattern) 'not)
     (if-let [ctx-list (seq (aget BMEM (dec bi)))]
+<<<<<<< HEAD
+      (when-let [ml (seq (filter seq (map #(match-ctx new-fact pattern % bi) ctx-list)))]
+        (aset BMEM bi (concat ml b-mem))
+        (add-to-confset tail ml)) ) ))
+
+(defn enex-a-action [bi pattern tail new-fact]
+=======
       (let [ml (filter seq (map #(match-ctx (first a-mem) pattern % bi) ctx-list))]
         (when (seq ml)
           ;; remember matching context for both a-nodes and n-nodes, not for f-nodes
@@ -451,11 +469,12 @@
           (add-to-confset tail ml)) )) ))
 
 (defn enex-a-action [bi pattern tail a-mem]
+>>>>>>> a72244acd11a718bee04462dcbf667cfc48f69f7
   "Entry and exit alpha activation (for LHS with 1 pattern)"
-  ;;(println [:ENEX-A-ACTION :PATTERN pattern :TAIL tail :AMEM a-mem])
+  ;;(println [:ENEX-A-ACTION :PATTERN pattern :TAIL tail :NEW-FACT new-fact])
   (if (not= (first pattern) 'not)
-    (if-let [ctx (match-ctx (first a-mem) pattern {} bi)]
-      (add-to-confset tail (list ctx)))))
+    (if-let [ctx (match-ctx new-fact pattern {} bi)]
+      (add-to-confset tail (list ctx)) ) ))
 
 (defn activate-a
   "Activate alpha net cells for index list <ais>"
@@ -464,13 +483,13 @@
   (doseq [ai ais]
     (let [ablinks (aget ABLINK ai)
           bnms (map #(list % (aget BNET %) (aget BMEM %)) ablinks)
-          a-mem (aget AMEM ai)]
+          new-fact (first (aget AMEM ai))]
       (doseq [[bi [eix bal pattern & tail] b-mem] bnms]
         (condp = eix
-          'e (entry-a-action bi pattern b-mem a-mem)
-          'i (inter-a-action bi pattern b-mem a-mem)
-          'x (exit-a-action bi pattern tail b-mem a-mem)
-          'ex (enex-a-action bi pattern tail a-mem))) )))
+          'e (entry-a-action bi pattern b-mem new-fact)
+          'i (inter-a-action bi pattern b-mem new-fact)
+          'x (exit-a-action bi pattern tail b-mem new-fact)
+          'ex (enex-a-action bi pattern tail new-fact))) )))
 
 (defn fire-resolved [reso]
   "Fire resolved production"
@@ -540,7 +559,7 @@
           ais (a-indices typ mp)]
       (if TRACE (println [:<== [typ mp] :id fid]))
       (doseq [ai ais]
-        (aset AMEM ai (doall (remove #(= (fact-id %) fid) (aget AMEM ai)) ) ))
+        (mapmem-rem typ mp (second (aget AMEM ai))))
       (retract-b fid (get @FIDS fid))
       (reset! CFSET (filter #(not (some #{fid} ('?fids (second %)))) @CFSET))
       (reset! FIDS (dissoc @FIDS fid))
@@ -579,7 +598,9 @@
         (if TRACE (println [:==> [typ mp] :id (fact-id fact)]))
         ;; fill alpha node
         (doseq [ai ais]
-          (aset AMEM ai (cons fact (aget AMEM ai)) ))
+          (let [amem (second (aget AMEM ai))]
+            (mapmem-put typ mp (fact-id fact) amem)
+            (aset AMEM ai [fact amem])))
         ais))))
 
 (defn assert-frame [frame]
@@ -601,6 +622,10 @@
   [lst]
   (activate-a (mapcat ais-for-frame lst)))
 
+(defn cfset [h x]
+  (println h)
+  (doall (map println x)))
+
 (defn fire
   "Fire!"
   ([]
@@ -609,8 +634,14 @@
   ([n]
     (dotimes [i n]
       (if (not (empty? @CFSET))
-        (let [[reso & remain] (sort-by #(- (salience (first %))) @CFSET)]
-          (reset! CFSET remain)
+        (let [sal-std (sort-by #(- (salience (first %))) @CFSET)
+              fir-sal (salience (ffirst sal-std))
+              [max-sal rst-sal] (split-with #(= (salience (first %)) fir-sal) sal-std)
+              sum (if (= STRATEGY 'DEPTH) - +)
+              max-fid (sort-by #(apply sum (get (second %) '?fids)) max-sal)
+              [reso & remain] max-fid]
+          (reset! CFSET (concat remain rst-sal))
+          ;;(println) (println [:RESO reso :CFSET]) (doall (map println @CFSET))
           (fire-resolved reso)) )) ))
 
 (defn asser
@@ -766,9 +797,15 @@
 (defn run-with
   [modes temps rules facts]
   ;; (println [:RUN-WITH modes temps rules facts])
-  (if (= modes "step:asynch")
+  (condp = modes
+    "step:asynch"
     (let [trules (map trans-rule rules)]
       (trace)
+      (create-rete temps trules)
+      (assert-list facts)
+      (fire 1))
+    "step+acts:asynch"
+    (let [trules (map trans-rule rules)]
       (create-rete temps trules)
       (assert-list facts)
       (fire 1))
@@ -816,5 +853,15 @@
         (run-with-modes (first args) trufs facts))
     2 (run-with-modes (first args) (read-string (slurp (second args))))
     (println "Number of arguments: 2 or 3, see documentation!")))
+
+(defn strategy-depth []
+  "Set conflict resolution strategy to depth"
+  (def STRATEGY 'DEPTH))
+
+(defn strategy-breadth []
+  "Set conflict resolution strategy to breadth"
+  (def STRATEGY 'BREADTH))
+
+
 
 
