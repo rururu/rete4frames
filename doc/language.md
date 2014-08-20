@@ -2,7 +2,8 @@
 
 The language of this rete implementation is a subset of Clojure language. Also it is similar to CLIPS language.
 It lacks many of CLIPS features, to mention few - multislots, slot value types, strategies, COOL. Syntax also is simplified.
-The rule engine of rete4frames includes two conflict resolution strategies - depth (default) and breadth.
+The rule engine of rete4frames includes only two conflict resolution strategies - depth (default) and breadth. Depth strategy means that among the rules with the highest priority fired one, which has been activated by most recent facts. Breadth strategy means that among the rules with the highest priority fired one, which has been activated by most old facts.
+
 Application description on this language is a list consisting of four mandatory lists: templates, rules, functions and facts:
 ```
 ((templates t1 t2 ... tn )
