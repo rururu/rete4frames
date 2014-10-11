@@ -7,7 +7,7 @@
               #^{:static true} [reteAppFacts [String String String] void]
               #^{:static true} [reteAppStringFacts [String String String] void]
               #^{:static true} [allFacts [] java.util.HashMap]
-              #^{:static true} [factsOfType [String] clojure.lang.Cons]
+              #^{:static true} [factsOfType [String] clojure.lang.ChunkedCons]
               #^{:static true} [assertFact [String java.util.HashMap] void]
               #^{:static true} [fireAll [] void]
               #^{:static true} [fire [int] void]
@@ -46,7 +46,8 @@
 (defn -assertFact [typ slot-value-hm]
   "Callable from Java function - assert fact in form of type and HashMaps of slot values"
   (let [mp (into {} slot-value-hm)
-        funarg (rete/to-funarg (symbol typ) mp)]
+        mp2 (reduce-kv #(assoc %1 (read-string %2) (read-string %3)) {} mp)
+        funarg (rete/to-funarg (symbol typ) mp2)]
     (rete/activate-a (rete/ais-for-funarg funarg))))
 
 (defn -fireAll []
@@ -68,10 +69,10 @@
 (defn -factsOfType [typ]
   "Callable from Java function - collection of HashMaps representing facts of specific type"
   (seq (for [[fid typ & svs] (rete/fact-list (symbol typ))]
-    (let [hm (HashMap.)]
-      (doseq [[k v] (partition 2 svs)]
-        (.put hm (name k) v))
-      hm))))
+         (let [hm (HashMap.)]
+           (doseq [[k v] (partition 2 svs)]
+             (.put hm (name k) v))
+           hm))))
 
 (defn -allFacts []
   "Callable from Java function - HashMap with keys of existing facts and vlues of collection of HashMaps representing facts of those type"

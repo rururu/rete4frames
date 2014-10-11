@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/ru/clojure/rete4frames/target/rete-4.3.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="/home/ru/clojure/clojure-1.6.0.jar"/>
+	<classpathentry kind="lib" path="/home/ru/clojure/rete4frames/rete-5.2.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/ru/clojure/rete4frames/lib/clojure-1.6.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -49,6 +49,7 @@
     (apply sorted-map itl)))
 
 (defn to-funarg [typ mp]
+  ;;(println [:TO-FUNARG typ mp])
   (cons typ (vals (merge (TEMPL typ) mp))))
 
 (defn tree-put [funarg value mem]
