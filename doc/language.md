@@ -79,17 +79,17 @@ The part of the rule after the symbol "=>" is named "right hand side of the rule
 
 Conditions
 ----
-The condition is a bare patterns, a pattern with test or a negative condition.
+The condition is a bare pattern, a pattern with test.
+The negative condition is a condition preceding with the symbol "not".
 If some condition contains a test the test is a last element of the list.
 The test is a predicate call or a list of tests or a vector of tests.
 The predicate is any Clojure function that returns true or false values, and also nil and not nil values that can be considered as true and false.
 The list of tests is interpreted as conjunction of tests. The vector of tests is interpreted as disjunction of tests.
-The negative condition is a pattern preceding with the symbol "not".
-The condition is fulfilled if the pattern is match some fact and the test returns true or not nil value.
-If the test is absent, the pattern matching is sufficient for the condition fulfilment.
-The condition can be preceded with a variable which is used in a right hand side of rule in calls to functions "modify" and "retract".
+The condition is fulfilled if the pattern is match some fact (not match for the negative condition) and the test returns true or not nil value.
+If the test is absent, the pattern matching (not matching) is sufficient for the condition fulfilment.
+The positive (not negative) condition can be preceded with a variable which is used in a right hand side of rule in calls to functions "modify" and "retract".
 A value of the such variable is a fact that have been matched with the pattern.
-The negative condition is fulfilled if the pattern does not match any fact in the working memory.
+The negative condition is fulfilled if the pattern does not match any fact in the working memory and following tests are true if supplied.
 Example of the condition:
 ```
   (avh a color v blue h ?c5
@@ -103,6 +103,10 @@ Example of the negative conditions:
 ```
   (not thing name ladder location ?place)
   (not goal-is-to action move argument1 ladder argument2 ?place)
+```
+```
+  (not edge p1 ?base-point p2 ?p4
+        ((not= ?p4 ?p2) (not= ?p4 ?p3)))
 ```
 
 Function Body
@@ -123,5 +127,5 @@ See examples of function definitions in example [waltz.clj] (https://github.com/
 
 Application program interface described in [API] (https://github.com/rururu/rete4frames/blob/master/doc/api.md).
 
-Copyright © 2013 Ruslan Sorokin.
+Copyright © 2014 Ruslan Sorokin.
 
