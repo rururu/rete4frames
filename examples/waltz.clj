@@ -1,10 +1,8 @@
 ((templates
-(stage value)
-(line p1 p2)
-(edge p1 p2 joined label plotted)
-(junct p1 p2 p3 base-point type)
-(limits min max)
-)
+  (stage value)
+  (line p1 p2)
+  (edge p1 p2 joined label plotted)
+  (junct p1 p2 p3 base-point type))
 (rules
 (r-reverse-edges 0
 	(stage value duplicate)
@@ -16,7 +14,7 @@
 
 (r-done-reversing -10
 	?s (stage value duplicate)
-	=>
+ 	=>
   (println (str " FIRE: done-reversing"))
 	(modify ?s value detect-junctions))
 
@@ -26,36 +24,20 @@
 	?e2 (edge p1 ?base-point p2 ?p2 joined FALSE
         (> ?p1 ?p2))
 	?e3 (edge p1 ?base-point p2 ?p3 joined FALSE
-        ((> ?p2 ?p3)
-         (not= ?p1 ?p3)))
+        (> ?p2 ?p3))
 	=>
 	(modify ?e1 joined TRUE)
 	(modify ?e2 joined TRUE)
 	(modify ?e3 joined TRUE)
   (wz/make-3-junction ?base-point ?p1 ?p2 ?p3))
 
-(r1-make-L 0
+(r-make-L 0
 	(stage value detect-junctions)
 	?e1 (edge p1 ?base-point p2 ?p2 joined FALSE)
 	?e2 (edge p1 ?base-point p2 ?p3 joined FALSE
-            (> ?p3 ?p2))
-  (not edge p1 ?base-point)
-	=>
-	(modify ?e1 joined TRUE)
-	(modify ?e2 joined TRUE)
-	(asser junct type L
-         base-point ?base-point
-         p1 ?p2
-         p2 ?p3))
-
-(r2-make-L 0
-	(stage value detect-junctions)
-	?e1 (edge p1 ?base-point p2 ?p2 joined FALSE)
-	?e2 (edge p1 ?base-point p2 ?p3 joined FALSE
-        (> ?p3 ?p2))
-	(edge p1 ?base-point p2 ?p4
-        ((not= ?e2 ?p3)
-         [(= ?p4 ?p2) (= ?p4 ?p3)]))
+        (> ?p2 ?p3))
+	(not edge p1 ?base-point p2 ?p4
+        ((not= ?p4 ?p2) (not= ?p4 ?p3)))
 	=>
 	(modify ?e1 joined TRUE)
 	(modify ?e2 joined TRUE)
@@ -68,88 +50,66 @@
 	?s (stage value detect-junctions)
 	=>
   (println (str " FIRE: done-detecting"))
-	(modify ?s value find-limits))
-
-(r-find-limits-max 5
-    (stage value find-limits)
-    ?lim (limits max ?max)
-    (junct base-point ?bp
-           (> ?bp ?max))
-    =>
-    (modify ?lim max ?bp))
-
-(r-find-limits-min 5
-    (stage value find-limits)
-    ?lim (limits min ?min)
-    (junct base-point ?bp
-           (< ?bp ?min))
-    =>
-    (modify ?lim min ?bp))
-
-(r-done-find-limits 0
-    ?s (stage value find-limits)
-    =>
-    (println (str " FIRE: done-find-limits"))
-    (modify ?s value find-initial-boundary))
+	(modify ?s value find-initial-boundary))
 
 (r-initial-boundary-junction-L 0
 	?s (stage value find-initial-boundary)
-  (limits max ?max)
   (junct type L
            base-point ?base-point
            p1 ?p1
-           p2 ?p2
-           (>= ?base-point ?max))
+           p2 ?p2)
 	?e1 (edge p1 ?base-point p2 ?p1)
 	?e2 (edge p1 ?base-point p2 ?p2)
+  (not junct base-point ?bp
+       (> ?bp ?base-point))
 	=>
   (println (str " FIRE: done find-initial-boundary"))
+	(modify ?s value find-second-boundary)
   (modify ?e1 label B)
-	(modify ?e2 label B)
-	(modify ?s value find-second-boundary))
+	(modify ?e2 label B))
 
 (r-initial-boundary-junction-arrow 0
 	?s (stage value find-initial-boundary)
-  (limits max ?max)
-	(junct type arrow base-point ?bp p1 ?p1 p2 ?p2 p3 ?p3
-         (>= ?bp ?max))
+	(junct type arrow base-point ?bp p1 ?p1 p2 ?p2 p3 ?p3)
 	?e1 (edge p1 ?bp p2 ?p1)
 	?e2 (edge p1 ?bp p2 ?p2)
 	?e3 (edge p1 ?bp p2 ?p3)
+  (not junct base-point ?base-point
+       (> ?base-point ?bp))
 	=>
   (println (str " FIRE: done find-initial-boundary"))
+	(modify ?s value find-second-boundary)
   (modify ?e1 label B)
 	(modify ?e2 label PLUS)
-	(modify ?e3 label B)
-	(modify ?s value find-second-boundary))
+	(modify ?e3 label B))
 
 (r-second-boundary-junction-L 0
 	?s (stage value find-second-boundary)
-  (limits min ?min)
-  (junct type L base-point ?bp p1 ?p1 p2 ?p2
-         (<= ?bp ?min))
+  (junct type L base-point ?base-point p1 ?p1 p2 ?p2)
 	?e1 (edge p1 ?base-point p2 ?p1)
 	?e2 (edge p1 ?base-point p2 ?p2)
+  (not junct base-point ?bp
+       (< ?bp ?base-point))
 	=>
   (println (str " FIRE: done find-second-boundary"))
+  (modify ?s value labeling)
   (modify ?e1 label B)
-  (modify ?e2 label B)
-  (modify ?s value labeling))
+  (modify ?e2 label B))
 
 (r-second-boundary-junction-arrow 0
 	?s (stage value find-second-boundary)
-  (limits min ?min)
-	(junct type arrow base-point ?bp p1 ?p1 p2 ?p2 p3 ?p3
-         (<= ?bp ?min))
+	(junct type arrow base-point ?bp p1 ?p1 p2 ?p2 p3 ?p3)
 	?e1 (edge p1 ?bp p2 ?p1)
 	?e2 (edge p1 ?bp p2 ?p2)
 	?e3 (edge p1 ?bp p2 ?p3)
+  (not junct base-point ?base-point
+       (< ?base-point ?bp))
 	=>
   (println (str " FIRE: done find-second-boundary"))
+	(modify ?s value labeling)
   (modify ?e1 label B)
 	(modify ?e2 label PLUS)
-	(modify ?e3 label B)
-	(modify ?s value labeling))
+	(modify ?e3 label B))
 
 (r-match-edge 0
 	(stage value labeling)
@@ -157,8 +117,8 @@
             [(= ?l PLUS) (= ?l MINUS) (= ?l B)])
 	?e2 (edge p1 ?p2 p2 ?p1 label NIL)
 	=>
-	(modify ?e1 plotted T)
-	(modify ?e2 label ?l plotted T))
+	(modify ?e1 plotted TRUE)
+	(modify ?e2 label ?l plotted TRUE))
 
 (r-label-L 0
 	(stage value labeling)
@@ -434,7 +394,6 @@
     (rete.core/assert-frame frm)))
 )
 (facts
-(limits min 100000000 max -1)
 (line p1 122 p2 107)
 (line p1 107 p2 2207)
 (line p1 2207 p2 3204)

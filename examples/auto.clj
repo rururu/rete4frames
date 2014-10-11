@@ -16,7 +16,7 @@
 
  (rules
   (normal-engine-state-conclusions
-   10
+   8
    (engine working-state normal)
    =>
    (asser repair advice "No repair needed.")
@@ -25,14 +25,14 @@
    (asser engine rotation-state rotates))
 
   (unsatisfactory-engine-state-conclusions
-   10
+   8
    (engine working-state unsatisfactory)
    =>
    (asser battery charge-state charged)
    (asser engine rotation-state rotates))
 
   (determine-engine-state
-   0
+   8
    (stage value diagnose)
    (not engine working-state ?ws)
    (not repair advice ?a)
@@ -125,7 +125,7 @@
        (asser battery charge-state dead))))
 
   (determine-point-surface-state-1
-   10
+   8
    (engine working-state does-not-start)
    (engine spark-state irregular-spark)
    (not repair advice ?a)
@@ -157,7 +157,7 @@
      (asser repair advice "Replace the ignition coil.")))
 
   (no-repairs
-   -10
+   -8
    (stage value diagnose)
    (not repair advice ?a)
    =>
@@ -172,7 +172,7 @@
    (modify ?s value diagnose))
 
   (print-repair
-   -10
+   -8
    (repair advice ?a)
    =>
    (println)

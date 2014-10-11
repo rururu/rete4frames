@@ -23,31 +23,31 @@
     (symbol (.substring s 1))
     s))
 
-(defn -reteApp [modes trff-path-url]
+(defn -reteApp [mode trff-path-url]
   "Callable from Java function - run rete4frames with modes on templates, rules, functions and facts from file on trff-path or -url"
   (let [trff (slurp trff-path-url)]
-    (rete/run-with-modes modes (read-string trff))))
+    (rete/run-with-mode mode (read-string trff))))
 
-(defn -reteAppString [modes trff]
+(defn -reteAppString [mode trff]
   "Callable from Java function - run rete4frames with modes on templates, rules, functions and facts from string trff"
-  (rete/run-with-modes modes (read-string trff)))
+  (rete/run-with-mode mode (read-string trff)))
 
-(defn -reteAppFacts [modes trf-path-url f-path-url]
+(defn -reteAppFacts [mode trf-path-url f-path-url]
   "Callable from Java function - run rete4frames with modes on templates, rules and functions from file on trf-path or -url, facts from f-path or -url"
   (let [trf (slurp trf-path-url)
         f (slurp f-path-url)]
-    (rete/run-with-modes modes (read-string trf) (read-string f))))
+    (rete/run-with-mode mode (read-string trf) (read-string f))))
 
-(defn -reteAppStringFacts [modes trf f-path-url]
+(defn -reteAppStringFacts [mode trf f-path-url]
   "Callable from Java function - run rete4frames with modes on templates, rules and functions from string trf, facts from from f-path or -url"
   (let [f (slurp f-path-url)]
-    (rete/run-with-modes modes (read-string trf) (read-string f))))
+    (rete/run-with-mode mode (read-string trf) (read-string f))))
 
 (defn -assertFact [typ slot-value-hm]
   "Callable from Java function - assert fact in form of type and HashMaps of slot values"
   (let [mp (into {} slot-value-hm)
-        mp2 (reduce-kv #(assoc %1 (symbol %2) (symbol-if %3)) {} mp)]
-    (rete/activate-a (rete/ais-for-frame (symbol typ) mp2))))
+        funarg (rete/to-funarg (symbol typ) mp)]
+    (rete/activate-a (rete/ais-for-funarg funarg))))
 
 (defn -fireAll []
   "Callable from Java function - fire rules while exist activations"
@@ -67,9 +67,9 @@
 
 (defn -factsOfType [typ]
   "Callable from Java function - collection of HashMaps representing facts of specific type"
-  (seq (for [fot (rete/frames-of-type (symbol typ))]
+  (seq (for [[fid typ & svs] (rete/fact-list (symbol typ))]
     (let [hm (HashMap.)]
-      (doseq [[k v] (partition 2 (rest fot))]
+      (doseq [[k v] (partition 2 svs)]
         (.put hm (name k) v))
       hm))))
 

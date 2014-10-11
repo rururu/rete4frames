@@ -249,7 +249,7 @@
 	?f2 <- (line (p1 ?p1) (p2 ?p2))
 	=>
 	(assert (edge (p1 ?p1) (p2 ?p2) (joined false)))
-    (assert (edge (p1 ?p2) (p2 ?p1) (joined false)))
+	(assert (edge (p1 ?p2) (p2 ?p1) (joined false)))
 	(retract ?f2))
  
 ;;; **************************************************************************
@@ -559,7 +559,7 @@
 ;;; **************
 
 (defrule label_arrow-3A
-	(declare (salience 5))
+	(declare (salience 5)
 	(stage (value labeling))
 	(junction (type arrow) (base_point ?bp) (p1 ?p1) (p2 ?p2) (p3 ?p3))
 	(edge (p1 ?bp) (p2 ?p1) (label +))
