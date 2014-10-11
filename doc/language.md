@@ -79,7 +79,7 @@ The part of the rule after the symbol "=>" is named "right hand side of the rule
 
 Conditions
 ----
-The condition is a bare pattern, a pattern with test.
+The condition is a bare pattern or a pattern with a test.
 The negative condition is a condition preceding with the symbol "not".
 If some condition contains a test the test is a last element of the list.
 The test is a predicate call or a list of tests or a vector of tests.
@@ -89,7 +89,7 @@ The condition is fulfilled if the pattern is match some fact (not match for the 
 If the test is absent, the pattern matching (not matching) is sufficient for the condition fulfilment.
 The positive (not negative) condition can be preceded with a variable which is used in a right hand side of rule in calls to functions "modify" and "retract".
 A value of the such variable is a fact that have been matched with the pattern.
-The negative condition is fulfilled if the pattern does not match any fact in the working memory and following tests are true if supplied.
+The negative condition is fulfilled if the pattern does not match any fact in the working memory and following test is true or not nil if supplied.
 Example of the condition:
 ```
   (avh a color v blue h ?c5
