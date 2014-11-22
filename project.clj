@@ -1,4 +1,4 @@
-(defproject rete "5.2.0-SNAPSHOT"
+(defproject rete "5.2.1-SNAPSHOT"
   :description "Clojure RETE implementation for frames"
   :url "https://github.com/rururu/rete4frames"
   :license {:name "Eclipse Public License"

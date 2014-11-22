@@ -74,11 +74,9 @@
               p2 (or (ctx p1) p1)]
           (cond
            (= p2 '?)
-           (let [kk (keys mem)]
-             (concat (mapcat #(tree-match (rest pp) (mem %) ctx) kk) ctxs))
+           (concat (mapcat #(tree-match (rest pp) (mem %) ctx) (keys mem)) ctxs)
            (vari? p2)
-           (if-let [kk (seq (doall (filter #(not= % '?) (keys mem))))]
-             (concat (mapcat #(tree-match (rest pp) (mem %) (assoc ctx p2 %)) kk) ctxs))
+           (concat (mapcat #(tree-match (rest pp) (mem %) (assoc ctx p2 %)) (keys mem)) ctxs)
            true
            (if-let [mem2 (mem p2)]
              (recur (rest pp) mem2 ctxs))) )) )))
@@ -365,20 +363,10 @@
                pfuar)))
 
 (defn matched-context [ffuar pfuar ctx]
+  "Returns matched context for given fact, pattern and initial context"
   ;;(println [:matched-context ffuar pfuar ctx])
   (let [nfuar (map #(or (ctx %) %) pfuar)]
     (if (match-fact-to-pattern ffuar nfuar)
-      (let [new-pairs (fn [x y] (if (and (not= y '?) (not= x '?) (vari? x))
-                                  (assoc {} x y)))
-            pairs (filter seq (map new-pairs nfuar ffuar))]
-        (if (seq pairs)
-          (apply merge (cons ctx pairs))
-          ctx)))))
-
-(defn not-matched-context [ffuar pfuar ctx]
-  ;;(println [:not-matched-context ffuar pfuar ctx])
-  (let [nfuar (map #(or (ctx %) %) pfuar)]
-    (if (not (match-fact-to-pattern ffuar nfuar))
       (let [new-pairs (fn [x y] (if (and (not= y '?) (not= x '?) (vari? x))
                                   (assoc {} x y)))
             pairs (filter seq (map new-pairs nfuar ffuar))]
@@ -392,17 +380,10 @@
   (if-let [ctx2 (matched-context ffuar pfuar ctx)]
     (try-func-add-fid func fid (assoc ctx2 '?fids (cons fid (ctx2 '?fids))) vrs bi)))
 
-(defn not-matched-ctx [ffuar [pfuar vrs func] ctx]
-  "Not match fact with pattern with respect to context"
-  ;;(println [:not-matched-ctx ffuar pfuar vrs func ctx])
-  (if-let [ctx2 (not-matched-context ffuar pfuar ctx)]
-    (if (or (nil? func) (apply func (var-vals ctx vrs)))
-      ctx)))
-
 (defn match-ctx-amem [amem [pfuar vrs func] ctx bi]
   "Match list of facts with pattern with respect to context and beta cell.
   Returns matching contexts"
-  ;;(println [:MATCH-CTX-AMEM amem pattern ctx bi])
+  ;;(println [:MATCH-CTX-AMEM amem pfuar vrs func ctx bi])
   (if-let [mm (seq (doall (tree-match pfuar @amem ctx)))]
     (remove nil?
             (for [[fid ctx2] mm]
@@ -573,14 +554,11 @@
 
 (defn beta-activate-above-not-node [bi funarg]
   "Activate beta-memory above not nodes"
-  ;;(println [:ACTIVATE-B-NOT bi funarg])
   (let [bnode (aget BNET bi)
         [eix bal pattern & tail] bnode
         ctx-list (aget BMEM (dec bi))]
-    (if-let[ml (seq (doall (keep #(not-matched-ctx funarg (rest pattern) %) ctx-list)))]
-      (condp = eix
-        'x (add-to-confset tail ml)
-        'i (activate-b (inc bi) ml)) ) ))
+    (if-let [ctxs (seq (filter #(matched-context funarg (second pattern) %) ctx-list))]
+      (activate-b-not bi (second (aget AMEM bal)) eix (rest pattern) tail bi ctxs))))
 
 (defn retract-beta-activate [ais funarg]
   "Activate beta-memory above not nodes for list of alpha nodes"
@@ -601,7 +579,7 @@
       (reset! FIDS (dissoc @FIDS fid))
       (doseq [ai ais]
         (tree-rem funarg (second (aget AMEM ai)) ))
-      (if TRACE (println [:<== (to-typmap funarg) :id fid]))
+      (if TRACE (do (println) (println [:<== (to-typmap funarg) :id fid])))
       (if beta-flag
         (retract-beta-activate ais funarg))
       funarg)))
@@ -612,7 +590,7 @@
   ;;(println [:AIS-FOR-FUNARG funarg])
   (when-let [fact (mk-fact funarg)]
     (when-let [ais (a-indices funarg)]
-      (if TRACE (println [:==> (to-typmap funarg) :id (second fact)]))
+      (if TRACE (do (println) (println [:==> (to-typmap funarg) :id (second fact)])))
       ;; fill alpha node
       (doseq [ai ais]
         (let [amem (second (aget AMEM ai))]
@@ -694,9 +672,8 @@
   "Fire resolved production with ctx"
   ;;(println [:FIRE-RESOLVED prod ctx])
   (let [[pnam sal vars func] prod]
-    (if TRACE (println [:FIRE pnam :CONTEXT ctx]))
+    (if TRACE (do (println) (println [:FIRE pnam :CONTEXT ctx])))
     (apply func (var-vals ctx vars))))
-    ;(swap! ATNCNT dec)))
 
 (defn fire
   "Fire!"
@@ -734,7 +711,7 @@
   (let [funarg (@IDFACT fid)]
     (if (not= funarg :deleted)
       (let [[typ mp] (to-typmap funarg)]
-        (cons typ (flatten (seq mp))) ) )))
+        (cons typ (apply concat (seq mp))) ) )))
 
 (defn fact-list
   "List of facts (of some type)"

@@ -1,16 +1,23 @@
-Last:
- ?: 9
-Path:
- ?: {? {? 7}}
-Seating:
- ?: {? {? {? {? {? {? 10}}}, no {? {? {? 6}}}, yes {? {? {? 4}}}}}}
-Count:
- ?: 2
-Guest:
- ?: {? {? 1}}
-context:
- print_results: 11
- check_done: 8
- make_path: 5
- assign_seats: 3
- start: 0
+spark-state:
+ does-not-spark: 13
+ irregular-spark: 12
+charge-state:
+ charged: 14
+ ?: 11
+symptom:
+ not-low-output: 8
+ low-output: 7
+rotation-state:
+ does-not-rotate: 10
+ rotates: 9
+ ?: 6
+repair:
+ ?: 4
+stage:
+ start: 15
+ diagnose: 2
+working-state:
+ does-not-start: 5
+ ?: 3
+ unsatisfactory: 1
+ normal: 0

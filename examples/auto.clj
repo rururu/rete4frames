@@ -1,12 +1,15 @@
 ((templates
-  (engine
-   working-state
-   spark-state
-   rotation-state
-   symptom)
+  (working-state
+   engine)
 
-  (battery
-   charge-state)
+  (spark-state
+   engine)
+
+  (charge-state
+   battery)
+
+  (rotation-state
+   engine)
 
   (repair
    advice)
@@ -17,96 +20,86 @@
  (rules
   (normal-engine-state-conclusions
    8
-   (engine working-state normal)
+   (working-state engine normal)
    =>
    (asser repair advice "No repair needed.")
-   (asser engine spark-state normal)
-   (asser battery charge-state charged)
-   (asser engine rotation-state rotates))
+   (asser spark-state engine normal)
+   (asser charge-state battery charged)
+   (asser rotation-state engine rotates))
 
   (unsatisfactory-engine-state-conclusions
    8
-   (engine working-state unsatisfactory)
+   (working-state engine unsatisfactory)
    =>
-   (asser battery charge-state charged)
-   (asser engine rotation-state rotates))
+   (asser charge-state battery charged)
+   (asser rotation-state engine rotates))
 
   (determine-engine-state
    8
    (stage value diagnose)
-   (not engine working-state ?ws)
+   (not working-state engine ?ws)
    (not repair advice ?a)
    =>
    (if (a/yes-or-no "Does the engine start?")
      (if (a/yes-or-no "Does the engine run normally?")
-       (asser engine working-state normal)
-       (asser engine working-state unsatisfactory))
-     (asser engine working-state does-not-start)))
+       (asser working-state engine normal)
+       (asser working-state engine unsatisfactory))
+     (asser working-state engine does-not-start)))
 
   (determine-rotation-state
    0
-   (engine working-state does-not-start)
-   (not engine rotation-state ?rs)
+   (working-state engine does-not-start)
+   (not rotation-state engine ?rs)
    (not repair advice ?a)
    =>
    (if (a/yes-or-no "Does the engine rotate?")
      (do
-       (asser engine rotation-state rotates)
-       (asser engine spark-state irregular-spark))
+       (asser rotation-state engine rotates)
+       (asser spark-state engine irregular-spark))
      (do
-       (asser engine rotation-state does-not-rotate)
-       (asser engine spark-state does-not-spark))))
+       (asser rotation-state engine does-not-rotate)
+       (asser spark-state engine does-not-spark))))
 
   (determine-sluggishness
-   0
-   (engine working-state unsatisfactory)
+   3
+   (working-state engine unsatisfactory)
    (not repair advice ?a)
    =>
    (if (a/yes-or-no "Is the engine sluggish?")
      (asser repair advice "Clean the fuel line.")))
 
   (determine-misfiring
-   0
-   (engine working-state unsatisfactory)
+   2
+   (working-state engine unsatisfactory)
    (not repair advice ?a)
    =>
    (if (a/yes-or-no "Does the engine misfire?")
      (do
        (asser repair advice "Point gap adjustment.")
-       (asser engine spark-state irregular-spark))))
+       (asser spark-state engine irregular-spark))))
 
   (determine-knocking
-   0
-   (engine working-state unsatisfactory)
+   1
+   (working-state engine unsatisfactory)
    (not repair advice ?a)
    =>
    (if (a/yes-or-no "Does the engine knock?")
      (asser repair advice "Timing adjustment.")))
 
-  (determine-low-output-1
+  (determine-low-output
    0
-   (engine working-state unsatisfactory)
-   (not engine symptom low-output)
+   (working-state engine unsatisfactory)
+   (not symptom engine ?se)
    (not repair advice ?a)
    =>
    (if (a/yes-or-no "Is the output of the engine low?")
-     (asser engine symptom low-output)
-     (asser engine symptom not-low-output)))
-
-  (determine-low-output-2
-   0
-   (engine working-state unsatisfactory)
-   (not engine symptom not-low-output)
-   (not repair advice ?a)
-   =>
-   (if (a/yes-or-no "Is the output of the engine low?")
-     (asser engine symptom low-output)
-     (asser engine symptom not-low-output)))
+     (asser symptom engine low-output)
+     (asser symptom engine not-low-output)))
 
   (determine-gas-level
    0
-   (engine working-state does-not-start)
-   (engine rotation-state rotates)
+   (working-state engine does-not-start)
+   (rotation-state engine rotates)
    (not repair advice ?a)
    =>
    (if (not (a/yes-or-no "Does the tank have any gas in it?"))
@@ -114,20 +107,20 @@
 
   (determine-battery-state
    0
-   (engine rotation-state does-not-rotate)
-   (not battery charge-state ?cs)
+   (rotation-state engine does-not-rotate)
+   (not charge-state battery ?cs)
    (not repair advice ?a)
    =>
    (if (a/yes-or-no "Is the battery charged?")
-     (asser battery charge-state charged)
+     (asser charge-state battery charged)
      (do
        (asser repair advice "Charge the battery.")
-       (asser battery charge-state dead))))
+       (asser charge-state battery dead))))
 
   (determine-point-surface-state-1
    8
-   (engine working-state does-not-start)
-   (engine spark-state irregular-spark)
+   (working-state engine does-not-start)
+   (spark-state engine irregular-spark)
    (not repair advice ?a)
    =>
    (condp = (a/ask "What is the surface state of the points?" '[normal burned contaminated])
@@ -137,19 +130,19 @@
 
   (determine-point-surface-state-2
    0
-   (engine symptom low-output)
+   (symptom engine low-output)
    (not repair advice ?a)
    =>
    (condp = (a/ask "What is the surface state of the points?" '[normal burned contaminated])
      'burned (asser repair advice "Replace the points.")
      'contaminated (asser repair advice "Clean the points.")
-     'normal (asser repair advice "Take your car to a electrician.")))
+     'normal))
 
   (determine-conductivity-test
    0
-   (engine working-state does-not-start)
-   (engine spark-state does-not-spark)
-   (battery charge-state charged)
+   (working-state engine does-not-start)
+   (spark-state engine does-not-spark)
+   (charge-state battery charged)
    (not repair advice ?a)
    =>
    (if (a/yes-or-no "Is the conductivity test for the ignition coil positive?")
