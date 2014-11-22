@@ -30,7 +30,7 @@ The benchmark table for Waltz algorithm is in [Waltz Benchmark Table] (https://g
 
 To include Rete for Frames into your Leiningen project:
 
-:dependencies [rete "5.2.0-SNAPSHOT"]
+:dependencies [rete "5.2.1-SNAPSHOT"]
 
 Running examples:
 ```
