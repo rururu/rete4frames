@@ -3,7 +3,7 @@ Waltz Benchmark Table
 ----
 
 <table>
-<tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames v 5.2.0 (msec)</td><td>factor</td></tr>
+<tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames v 5.2.1 (msec)</td><td>factor</td></tr>
 <tr><td>waltz12</td><td>1926</td><td>35771</td><td>x 19</td></tr>
 <tr><td>waltz25</td><td>9490</td><td>116097</td><td>x 12</td></tr>
 <tr><td>waltz37</td><td>22077</td><td>234100</td><td>x 11</td></tr>
