@@ -18,7 +18,6 @@ Manners Benchmark Table
 Test results obtained on the same hardware and OS (Linux Mint 17, Qiana) 22 november 2014.
 As can be seen from the results, rete4frames initially far behind and then starts to catch up CLIPS v 6.24.
 On the most difficult test rete4frames almost 6 times superior to CLIPS v 6.24.
-(I must say CLIPS 6.30 is two orders faster than 6.24)
 
 To get the results run in REPL:
 
