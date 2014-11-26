@@ -106,18 +106,28 @@
   "Reduces all different variables to '?"
   (map #(if (vari? %) '? %) cond))
 
-(defn add-anet-entry
+(defn slot-in-templ [pair typ]
+  "For pair of slot and value checks if slot is in template of typ.
+   If so returns pair of slot and value else nil"
+  ;;(println [:SLOT-IN-TEMPL pair typ])
+  (let [templ (TEMPL typ)
+        slot (first pair)]
+    (if (some #{slot} (keys templ))
+      pair
+      (println (str "Slot " slot " is not in template " typ "!")))))
+
+(defn add-anet-entry [condition]
   "If condition in a left hand side of a rule is a pattern (not test with a function on the predicate place)
-  adds a new entry to the map representing the alpha net.@
-  If test contains call to 'not-exist', for its args also adds entries"
-  ([condition]
-   (let [cnd (if (= (first condition) 'not)
-               (rest condition)
-               condition)
-         funarg (mk-funarg (univars (template cnd)))]
-     (when (nil? (tree-get funarg ANET))
-       (tree-put funarg @ACNT ANET)
-       (swap! ACNT inc)))))
+  adds a new entry to the map representing the alpha net."
+  (let [cnd (if (= (first condition) 'not)
+              (rest condition)
+              condition)
+        typ (first cnd)
+        cnd2 (cons typ (apply concat (filter #(slot-in-templ % typ) (partition 2 (rest cnd)))))
+        funarg (mk-funarg (univars (template cnd2)))]
+    (when (nil? (tree-get funarg ANET))
+      (tree-put funarg @ACNT ANET)
+      (swap! ACNT inc))))
 
 (defn anet-for-pset
   "Build the alpha net for the given production set (rule set) <pset> as a map"
