@@ -66,7 +66,7 @@
 
 (defn tree-match [patt t-mem ctx]
   ;;(println [:TREE-MATCH :PATT patt :T-MEM t-mem :CTX ctx])
-  (loop [pp patt mem t-mem ctxs []]
+  (loop [pp patt mem t-mem]
     (if (number? mem)
       [[mem (assoc ctx '?fids (cons mem (ctx '?fids)))]]
       (if (seq pp)
@@ -74,12 +74,12 @@
               p2 (or (ctx p1) p1)]
           (cond
            (= p2 '?)
-           (concat (mapcat #(tree-match (rest pp) (mem %) ctx) (keys mem)) ctxs)
+           (mapcat #(tree-match (rest pp) (mem %) ctx) (keys mem))
            (vari? p2)
-           (concat (mapcat #(tree-match (rest pp) (mem %) (assoc ctx p2 %)) (keys mem)) ctxs)
+           (mapcat #(tree-match (rest pp) (mem %) (assoc ctx p2 %)) (keys mem))
            true
            (if-let [mem2 (mem p2)]
-             (recur (rest pp) mem2 ctxs))) )) )))
+             (recur (rest pp) mem2))) )) )))
 
 (defn template
   "Select template part of condition"
@@ -431,7 +431,9 @@
 
 (defn match-not-existed [fid not-existed]
   "Match fact of fid with pattern from 'not-existed'"
-  (some #(match-1-not-existed (@IDFACT fid) %) not-existed))
+  (let [ffuar (@IDFACT fid)]
+    (if (seq? ffuar)
+      (some #(match-1-not-existed ffuar %) not-existed))))
 
 (defn sumfids [ctx]
   "Evaluation of activation assesment 'sumfids' depending on strategy"
@@ -913,5 +915,13 @@
     (if (= (@IDFACT k) :deleted)
       (swap! IDFACT dissoc k))))
 
-;; The End
+(defn picat [code]
+  "Prints stack trace"
+  `(try
+     ~code
+     (catch Throwable th#
+       (print-cause-trace th#)
+       (println))))
+
+  ;; The End
 
