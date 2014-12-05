@@ -915,13 +915,5 @@
     (if (= (@IDFACT k) :deleted)
       (swap! IDFACT dissoc k))))
 
-(defn picat [code]
-  "Prints stack trace"
-  `(try
-     ~code
-     (catch Throwable th#
-       (print-cause-trace th#)
-       (println))))
-
   ;; The End
 
