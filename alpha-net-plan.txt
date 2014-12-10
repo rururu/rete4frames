@@ -1,23 +1,14 @@
-spark-state:
- does-not-spark: 13
- irregular-spark: 12
-charge-state:
- charged: 14
- ?: 11
-symptom:
- not-low-output: 8
- low-output: 7
-rotation-state:
- does-not-rotate: 10
- rotates: 9
- ?: 6
-repair:
- ?: 4
-stage:
- start: 15
- diagnose: 2
-working-state:
- does-not-start: 5
- ?: 3
- unsatisfactory: 1
- normal: 0
+chest:
+ ?: {? {? 6}}
+monkey:
+ blank: {? {floor 19, ? 16, ladder 13}}
+ ?: {? {floor 20, ? 2}}
+thing:
+ ?: {ladder {floor {? 11}, ? {? 9}}, ? {ceiling {light 8}, floor {? 5}, ? {? 4, light 1}}}
+goal-is-to:
+ eat: {? {? 21}}
+ on: {floor {? 18}, ? {? 14}, ladder {? 12}}
+ move: {? {? 17}, ladder {? 10}}
+ walk-to: {? {? 7}}
+ hold: {blank {? 15}, ? {? 3}}
+ unlock: {? {? 0}}

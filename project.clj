@@ -6,4 +6,5 @@
   :jvm-opts ["-Xmx2000M"]
   :aot :all
   :main rete.core
-  :dependencies [[org.clojure/clojure "1.6.0"]])
+  :dependencies [[org.clojure/clojure "1.6.0"]]
+  :resource-paths ["lib/TreeMem.jar"])

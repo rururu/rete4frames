@@ -526,19 +526,18 @@
           'i (inter-a-action bi pattern b-mem new-fact)
           'x (exit-a-action bi pattern tail b-mem new-fact))) )))
 
-(defn a-branch [[aval tree] [fval & vls]]
-  ;;(println [:A-BRANCH aval tree fval vls])
-  (if (or (= '? aval) (= fval aval))
-    (if (number? tree)
-      [tree]
-      (doall (mapcat #(a-branch % vls) (seq tree))))))
-
-(defn a-indices [funarg]
+(defn a-indices
   "For an asserted funarg find all suitable alpha memory cells"
-  ;;(println [:A-INDICES typ mp])
-  (let [[typ & vls] funarg
-        tree (@ANET typ)]
-    (doall (mapcat #(a-branch % vls) (seq tree)))))
+  ([[fun & args]]
+   (if-let [anet (@ANET fun)]
+     (a-indices args anet)))
+  ([args anet]
+   (letfn [(path [args key anet]
+                 (if (or (= key '?) (= key (first args)))
+                   (a-indices (rest args) (anet key))))]
+     (if (number? anet)
+       [anet]
+       (mapcat #(path args % anet) (keys anet))))))
 
 (defn remove-ctx-with [fid ctxlist]
   "Remove context for given fact id"
