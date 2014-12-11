@@ -354,7 +354,7 @@
 
 (defn var-vals [mp vrs]
   "Takes values from context map mp in order of list of variables"
-  (doall (map #(mp %) vrs)))
+  (map #(mp %) vrs))
 
 (defn try-func-add-fid [func fid ctx vrs bi]
   ;;(println [:TRY-FUNC-ADD-FID func fid ctx vrs bi])
@@ -394,8 +394,8 @@
   "Match list of facts with pattern with respect to context and beta cell.
   Returns matching contexts"
   ;;(println [:MATCH-CTX-AMEM amem pfuar vrs func ctx bi])
-  (if-let [mm (seq (doall (tree-match pfuar @amem ctx)))]
-    (remove nil?
+  (if-let [mm (seq (tree-match pfuar @amem ctx))]
+    (filter some?
             (for [[fid ctx2] mm]
               (try-func-add-fid func fid ctx2 vrs bi)) ) ))
 
@@ -403,31 +403,31 @@
   "Make match-list of contexts"
   ;;(println [:MK-MATCH-LIST amem pattern ctx-list bi])
   (if (not (empty? @amem))
-    (doall (mapcat #(match-ctx-amem amem pattern % bi) ctx-list))))
+    (mapcat #(match-ctx-amem amem pattern % bi) ctx-list)))
 
 (defn not-match-ctx-amem [amem [pfuar vrs func] ctx]
   "If not match context alpha memory returns it with remembered what was not existed"
   ;;(println [:NOT-MATCH-CTX-AMEM amem pfuar vrs func ctx])
   (if (or (empty? @amem)
-          (let [mm (doall (tree-match pfuar @amem ctx))]
+          (let [mm (tree-match pfuar @amem ctx)]
             (or (empty? mm)
                 (and func
-                     (empty? (doall (filter #(apply func (var-vals % vrs)) (doall (map second mm))) ))) )))
+                     (empty? (filter #(apply func (var-vals % vrs)) (map second mm)) ))) ))
     [(assoc ctx :not-existed
-       (cons (cons (first pfuar) (doall (map #(or (ctx %) %) (rest pfuar)))) (:not-existed ctx)))]))
+       (cons (cons (first pfuar) (map #(or (ctx %) %) (rest pfuar))) (:not-existed ctx)))]))
 
 (defn mk-not-match-list [amem pattern ctx-list]
   "Make match-list of not matching contexts"
   ;;(println [:MK-NOT-MATCH-LIST pattern ctx-list])
-  (doall (mapcat #(not-match-ctx-amem amem pattern %) ctx-list)))
+  (mapcat #(not-match-ctx-amem amem pattern %) ctx-list))
 
 (defn match-1-not-existed [ffuar nfuar]
   "Match funarg of fact to funarg of 1 pattern in a list of not exited"
   ;;(println [:MATCH-1-NOT-EXISTED ffuar nfuar])
   (every? #(= % true)
-          (doall (map (fn [x y] (or (= x y) (vari? y)))
+          (map (fn [x y] (or (= x y) (vari? y)))
                ffuar
-               nfuar))))
+               nfuar)))
 
 (defn match-not-existed [fid not-existed]
   "Match fact of fid with pattern from 'not-existed'"
@@ -517,7 +517,7 @@
   ;;(println [:ACTIVATE-A :AIS ais])
   (doseq [ai ais]
     (let [ablinks (aget ABLINK ai)
-          bnms (doall (map #(list % (aget BNET %) (aget BMEM %)) ablinks))
+          bnms (map #(list % (aget BNET %) (aget BMEM %)) ablinks)
           new-fact (first (aget AMEM ai))]
       (doseq [[bi [eix bal pattern & tail] b-mem] bnms]
         (condp = eix
@@ -542,7 +542,7 @@
 (defn remove-ctx-with [fid ctxlist]
   "Remove context for given fact id"
   ;;(println [:REMOVE-CTX-WITH :FID fid :CTXLIST ctxlist])
-  (doall (filter #(not (some #{fid} ('?fids %))) ctxlist)))
+  (filter #(not (some #{fid} ('?fids %))) ctxlist))
 
 (defn retract-b [fid bis]
   "Retract fact id from the beta memory"
@@ -590,7 +590,7 @@
       (reset! FIDS (dissoc @FIDS fid))
       (doseq [ai ais]
         (tree-rem funarg (second (aget AMEM ai)) ))
-      (if TRACE (do (println) (println [:<== (to-typmap funarg) :id fid])))
+      (if TRACE (println [:<== (to-typmap funarg) :id fid]))
       (if beta-flag
         (retract-beta-activate ais funarg))
       funarg)))
@@ -601,7 +601,7 @@
   ;;(println [:AIS-FOR-FUNARG funarg])
   (when-let [fact (mk-fact funarg)]
     (when-let [ais (a-indices funarg)]
-      (if TRACE (do (println) (println [:==> (to-typmap funarg) :id (second fact)])))
+      (if TRACE (println [:==> (to-typmap funarg) :id (second fact)]))
       ;; fill alpha node
       (doseq [ai ais]
         (let [amem (second (aget AMEM ai))]
@@ -628,7 +628,7 @@
   "Function for assertion a list of triples or object descriptions (see comments on the function 'asser').
    For the use outside of the right hand side of rules"
   [lst]
-  (activate-a (set (doall (mapcat ais-for-funarg lst)))))
+  (activate-a (set (mapcat ais-for-funarg lst))))
 
 (defn actual [ctx newf]
   (if-let [ned (:not-existed ctx)]

@@ -17,7 +17,7 @@
   <scm>
     <connection>scm:git:git://github.com/rururu/rete4frames.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/rururu/rete4frames.git</developerConnection>
-    <tag>8ced0e2cde4d3e652ef165e0630fca2bc65ebda9</tag>
+    <tag>889255e8b1b0ad61175952cd4071fab1b6d0f89e</tag>
     <url>https://github.com/rururu/rete4frames</url>
   </scm>
   <build>

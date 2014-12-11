@@ -8,14 +8,14 @@ Manners Benchmark Table
 
 <table>
 <tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames v 5.2.1 (msec)</td></tr>
-<tr><td>manners8</td><td>1.1</td><td>67</td><td>x 81</td></tr>
-<tr><td>manners16</td><td>12</td><td>354</td><td>x 16</td></tr>
-<tr><td>manners32</td><td>266</td><td>1073</td><td>x 3</td></tr>
-<tr><td>manners64</td><td>8859</td><td>6326</td><td>x 0.66</td></tr>
-<tr><td>manners128</td><td>311823</td><td>58083</td><td>x 0.17</td></tr>
+<tr><td>manners8</td><td>1.4</td><td>63</td><td>x 45</td></tr>
+<tr><td>manners16</td><td>10</td><td>225</td><td>x 23</td></tr>
+<tr><td>manners32</td><td>254</td><td>897</td><td>x 4</td></tr>
+<tr><td>manners64</td><td>8563</td><td>5693</td><td>x 0.66</td></tr>
+<tr><td>manners128</td><td>313709</td><td>52454</td><td>x 0.17</td></tr>
 </table>
 
-Test results obtained on the same hardware and OS (Linux Mint 17, Qiana) 22 november 2014.
+Test results obtained on the same hardware and OS (Linux Mint 17, Qiana) 11 december 2014.
 As can be seen from the results, rete4frames initially far behind and then starts to catch up CLIPS v 6.24.
 On the most difficult test rete4frames almost 6 times superior to CLIPS v 6.24.
 

@@ -11,6 +11,9 @@
   (rotation-state
    engine)
 
+  (symptom
+   engine)
+
   (repair
    advice)
 
