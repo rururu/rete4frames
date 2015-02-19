@@ -1,11 +1,11 @@
 # The Language
 
 The language of this rete implementation is a subset of Clojure language. Also it is similar to CLIPS language.
-It lacks many of CLIPS features, to mention few - multislots, slot value types, strategies, COOL. Syntax also is simplified.
+It lacks many of CLIPS features, to mention few - multislots, slot value types, COOL. Syntax is also simplified.
 The rule engine of rete4frames includes only two conflict resolution strategies - depth (default) and breadth. Depth strategy means that among the rules with the highest priority fired one, which has been activated by most recent facts. Breadth strategy means that among the rules with the highest priority fired one, which has been activated by most old facts.
 
 Application description on this language is a list consisting of four mandatory lists: templates, rules, functions and facts:
-```
+```clj
 ((templates t1 t2 ... tn )
  (rules r1 r2 ... rm )
  (functions d1 d2 ... dl )
@@ -16,19 +16,19 @@ Facts can be loaded into the application from a separate file.
 Frames, Facts and Patterns
 ----
 The frame is a basic concept for the representation of knowledge in the language. It is used to represent the facts and patterns of facts.
-The frame has a type and slots. The slot has  a name and a value. The frame represented as a list.
+The frame has a type and slots. The slot has a name and a value. The frame represented as a list.
 First element of the list is the type of the frame. Other elements of the list are slot names and values alternately:
-```
+```clj
 (type slot1 value1 slot2 value2 ... )
 ```
 Values of slots can be constants and variables. Variables are represented as symbols with the question mark prefix. Constants can be of any Clojure data type.
 If a frame contains variables it is a pattern, otherwise it is a fact.
 Example of the fact:
-```
+```clj
 (monkey location t5-7 on-top-of green-couch holding blank)
 ```
 Example of the pattern:
-```
+```clj
 (monkey location ?place on-top-of ?on2 holding blank)
 ```
 
@@ -36,7 +36,7 @@ Templates
 ----
 The template is a description of a frame type. It is a list of the group name (type) and names of the slots.
 Example:
-```
+```clj
 (monkey
   location
   on-top-of
@@ -46,7 +46,7 @@ Example:
 Rules
 ----
 The rule is a description of a transformation. It is represented by a list of the form:
-```
+```clj
 (<name>
   <salience>
   <condition1>
@@ -63,7 +63,7 @@ The function body is an ordinary clojure function body which may contain, apart 
 The rule "fires" when all conditions are fulfilled. In this case the function body accomplished with values for variables obtained during pattern-matching of conditional part.
 First condition in the rule cannot be negative.
 Example of the rule:
-```
+```clj
 (walk-holding-object 0
   ?goal (goal-is-to action walk-to argument1 ?place)
   ?monkey (monkey location ?loc on-top-of floor holding ?obj
@@ -91,7 +91,7 @@ The positive (not negative) condition can be preceded with a variable which is u
 A value of the such variable is a fact that have been matched with the pattern.
 The negative condition is fulfilled if the pattern does not match any fact in the working memory and following test is true or not nil if supplied.
 Example of the condition:
-```
+```clj
   (avh a color v blue h ?c5
        ((not= ?c5 ?c4)
         (not= ?c5 ?c3)
@@ -100,11 +100,11 @@ Example of the condition:
         [(= ?c5 (- ?n4 1)) (= ?c5 (+ ?n4 1))]))
 ```
 Example of the negative conditions:
-```
+```clj
   (not thing name ladder location ?place)
   (not goal-is-to action move argument1 ladder argument2 ?place)
 ```
-```
+```clj
   (not edge p1 ?base-point p2 ?p4
         ((not= ?p4 ?p2) (not= ?p4 ?p3)))
 ```
@@ -124,6 +124,10 @@ Functions
 ----
 The functions section contains ordinary clojure function definitions optionally prepended with namespace definition (ns <namespace>)
 See examples of function definitions in example [waltz.clj] (https://github.com/rururu/rete4frames/blob/master/examples/waltz.clj).
+
+Comments
+----
+Files can contain comments prepended with semicolon
 
 Application program interface described in [API] (https://github.com/rururu/rete4frames/blob/master/doc/api.md).
 

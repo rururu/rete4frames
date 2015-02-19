@@ -65,10 +65,13 @@
   (reset! mem (dissoc-in @mem funarg)))
 
 (defn tree-match [patt t-mem ctx]
+  "Search fact in tree-type memory matching to pattern with respect to ctx"
   ;;(println [:TREE-MATCH :PATT patt :T-MEM t-mem :CTX ctx])
   (loop [pp patt mem t-mem]
     (if (number? mem)
-      [[mem (assoc ctx '?fids (cons mem (ctx '?fids)))]]
+      (let [fids (ctx '?fids)]
+        (if (not (some #{mem} fids))
+          [[mem (assoc ctx '?fids (cons mem fids))]]))
       (if (seq pp)
         (let [p1 (first pp)
               p2 (or (ctx p1) p1)]
@@ -379,7 +382,7 @@
     (if (match-fact-to-pattern ffuar nfuar)
       (let [new-pairs (fn [x y] (if (and (not= y '?) (not= x '?) (vari? x))
                                   (assoc {} x y)))
-            pairs (filter seq (map new-pairs nfuar ffuar))]
+            pairs (filter some? (map new-pairs nfuar ffuar))]
         (if (seq pairs)
           (apply merge (cons ctx pairs))
           ctx)))))
@@ -387,8 +390,10 @@
 (defn matched-ctx [[ffuar fid] [pfuar vrs func] ctx bi]
   "Match fact with pattern with respect to context"
   ;;(println [:matched-ctx ffuar fid pfun pargs vrs func ctx bi])
-  (if-let [ctx2 (matched-context ffuar pfuar ctx)]
-    (try-func-add-fid func fid (assoc ctx2 '?fids (cons fid (ctx2 '?fids))) vrs bi)))
+  (let [fids (ctx '?fids)]
+    (if (not (some #{fid} fids))
+      (if-let [ctx2 (matched-context ffuar pfuar ctx)]
+        (try-func-add-fid func fid (assoc ctx2 '?fids (cons fid fids)) vrs bi)) ) ))
 
 (defn match-ctx-amem [amem [pfuar vrs func] ctx bi]
   "Match list of facts with pattern with respect to context and beta cell.
@@ -407,33 +412,23 @@
 
 (defn not-match-ctx-amem [amem [pfuar vrs func] ctx]
   "If not match context alpha memory returns it with remembered what was not existed"
-  ;;(println [:NOT-MATCH-CTX-AMEM amem pfuar vrs func ctx])
-  (if (or (empty? @amem)
-          (let [mm (tree-match pfuar @amem ctx)]
+  ;;(println [:NOT-MATCH-CTX-AMEM :AMEM amem :PFUAR pfuar :VRS vrs :FUNC func :CTX ctx])
+  (if (or (empty? amem)
+          (let [mm (tree-match pfuar amem ctx)]
             (or (empty? mm)
                 (and func
                      (empty? (filter #(apply func (var-vals % vrs)) (map second mm)) ))) ))
-    [(assoc ctx :not-existed
-       (cons (cons (first pfuar) (map #(or (ctx %) %) (rest pfuar))) (:not-existed ctx)))]))
+    (let [ctx2 (if (nil? (ctx :novelty))
+                 (assoc ctx :novelty @FCNT)
+                 ctx)]
+      [(assoc ctx2 :not-existed
+         (cons [(cons (first pfuar) (map #(or (ctx %) %) (rest pfuar))) vrs func]
+               (:not-existed ctx2)))])))
 
 (defn mk-not-match-list [amem pattern ctx-list]
   "Make match-list of not matching contexts"
   ;;(println [:MK-NOT-MATCH-LIST pattern ctx-list])
-  (mapcat #(not-match-ctx-amem amem pattern %) ctx-list))
-
-(defn match-1-not-existed [ffuar nfuar]
-  "Match funarg of fact to funarg of 1 pattern in a list of not exited"
-  ;;(println [:MATCH-1-NOT-EXISTED ffuar nfuar])
-  (every? #(= % true)
-          (map (fn [x y] (or (= x y) (vari? y)))
-               ffuar
-               nfuar)))
-
-(defn match-not-existed [fid not-existed]
-  "Match fact of fid with pattern from 'not-existed'"
-  (let [ffuar (@IDFACT fid)]
-    (if (seq? ffuar)
-      (some #(match-1-not-existed ffuar %) not-existed))))
+  (mapcat #(not-match-ctx-amem @amem pattern %) ctx-list))
 
 (defn sumfids [ctx]
   "Evaluation of activation assesment 'sumfids' depending on strategy"
@@ -445,11 +440,13 @@
       k)))
 
 (defn add-to-confset
-  "Add activation with 'novelty' parameter to conflict set array"
+  "Add activation to conflict set array"
   [aprod match-list]
   ;;(println [:ADD-TO-CONFSET :APROD aprod :MATCH-LIST (count match-list)])
+  ;;(doseq [ctx match-list]
+  ;;  (println [:FIDS (ctx '?fids)]))
   (let [sal (salience aprod)
-        srt [aprod @FCNT (sort-by sumfids match-list)]
+        srt [aprod (sort-by sumfids match-list)]
         do (aget CFARR sal)
         po (if (= STRATEGY 'DEPTH)
              (cons srt do)
@@ -461,10 +458,13 @@
 (defn activate-b-not [bi amem eix pattern tail bi ctx-list]
   "Activate beta net cell for not node"
   ;;(println [:ACTIVATE-B-NOT bi amem eix pattern tail bi (count ctx-list)])
-  (if-let [ml (seq (mk-not-match-list amem pattern ctx-list))]
-    (condp = eix
-      'x (add-to-confset tail ml)
-      'i (activate-b (inc bi) ml))))
+  (let [ml (mk-not-match-list amem pattern ctx-list)]
+    (if (seq ml)
+      (condp = eix
+        'x (add-to-confset tail ml)
+        'i (do
+             (aset BMEM bi (concat ml (aget BMEM bi)))
+             (activate-b (inc bi) ml))) )))
 
 (defn activate-b [bi ctx-list]
   "Activate beta net cell of index <bi> with respect to a list of contexts
@@ -542,7 +542,7 @@
 (defn remove-ctx-with [fid ctxlist]
   "Remove context for given fact id"
   ;;(println [:REMOVE-CTX-WITH :FID fid :CTXLIST ctxlist])
-  (filter #(not (some #{fid} ('?fids %))) ctxlist))
+  (doall (filter #(not (some #{fid} ('?fids %))) ctxlist)))
 
 (defn retract-b [fid bis]
   "Retract fact id from the beta memory"
@@ -565,8 +565,8 @@
 
 (defn beta-activate-above-not-node [bi funarg]
   "Activate beta-memory above not nodes"
-  (let [bnode (aget BNET bi)
-        [eix bal pattern & tail] bnode
+  ;;(println [:BETA-ACTIVATE-ABOVE-NOT-NODE bi funarg])
+  (let [[eix bal pattern & tail] (aget BNET bi)
         ctx-list (aget BMEM (dec bi))]
     (if-let [ctxs (seq (filter #(matched-context funarg (second pattern) %) ctx-list))]
       (activate-b-not bi (second (aget AMEM bal)) eix (rest pattern) tail bi ctxs))))
@@ -590,7 +590,7 @@
       (reset! FIDS (dissoc @FIDS fid))
       (doseq [ai ais]
         (tree-rem funarg (second (aget AMEM ai)) ))
-      (if TRACE (println [:<== (to-typmap funarg) :id fid]))
+      (if TRACE (println [:<== :fid fid (to-typmap funarg)]))
       (if beta-flag
         (retract-beta-activate ais funarg))
       funarg)))
@@ -601,8 +601,7 @@
   ;;(println [:AIS-FOR-FUNARG funarg])
   (when-let [fact (mk-fact funarg)]
     (when-let [ais (a-indices funarg)]
-      (if TRACE (println [:==> (to-typmap funarg) :id (second fact)]))
-      ;; fill alpha node
+      (if TRACE (println [:==> :fid (second fact) (to-typmap funarg)]))
       (doseq [ai ais]
         (let [amem (second (aget AMEM ai))]
           (tree-put funarg (second fact) amem)
@@ -630,22 +629,42 @@
   [lst]
   (activate-a (set (mapcat ais-for-funarg lst))))
 
-(defn actual [ctx newf]
+(defn match-1-not-existed [ffuar [nfuar vars func] ctx]
+  "Match funarg of fact to funarg of 1 pattern in a list of not exited"
+  ;;(println [:MATCH-1-NOT-EXISTED ffuar nfuar vars func])
+  (and (every? #(= % true) (map (fn [x y] (or (= x y) (vari? y)))
+                 ffuar
+                 nfuar))
+       (or (nil? func)
+           (let [hmap (apply hash-map (interleave (rest nfuar) (rest ffuar)))
+                 ctx2 (merge hmap ctx)]
+             (apply func (var-vals ctx2 vars))))))
+
+(defn match-not-existed [fid not-existed ctx]
+  "Match fact of fid with pattern from 'not-existed'"
+  (let [ffuar (@IDFACT fid)]
+    (if (seq? ffuar)
+      (some #(match-1-not-existed ffuar % ctx) not-existed))))
+
+(defn actual [ctx]
+  ;;(println [:ACTUAL ctx])
   (if-let [ned (:not-existed ctx)]
-    (not (some #(match-not-existed % ned) newf))
+    (let [nty (:novelty ctx)
+          newf (range nty @FCNT)]
+      (not (some #(match-not-existed % ned ctx) newf)))
     true))
 
 (defn not-deleted [ctx]
-  (not (some #(if-let [f (@IDFACT %)] (= f :deleted)) (ctx '?fids))))
+  (not (some #(= (@IDFACT %) :deleted) (ctx '?fids))))
 
-(defn resolve-for-ctx [ctx-lst newf]
+(defn resolve-for-ctx [ctx-lst]
   "Resolve conflict set context list based on 'novelty' and 'sumfield' assesment.
    Returns vector of context and rest of list or nil"
   ;;(println [:RESOLVE-FOR-CTX ctx-lst newf])
   (loop [ctxs ctx-lst]
     (if (seq ctxs)
       (let [[ctx & rctxs] ctxs]
-        (if (and (not-deleted ctx) (actual ctx newf))
+        (if (and (not-deleted ctx) (actual ctx))
           [ctx rctxs]
           (recur rctxs))) )))
 
@@ -655,12 +674,11 @@
   ;;(println [:RESOLVE-FOR-SAL sal alist])
   (loop [srta alist]
     (if (seq srta)
-      (let [[[prod nty ctxs] & rsta] srta
-            newf (range nty @FCNT)]
-        (if-let [[ctx rsd] (resolve-for-ctx ctxs newf)]
+      (let [[[prod ctxs] & rsta] srta]
+        (if-let [[ctx rsd] (resolve-for-ctx ctxs)]
           (do
             (if (seq rsd)
-              (aset cfarr sal (cons [prod nty rsd] rsta))
+              (aset cfarr sal (cons [prod rsd] rsta))
               (aset cfarr sal rsta))
             [prod ctx])
           (recur rsta)))
@@ -763,18 +781,6 @@
   "Ends tracing of translation and execution"
   (def TRACE nil))
 
-(defn trans-lhs
-  "Translate left hand side of rule by removing statement labels and put them into map.
-    Returns map of statement labels with statement indexes"
-  [lhs]
-  (loop [i 0 ss lhs mp {} nlhs []]
-    (if (seq ss)
-      (let [los (first ss)]
-        (if (symbol? los)
-          (recur (inc i) (nnext ss) (assoc mp los i) (conj nlhs (first (next ss))))
-          (recur (inc i) (next ss) mp (conj nlhs los))))
-      [nlhs mp])))
-
 (defn trans-asser [x vars]
   (cons 'rete.core/asser (qq (rest x) vars)))
 
@@ -806,6 +812,17 @@
     (cons (first x)
           (cons binds (trans-rhs (nnext x) vars4 mp)))))
 
+(defn trans-lhs [lhs]
+  "Translate left hand side of rule by removing statement labels and put them into map.
+    Returns map of statement labels with statement indexes"
+  (loop [i 0 ss lhs mp {} nlhs []]
+    (if (seq ss)
+      (let [los (first ss)]
+        (if (symbol? los)
+          (recur (inc i) (nnext ss) (assoc mp los i) (conj nlhs (first (next ss))))
+          (recur (if (not= (first los) 'not) (inc i) i) (next ss) mp (conj nlhs los))))
+      [nlhs mp])))
+
 (defn trans-rhs [x vars mp]
   "Translate right hand side of rule by replacing in retract and modify statements
    labels of left hand side statements with their indexes using corresponding map"
@@ -824,9 +841,8 @@
    (vector? x) (vec (map #(trans-rhs % vars mp) x))
    true x))
 
-(defn trans-rule
+(defn trans-rule [rule]
   "Translate rule by translating lhs and rhs of rule"
-  [rule]
   (let [nam (prod-name rule)
         sal (salience rule)
         lsd (lhs rule)
@@ -883,21 +899,35 @@
              (= (first (nth trufs 2)) 'functions))
       (let [temps (rest (nth trufs 0))
             rules (rest (nth trufs 1))
-            truls (map trans-rule rules)
+            truls (filter some? (map trans-rule rules))
             ons (ns-name *ns*)]
         (eval (cons 'do (rest (nth trufs 2))))
         (in-ns ons)
         (run-with mode temps truls facts))
       (println (str "Wrong file format!")) ) ))
 
+(defn slurp-with-comments [f]
+  "Opens a reader on f and reads all its contents, returning a string.
+  Skip rest of the line starting from semicolon."
+  (let [sb (StringBuilder.)]
+    (with-open [^java.io.Reader r (reader f)]
+      (loop [c (.read r) comm false]
+        (if (neg? c)
+          (str sb)
+          (let [cc (char c)
+                is-comm (or (and (not comm) (= cc \;)) (and comm (not= cc \newline)))]
+            (if (not is-comm)
+              (.append sb cc))
+            (recur (.read r) is-comm)) ))) ))
+
 (defn app
   "rete application function"
   [& args]
   (condp = (count args)
-    3 (let [trufs (read-string (slurp (nth args 1)))
-		    facts (read-string (slurp (nth args 2)))]
+    3 (let [trufs (read-string (slurp-with-comments (nth args 1)))
+		    facts (read-string (slurp-with-comments (nth args 2)))]
         (run-with-mode (first args) trufs facts))
-    2 (run-with-mode (first args) (read-string (slurp (second args))))
+    2 (run-with-mode (first args) (read-string (slurp-with-comments (second args))))
     (println "Number of arguments: 2 or 3, see documentation!")))
 
 (defn strategy-depth []
@@ -913,6 +943,42 @@
   (doseq [k (keys @IDFACT)]
     (if (= (@IDFACT k) :deleted)
       (swap! IDFACT dissoc k))))
+
+(defn load-facts [path]
+  "Load facts from path and assert all of them into working memory"
+  (run (read-string (slurp-with-comments path))))
+;;  (doseq [fact (read-string (slurp-with-comments path))]
+;;    (assert-frame fact)))
+
+(defn save-facts
+  "Save all facts or facts of types to a file on a path in a format suitable to load"
+  ([path]
+   (save-facts :all path (mapcat fact-list (keys TEMPL))))
+  ([types path]
+   (save-facts :all path (mapcat fact-list types)))
+  ([types path facts]
+   (let [ffs (map rest facts)]
+     (with-open [^java.io.Writer w (writer path)]
+       (.write w "(")
+       (doseq [f (butlast ffs)]
+         (.write w (str f))
+         (.newLine w))
+       (.write w (str (last ffs)))
+       (.write w ")")))))
+
+(defn slot-value [s f]
+  "Returns value of slot of fact (as of item of result of the function fact-list)"
+  (s (apply hash-map (rest (rest f)))))
+
+(defn facts-with-slot-value
+  "Returns list of facts with slot values for which (f slot-value value) = true"
+  ([slot f value]
+   (facts-with-slot-value :all slot f value (fact-list)))
+  ([typ slot f value]
+   (facts-with-slot-value typ slot f value (fact-list typ)))
+  ([typ slot f value facts]
+   (filter #(f (slot-value slot %) value) facts)))
+
 
   ;; The End
 

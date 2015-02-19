@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>rete</groupId>
   <artifactId>rete</artifactId>
-  <version>5.2.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <version>5.2.2-SNAPSHOT</version>
   <name>rete</name>
   <description>Clojure RETE implementation for frames</description>
   <url>https://github.com/rururu/rete4frames</url>
@@ -17,7 +16,8 @@
   <scm>
     <connection>scm:git:git://github.com/rururu/rete4frames.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/rururu/rete4frames.git</developerConnection>
-    <tag>889255e8b1b0ad61175952cd4071fab1b6d0f89e</tag>
+    <tag>c1e67f6e409a7771bef1d08ba838ee36caee6106
+</tag>
     <url>https://github.com/rururu/rete4frames</url>
   </scm>
   <build>
@@ -30,18 +30,36 @@
     </resources>
     <testResources>
       <testResource>
-        <directory>test-resources</directory>
+        <directory>dev-resources</directory>
+      </testResource>
+      <testResource>
+        <directory>resources</directory>
       </testResource>
     </testResources>
+    <directory>target</directory>
+    <outputDirectory>target/classes</outputDirectory>
+    <plugins/>
   </build>
   <repositories>
     <repository>
       <id>central</id>
-      <url>http://repo1.maven.org/maven2</url>
+      <url>https://repo1.maven.org/maven2/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
     </repository>
     <repository>
       <id>clojars</id>
-      <url>http://clojars.org/repo/</url>
+      <url>https://clojars.org/repo/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
     </repository>
   </repositories>
   <dependencies>
@@ -49,6 +67,30 @@
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
       <version>1.6.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.clojure</groupId>
+      <artifactId>tools.nrepl</artifactId>
+      <version>0.2.6</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.clojure</groupId>
+          <artifactId>clojure</artifactId>
+        </exclusion>
+      </exclusions>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>clojure-complete</groupId>
+      <artifactId>clojure-complete</artifactId>
+      <version>0.2.3</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.clojure</groupId>
+          <artifactId>clojure</artifactId>
+        </exclusion>
+      </exclusions>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
