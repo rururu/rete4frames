@@ -12,32 +12,17 @@
   (BloodPressure
    person-id systolic diastolic date)
 
-  (Hypertensive
-   person-id severity)
-
-  (RecommendedMeds
-   person-id type)
-
   (PersonalData
    person-id name age race)
 
   (CoexistingDiseases
    person-id diabetes chronic-kidney-disease)
 
-  (Referral
-   person-id type urgency)
-
-  (HighRiskPatient
-   person-id condition-severity)
-
   (CurrentDate
    date)
 
   (FactStore
    path)
-
-  (Query
-   type value)
 
   (WorkingDay
    work)

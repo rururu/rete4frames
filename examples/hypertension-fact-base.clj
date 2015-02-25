@@ -19,4 +19,6 @@
 (BloodPressure systolic 155 date "17.1.2015" diastolic 90 person-id 1)
 (BloodPressure systolic 153 date "18.2.2015" diastolic 89 person-id 1)
 (BloodPressure systolic 132 date "19.2.2015" diastolic 78 person-id 3)
-(BloodPressure systolic 140 date "19.2.2015" diastolic 90 person-id 1))
+(BloodPressure systolic 140 date "19.2.2015" diastolic 90 person-id 1)
+(BloodPressure systolic 151 date "25.2.2015" diastolic 101 person-id 1)
+(BloodPressure systolic 141 date "25.2.2015" diastolic 88 person-id 3))
