@@ -652,7 +652,11 @@
    ?tsk (Analyse task P query age params ?pp result -1)
    =>
    (let [[min max] ?pp
-         pats (facts-with-slot-value 'PersonalData 'age #(<= (first %2) %1 (second %2)) ?pp)
+         pats (facts-with-slot-value
+               'PersonalData
+               'age
+               #(and (number? %1) (<= (first %2) %1 (second %2)))
+               ?pp)
          ?srt (sort-by #(slot-value 'name %) pats)]
      (modify ?tsk result ?srt)
      (println (str "\nPatients from " min " to " max " years old:\n"))

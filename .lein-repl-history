@@ -281,3 +281,5 @@ x
 (app "run" "examples/hypertension.clj")
 (facts)
 (app "run" "examples/hypertension.clj")
+(app "run" "examples/sudoku/sudoku.clj" "examples/sudoku/grid3x3-p16.clj")
+(app "run" "examples/hypertension.clj")
