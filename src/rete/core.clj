@@ -156,6 +156,7 @@
     (and (or (seq? ex) (vector? ex) (= (type ex) clojure.lang.PersistentHashSet))
          (not (empty? ex)))
       (collect-vars (first ex) (collect-vars (rest ex) yet))
+    (map? ex) (collect-vars (vals ex) yet)
     (vari? ex) (cons ex yet)
     true yet)))
 
@@ -867,11 +868,11 @@
    (dotimes [i n]
      (step))))
 
-(defn run [facts]
-  "Run facts (assert and fire)"
-  (doseq [f facts]
-    (assert-frame f)
-    (fire)))
+  (defn run [facts]
+    "Run facts (assert all facts and fire)"
+    (doseq [f facts]
+      (assert-frame f))
+    (fire))
 
 (defn run-with
   [mode temps truls facts]
