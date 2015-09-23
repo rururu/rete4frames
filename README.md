@@ -7,17 +7,17 @@ Manners Benchmark Table
 ----
 
 <table>
-<tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames v 5.2.2 (msec)</td></tr>
-<tr><td>manners8</td><td>1.5</td><td>128</td><td>x 85</td></tr>
-<tr><td>manners16</td><td>19</td><td>419</td><td>x 22</td></tr>
-<tr><td>manners32</td><td>258</td><td>1170</td><td>x 4.5</td></tr>
-<tr><td>manners64</td><td>8601</td><td>6457</td><td>x 0.75</td></tr>
-<tr><td>manners128</td><td>316109</td><td>55961</td><td>x 0.18</td></tr>
+<tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames v 5.2.3 (msec)</td></tr>
+<tr><td>manners8</td><td>1.4</td><td>65</td><td>x 46</td></tr>
+<tr><td>manners16</td><td>18</td><td>203</td><td>x 11</td></tr>
+<tr><td>manners32</td><td>259</td><td>948</td><td>x 3.7</td></tr>
+<tr><td>manners64</td><td>8664</td><td>6239</td><td>x 0.7</td></tr>
+<tr><td>manners128</td><td>316599</td><td>55081</td><td>x 0.17</td></tr>
 </table>
 
-Test results obtained on the same hardware and OS (Linux Mint 17, Qiana) 19 february 2015.
+Test results obtained on the same hardware and OS (Linux Mint 17, Qiana) 23 september 2015.
 As can be seen from the results, rete4frames initially far behind and then starts to catch up CLIPS v 6.24.
-On the most difficult test rete4frames more then 5 times superior to CLIPS v 6.24.
+On the most difficult test rete4frames almost 6 times faster than CLIPS v 6.24.
 
 To get the results run in REPL:
 
@@ -30,7 +30,7 @@ The benchmark table for Waltz algorithm is in [Waltz Benchmark Table] (https://g
 
 To include Rete for Frames into your Leiningen project:
 
-:dependencies [rete "5.2.2-SNAPSHOT"]
+:dependencies [rete "5.2.3-SNAPSHOT"]
 
 Running examples:
 ```clj

@@ -1,4 +1,4 @@
-(defproject rete "5.2.2-SNAPSHOT"
+(defproject rete "5.2.3-SNAPSHOT"
   :description "Clojure RETE implementation for frames"
   :url "https://github.com/rururu/rete4frames"
   :license {:name "Eclipse Public License"
@@ -6,4 +6,4 @@
   :jvm-opts ["-Xmx2000M"]
   :aot :all
   :main rete.core
-  :dependencies [[org.clojure/clojure "1.6.0"]])
+  :dependencies [[org.clojure/clojure "1.7.0"]])

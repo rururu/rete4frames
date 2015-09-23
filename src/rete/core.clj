@@ -45,7 +45,7 @@
 
 (defn templ-map [slots]
   "Created sorted map from list of slots with '? values"
-  (let [itl (interleave slots (repeat '?))]
+  (let [itl (interleave slots (repeat :?))]
     (apply sorted-map itl)))
 
 (defn to-funarg [typ mp]
@@ -69,16 +69,16 @@
   ;;(println [:TREE-MATCH :PATT patt :T-MEM t-mem :CTX ctx])
   (loop [pp patt mem t-mem]
     (if (number? mem)
-      (let [fids (ctx '?fids)]
+      (let [fids (ctx :?fids)]
         (if (not (some #{mem} fids))
-          [[mem (assoc ctx '?fids (cons mem fids))]]))
+          [[mem (assoc ctx :?fids (cons mem fids))]]))
       (if (seq pp)
         (let [p1 (first pp)
               p2 (or (ctx p1) p1)]
           (cond
-           (= p2 '?)
+           (= p2 :?)
            (mapcat #(tree-match (rest pp) (mem %) ctx) (keys mem))
-           (vari? p2)
+           (keyword? p2)
            (mapcat #(tree-match (rest pp) (mem %) (assoc ctx p2 %)) (keys mem))
            true
            (if-let [mem2 (mem p2)]
@@ -107,7 +107,7 @@
 
 (defn univars [cond]
   "Reduces all different variables to '?"
-  (map #(if (vari? %) '? %) cond))
+  (map #(if (vari? %) :? %) cond))
 
 (defn slot-in-templ [pair typ]
   "For pair of slot and value checks if slot is in template of typ.
@@ -189,6 +189,13 @@
       (if TRACE (println [:COMPILED cf]))
       cf)))
 
+(defn var-to-key [e]
+  (if (keyword? e)
+    (do (println (str "Keywords forbidden in LHS: " e)) (name e))
+    (if (and (symbol? e) (.startsWith (name e) "?"))
+      (keyword e)
+      e)))
+
 (defn mk-pattern-and-test [condition]
   "Make pattern or test"
   ;;(println [:MK-PATTERN-AND-TEST condition])
@@ -200,9 +207,11 @@
               [(butlast condition) (last condition)]
               [condition nil])
           rst (if test
-                (let [vrs (collect-vars test)]
-                  [vrs (mk-test-func test vrs)])
+                (let [vrs (collect-vars test)
+                      vks (map keyword vrs)]
+                  [vks (mk-test-func test vrs)])
                 [nil nil])
+          frame (map var-to-key frame)
           patt (cons (mk-funarg frame) rst)
           apid (a-indexof-pattern (template condition))]
         (list apid patt))))
@@ -213,6 +222,7 @@
 
 (defn mk-rhs-func [vrs rhs]
   "Create function from vector of variables and right hand side"
+  ;;(println [:MK-RHS-FUNC vrs rhs])
   (let [df (cons 'fn (cons vrs rhs))]
     (if TRACE (println [:RHS-FUNCTION df]))
     (let [cf (eval df)]
@@ -251,7 +261,7 @@
           mid (butlast (rest pts))
           vrs (collect-vars rhs)
           las (concat (last pts)
-                      (list pname sal vrs (mk-rhs-func vrs rhs)))]
+                      (list pname sal (map keyword vrs) (mk-rhs-func vrs rhs)))]
       (if (= (count lhs) 1)
         (list (cons 'ex las))
         (concat (list (cons 'e fir))
@@ -372,7 +382,7 @@
   "Match funarg of fact to funarg of pattern"
   ;;(println [:match-fact-to-pattern ffuar pfuar])
   (every? #(= % true)
-          (map (fn [x y] (or (= x y) (vari? y)))
+          (map (fn [x y] (or (= x y) (keyword? y)))
                ffuar
                pfuar)))
 
@@ -381,7 +391,7 @@
   ;;(println [:matched-context ffuar pfuar ctx])
   (let [nfuar (map #(or (ctx %) %) pfuar)]
     (if (match-fact-to-pattern ffuar nfuar)
-      (let [new-pairs (fn [x y] (if (and (not= y '?) (not= x '?) (vari? x))
+      (let [new-pairs (fn [x y] (if (and (not= y :?) (not= x :?) (keyword? x))
                                   (assoc {} x y)))
             pairs (filter some? (map new-pairs nfuar ffuar))]
         (if (seq pairs)
@@ -391,10 +401,10 @@
 (defn matched-ctx [[ffuar fid] [pfuar vrs func] ctx bi]
   "Match fact with pattern with respect to context"
   ;;(println [:matched-ctx ffuar fid pfun pargs vrs func ctx bi])
-  (let [fids (ctx '?fids)]
+  (let [fids (ctx :?fids)]
     (if (not (some #{fid} fids))
       (if-let [ctx2 (matched-context ffuar pfuar ctx)]
-        (try-func-add-fid func fid (assoc ctx2 '?fids (cons fid fids)) vrs bi)) ) ))
+        (try-func-add-fid func fid (assoc ctx2 :?fids (cons fid fids)) vrs bi)) ) ))
 
 (defn match-ctx-amem [amem [pfuar vrs func] ctx bi]
   "Match list of facts with pattern with respect to context and beta cell.
@@ -433,7 +443,7 @@
 
 (defn sumfids [ctx]
   "Evaluation of activation assesment 'sumfids' depending on strategy"
-  (let [fids (ctx '?fids)
+  (let [fids (ctx :?fids)
         sum (apply + fids)
         k (/ sum (count fids))]
     (if (= STRATEGY 'DEPTH)
@@ -445,7 +455,7 @@
   [aprod match-list]
   ;;(println [:ADD-TO-CONFSET :APROD aprod :MATCH-LIST (count match-list)])
   ;;(doseq [ctx match-list]
-  ;;  (println [:FIDS (ctx '?fids)]))
+  ;;  (println [:FIDS (ctx :?fids)]))
   (let [sal (salience aprod)
         srt [aprod (sort-by sumfids match-list)]
         do (aget CFARR sal)
@@ -470,7 +480,7 @@
 (defn activate-b [bi ctx-list]
   "Activate beta net cell of index <bi> with respect to a list of contexts
   already activated by a new fact with an index <new-fid>"
-  ;;(println [:ACTIVATE-B :BI bi :CTX-LIST (count ctx-list)])
+  ;;(println [:ACTIVATE-B :BI bi :CTX-LIST ctx-list])
   (let [bnode (aget BNET bi)
         [eix bal pattern & tail] bnode]
     (if (= (first pattern) 'not)
@@ -534,7 +544,7 @@
      (a-indices args anet)))
   ([args anet]
    (letfn [(path [args key anet]
-                 (if (or (= key '?) (= key (first args)))
+                 (if (or (= key :?) (= key (first args)))
                    (a-indices (rest args) (anet key))))]
      (if (number? anet)
        [anet]
@@ -543,7 +553,7 @@
 (defn remove-ctx-with [fid ctxlist]
   "Remove context for given fact id"
   ;;(println [:REMOVE-CTX-WITH :FID fid :CTXLIST ctxlist])
-  (doall (filter #(not (some #{fid} ('?fids %))) ctxlist)))
+  (doall (filter #(not (some #{fid} (:?fids %))) ctxlist)))
 
 (defn retract-b [fid bis]
   "Retract fact id from the beta memory"
@@ -600,7 +610,7 @@
   "Create fact from funarg and add it to alpha memory.
    Returns list of activated alpha memory cells"
   ;;(println [:AIS-FOR-FUNARG funarg])
-  (when-let [fact (mk-fact funarg)]
+  (if-let [fact (mk-fact funarg)]
     (when-let [ais (a-indices funarg)]
       (if TRACE (println [:==> :fid (second fact) (to-typmap funarg)]))
       (doseq [ai ais]
@@ -633,7 +643,7 @@
 (defn match-1-not-existed [ffuar [nfuar vars func] ctx]
   "Match funarg of fact to funarg of 1 pattern in a list of not exited"
   ;;(println [:MATCH-1-NOT-EXISTED ffuar nfuar vars func])
-  (and (every? #(= % true) (map (fn [x y] (or (= x y) (vari? y)))
+  (and (every? #(= % true) (map (fn [x y] (or (= x y) (keyword? y)))
                  ffuar
                  nfuar))
        (or (nil? func)
@@ -656,7 +666,7 @@
     true))
 
 (defn not-deleted [ctx]
-  (not (some #(= (@IDFACT %) :deleted) (ctx '?fids))))
+  (not (some #(= (@IDFACT %) :deleted) (ctx :?fids))))
 
 (defn resolve-for-ctx [ctx-lst]
   "Resolve conflict set context list based on 'novelty' and 'sumfield' assesment.

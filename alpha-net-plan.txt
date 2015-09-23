@@ -1,31 +1,14 @@
-Medication:
- -1: {? {? {? {? {? 21}}}}}
- ?: {? {? {? {? {? 17}}}}}
-WorkingDay:
- end: 34
- analyse: 23
- reception: 3
- ?: 2
-Treatment:
- ?: {? {? {1 16, ? 10}}}
-CurrentDate:
- ?: 1
-Analyse:
- ?: {his {-1 {P 33}}, race {-1 {P 32}}, age {-1 {P 31}}, all {-1 {P 30}}, -1 {? {D 28, P 27}}, ? {-1 {D 29, B 26, ? 25}, ? {? 24}}}
-PersonalData:
- ?: {? {? {black 18, nonblack 15, ? 6}}}
-Reception:
- GOAL-NOT-REACHED: {? {? 22}}
- DECISION: {? {? 12}}
- TREATMENT: {? {? 11}}
- RETROSPECT: {? {? 9}}
- BP-COMPARE: {? {? 8}}
- ?: {? {-1 5, ? 4}}
-FactStore:
- ?: 0
-CoexistingDiseases:
- true: {? {? 20}}
- ?: {? {? 19}, yes {? 14}}
- yes: {? {? 13}}
-BloodPressure:
- ?: {? {? {? 7}}}
+goal-is-to:
+ unlock: {:? {:? 0}}
+ hold: {:? {:? 3}, blank {:? 15}}
+ walk-to: {:? {:? 7}}
+ move: {ladder {:? 10}, :? {:? 17}}
+ on: {ladder {:? 12}, :? {:? 14}, floor {:? 18}}
+ eat: {:? {:? 21}}
+thing:
+ :?: {:? {:? {light 1, :? 4}, floor {:? 5}, ceiling {light 8}}, ladder {:? {:? 9}, floor {:? 11}}}
+monkey:
+ :?: {:? {:? 2, floor 20}}
+ blank: {:? {ladder 13, :? 16, floor 19}}
+chest:
+ :?: {:? {:? 6}}
