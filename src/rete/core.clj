@@ -32,8 +32,8 @@
 (defn dissoc-in
   "Dissociates an entry from a nested associative structure returning a new
   nested structure. keys is a sequence of keys. Any empty maps that result
-  will not be present in the new structure. (clojure.incubator)"
-  [m [k & ks :as keys]]
+  will not be present in the new structure."
+  [m [k & ks]]
   (if ks
     (if-let [nextmap (get m k)]
       (let [newmap (dissoc-in nextmap ks)]
@@ -569,10 +569,11 @@
 
 (defn remove-fmem [fid]
   "Remove fact from facts memory by fact id.
-   Returns funarg of removed fact"
+  Returns funarg of removed fact"
   (let [funarg (@IDFACT fid)]
-    (tree-rem funarg FMEM)
-    funarg))
+    (when (seq? funarg)
+      (tree-rem funarg FMEM)
+      funarg)))
 
 (defn beta-activate-above-not-node [bi funarg]
   "Activate beta-memory above not nodes"
