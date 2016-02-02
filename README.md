@@ -7,7 +7,7 @@ Manners Benchmark Table
 ----
 
 <table>
-<tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames v 5.2.3 (msec)</td></tr>
+<tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames v 5.2.4 (msec)</td></tr>
 <tr><td>manners8</td><td>1.4</td><td>62</td><td>x 44</td></tr>
 <tr><td>manners16</td><td>18</td><td>183</td><td>x 10</td></tr>
 <tr><td>manners32</td><td>259</td><td>920</td><td>x 3.6</td></tr>
