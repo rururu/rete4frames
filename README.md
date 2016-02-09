@@ -30,7 +30,7 @@ The benchmark table for Waltz algorithm is in [Waltz Benchmark Table] (https://g
 
 To include Rete for Frames into your Leiningen project:
 
-:dependencies [rete "5.2.3-SNAPSHOT"]
+:dependencies [rete "5.2.4-SNAPSHOT"]
 
 Running examples:
 ```clj
@@ -58,6 +58,8 @@ Continue prescribed medication.
 What is a name of a next patient? (no-patients)
 ...
 ```
+Yet another example: "Real" air traffic control system - client-server ClojureScript-Clojure application based on "Flightradar24"  web service (http://www.flightradar24.com/), "Leaflet" JavaScript libraty (http://leafletjs.com/), httpkit, compojure, core.async and others Clojure libraries. This example is in a separate repository https://github.com/rururu/rete4flights.
+
 How to include Rete for Frames into your Java programs see example [Eclipse project] (https://github.com/rururu/rete4frames/blob/master/Rete4framesEclipseTest/).
 
 For further information see [Documentation] (https://github.com/rururu/rete4frames/blob/master/doc/intro.md)
