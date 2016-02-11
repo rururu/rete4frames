@@ -3,7 +3,7 @@
   <groupId>rete</groupId>
   <artifactId>rete</artifactId>
   <packaging>jar</packaging>
-  <version>5.2.3-SNAPSHOT</version>
+  <version>5.2.4-SNAPSHOT</version>
   <name>rete</name>
   <description>Clojure RETE implementation for frames</description>
   <url>https://github.com/rururu/rete4frames</url>
@@ -16,8 +16,7 @@
   <scm>
     <connection>scm:git:git://github.com/rururu/rete4frames.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/rururu/rete4frames.git</developerConnection>
-    <tag>22a4f0b33041a13fded4448e17765f9e79a3a887
-</tag>
+    <tag>18582cfb497f8c735406a9925e39b6a7e9f534f3</tag>
     <url>https://github.com/rururu/rete4frames</url>
   </scm>
   <build>
@@ -30,14 +29,11 @@
     </resources>
     <testResources>
       <testResource>
-        <directory>dev-resources</directory>
-      </testResource>
-      <testResource>
         <directory>resources</directory>
       </testResource>
     </testResources>
     <directory>target</directory>
-    <outputDirectory>target/classes</outputDirectory>
+    <outputDirectory>target\classes</outputDirectory>
     <plugins/>
   </build>
   <repositories>
@@ -66,31 +62,7 @@
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
-      <version>1.7.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.clojure</groupId>
-      <artifactId>tools.nrepl</artifactId>
-      <version>0.2.6</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.clojure</groupId>
-          <artifactId>clojure</artifactId>
-        </exclusion>
-      </exclusions>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>clojure-complete</groupId>
-      <artifactId>clojure-complete</artifactId>
-      <version>0.2.3</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.clojure</groupId>
-          <artifactId>clojure</artifactId>
-        </exclusion>
-      </exclusions>
-      <scope>test</scope>
+      <version>1.8.0</version>
     </dependency>
   </dependencies>
 </project>
