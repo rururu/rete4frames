@@ -54,7 +54,7 @@
 
 (defn tree-put [funarg value mem]
   "Put into tree-like from map made memory"
-  (reset! mem (assoc-in @mem funarg value)))
+  (vreset! mem (assoc-in @mem funarg value)))
 
 (defn tree-get [funarg mem]
   "Get from tree-like from map made memory"
@@ -62,7 +62,7 @@
 
 (defn tree-rem [funarg mem]
   "Remove from tree-like from map made memory"
-  (reset! mem (dissoc-in @mem funarg)))
+  (vreset! mem (dissoc-in @mem funarg)))
 
 (defn tree-match [patt t-mem ctx]
   "Search fact in tree-type memory matching to pattern with respect to ctx"
@@ -130,7 +130,7 @@
         funarg (mk-funarg (univars (template cnd2)))]
     (when (nil? (tree-get funarg ANET))
       (tree-put funarg @ACNT ANET)
-      (swap! ACNT inc))))
+      (vswap! ACNT inc))))
 
 (defn anet-for-pset
   "Build the alpha net for the given production set (rule set) <pset> as a map"
@@ -280,7 +280,7 @@
           nnot (filter #(not= (first (nth % 3)) 'not) flt)]
       (aset ablink i (map first nnot))
       (if (seq ynot)
-        (swap! abnotl assoc i (map first ynot)) )) ))
+        (vswap! abnotl assoc i (map first ynot)) )) ))
 
 (defn fill-bnet [bnet bplan]
   "Fill beta net from beta net plan"
@@ -319,8 +319,8 @@
     (def TEMPL
       (apply hash-map (mapcat #(list (first %) (templ-map (rest %))) tset)))
     (if TRACE (println "\n.... Creating ANET PLAN for Pset ...."))
-    (def ANET (atom {}))
-    (def ACNT (atom 0))
+    (def ANET (volatile! {}))
+    (def ACNT (volatile! 0))
     (anet-for-pset pset)
     (when TRACE
       (log-hm "alpha-net-plan.txt" @ANET)
@@ -330,7 +330,7 @@
       (log-lst "beta-net-plan.txt" BPLAN)
       (println "\n.... Creating BNET ANET LINK PLAN for Pset ....\n"))
     (def ABLINK (object-array @ACNT))
-    (def ABNOTL (atom {}))
+    (def ABNOTL (volatile! {}))
     (def BCNT (count BPLAN))
     (def BNET (object-array BCNT))
     (fill-bnet BNET BPLAN)
@@ -348,13 +348,13 @@
 (defn reset []
   "Reset: clear and initialize all memories"
   (def AMEM (object-array @ACNT))
-  (dotimes [i (alength AMEM)] (aset AMEM i [nil (atom {})]))
+  (dotimes [i (alength AMEM)] (aset AMEM i [nil (volatile! {})]))
   (def BMEM (object-array BCNT))
   (def CFARR (object-array (inc (* 2 MAXSAL))))
-  (def IDFACT (atom {}))
-  (def FMEM (atom {}))
-  (def FCNT (atom 0))
-  (def FIDS (atom {})))
+  (def IDFACT (volatile! {}))
+  (def FMEM (volatile! {}))
+  (def FCNT (volatile! 0))
+  (def FIDS (volatile! {})))
 
 (defn mk-fact [funarg]
   "Make fact. Returns new fact [funarg id] id or nil if same fact exists"
@@ -362,8 +362,8 @@
   (if (nil? (tree-get funarg FMEM))
     (let [fid @FCNT]
       (tree-put funarg fid FMEM)
-      (swap! IDFACT assoc fid funarg)
-      (swap! FCNT inc)
+      (vswap! IDFACT assoc fid funarg)
+      (vswap! FCNT inc)
       [funarg fid])))
 
 (defn var-vals [mp vrs]
@@ -375,7 +375,7 @@
   (if (or (nil? func) (apply func (var-vals ctx vrs)))
     (let [fids (get @FIDS fid)]
       (if (not (some #{bi} fids))
-        (reset! FIDS (assoc @FIDS fid (cons bi fids))))
+        (vreset! FIDS (assoc @FIDS fid (cons bi fids))))
       ctx)))
 
 (defn match-fact-to-pattern [ffuar pfuar]
@@ -596,10 +596,10 @@
   ;;(println [:RETRACT-FACT fid])
   (if-let [funarg (remove-fmem fid)]
     (let [ais (a-indices funarg)
-          amem (atom {})]
-      (swap! IDFACT assoc fid :deleted)
+          amem (volatile! {})]
+      (vswap! IDFACT assoc fid :deleted)
       (retract-b fid (get @FIDS fid))
-      (reset! FIDS (dissoc @FIDS fid))
+      (vreset! FIDS (dissoc @FIDS fid))
       (doseq [ai ais]
         (tree-rem funarg (second (aget AMEM ai)) ))
       (if TRACE (println [:<== :fid fid (to-typmap funarg)]))
@@ -872,7 +872,7 @@
      (fire 1)
      (if (seq @FACTS)
        (do (assert-frame (first @FACTS))
-         (swap! FACTS rest)
+         (vswap! FACTS rest)
          (fire 1))
        (println "No facts!"))))
   ([n]
@@ -895,7 +895,7 @@
         (do (println (str "Wrong mode: " mode)) false))
     (do (create-rete temps truls)
       (condp = mode
-        "step" (def FACTS (atom facts))
+        "step" (def FACTS (volatile! facts))
         "trace" (run facts)
         "run" (time (run facts))) )))
 
@@ -954,7 +954,7 @@
   "Clear map @IDFACT from fact-ids marked as :deleted"
   (doseq [k (keys @IDFACT)]
     (if (= (@IDFACT k) :deleted)
-      (swap! IDFACT dissoc k))))
+      (vswap! IDFACT dissoc k))))
 
 (defn load-facts [path]
   "Load facts from path and assert all of them into working memory"
