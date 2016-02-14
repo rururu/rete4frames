@@ -314,36 +314,32 @@
 (defn create-rete
   "Create RETE from a production set and reset"
   [tset pset]
-  (try
-    (if TRACE (println "\n.... Creating TEMPLATES for Pset ....\n"))
-    (def TEMPL
-      (apply hash-map (mapcat #(list (first %) (templ-map (rest %))) tset)))
-    (if TRACE (println "\n.... Creating ANET PLAN for Pset ...."))
-    (def ANET (volatile! {}))
-    (def ACNT (volatile! 0))
-    (anet-for-pset pset)
-    (when TRACE
-      (log-hm "alpha-net-plan.txt" @ANET)
-      (println "\n.... Creating BNET PLAN for Pset ...."))
-    (def BPLAN (beta-net-plan pset))
-    (when TRACE
-      (log-lst "beta-net-plan.txt" BPLAN)
-      (println "\n.... Creating BNET ANET LINK PLAN for Pset ....\n"))
-    (def ABLINK (object-array @ACNT))
-    (def ABNOTL (volatile! {}))
-    (def BCNT (count BPLAN))
-    (def BNET (object-array BCNT))
-    (fill-bnet BNET BPLAN)
-    (fill-ablink-abnotl BPLAN ABLINK ABNOTL)
-    (when TRACE
-      (log-array "alpha-beta-links.txt" ABLINK)
-      (println "\n.... Log Files Created ....\n"))
-    (reset)
-    (if TRACE (println "\n.... RETE Created and Reset ....\n"))
-    [@ACNT BCNT]
-    (catch Throwable twe
-      (println twe)
-      nil)))
+  (if TRACE (println "\n.... Creating TEMPLATES for Pset ....\n"))
+  (def TEMPL
+    (apply hash-map (mapcat #(list (first %) (templ-map (rest %))) tset)))
+  (if TRACE (println "\n.... Creating ANET PLAN for Pset ...."))
+  (def ANET (volatile! {}))
+  (def ACNT (volatile! 0))
+  (anet-for-pset pset)
+  (when TRACE
+    (log-hm "alpha-net-plan.txt" @ANET)
+    (println "\n.... Creating BNET PLAN for Pset ...."))
+  (def BPLAN (beta-net-plan pset))
+  (when TRACE
+    (log-lst "beta-net-plan.txt" BPLAN)
+    (println "\n.... Creating BNET ANET LINK PLAN for Pset ....\n"))
+  (def ABLINK (object-array @ACNT))
+  (def ABNOTL (volatile! {}))
+  (def BCNT (count BPLAN))
+  (def BNET (object-array BCNT))
+  (fill-bnet BNET BPLAN)
+  (fill-ablink-abnotl BPLAN ABLINK ABNOTL)
+  (when TRACE
+    (log-array "alpha-beta-links.txt" ABLINK)
+    (println "\n.... Log Files Created ....\n"))
+  (reset)
+  (if TRACE (println "\n.... RETE Created and Reset ....\n"))
+  [@ACNT BCNT])
 
 (defn reset []
   "Reset: clear and initialize all memories"
@@ -886,14 +882,14 @@
     (fire))
 
 (defn run-with
-  [mode temps truls facts]
-  ;; (println [:RUN-WITH mode temps truls facts])
+  [mode temps rules facts]
+  ;; (println [:RUN-WITH mode temps rules facts])
   (if (condp = mode
         "run" (do (untrace) true)
         "trace" (do (trace) true)
         "step" (do (trace) true)
         (do (println (str "Wrong mode: " mode)) false))
-    (do (create-rete temps truls)
+    (do (create-rete temps (filter some? (map trans-rule rules)))
       (condp = mode
         "step" (def FACTS (volatile! facts))
         "trace" (run facts)
