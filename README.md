@@ -64,9 +64,11 @@ How to include Rete for Frames into your Java programs see example [Eclipse proj
 
 For further information see [Documentation] (https://github.com/rururu/rete4frames/blob/master/doc/intro.md)
 
+To get this functionality in ClojureScript see [cljs-rete4f] (https://github.com/rururu/cljs-rete4f)
+
 Copyright and license
 ----
 
-Copyright © 2014 Ruslan Sorokin.
+Copyright © 2014-2016 Ruslan Sorokin.
 
 Licensed under the EPL (see the file epl.html).
