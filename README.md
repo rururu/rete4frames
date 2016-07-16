@@ -60,7 +60,7 @@ What is a name of a next patient? (no-patients)
 ```
 Yet another example: "Real" air traffic control system - client-server ClojureScript-Clojure application based on "Flightradar24"  web service (http://www.flightradar24.com/), "Leaflet" JavaScript libraty (http://leafletjs.com/), httpkit, compojure, core.async and others Clojure libraries. This example is in a separate repository https://github.com/rururu/rete4flights.
 
-And one more: es-boat - a prototype of an expert system for coastal navigation. It uses [Protege-3.5 ontology editor] (http://protege.stanford.edu/) as a knowledge representation system and server-side GUI, [OpenStreetMap] (https://wiki.openstreetmap.org/wiki/API) API, Leaflet JavaScript library, [Cesium] (https://cesiumjs.org/) WebGL virtual globe and map engine, [GeoNames] (http://www.geonames.org/) geographical database and Wikipedia.
+And one more: es-boat - a prototype of an expert system for coastal navigation. It uses [Protege-3.5 ontology editor] (http://protege.stanford.edu/) as a knowledge representation system and server-side GUI, [OpenStreetMap] (https://wiki.openstreetmap.org/wiki/API) API, Leaflet JavaScript library, [Cesium] (https://cesiumjs.org/) WebGL virtual globe and map engine, [GeoNames] (http://www.geonames.org/) geographical database and Wikipedia. Link to this prpject: https://github.com/rururu/es-boat
 
 How to include Rete for Frames into your Java programs see example [Eclipse project] (https://github.com/rururu/rete4frames/blob/master/Rete4framesEclipseTest/).
 
