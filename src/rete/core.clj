@@ -3,7 +3,7 @@
 
 (declare TEMPL ACNT ANET AMEM)
 
-(def MAXSAL 10) ;; Salience range [-10, 10]
+(def MAXSAL 0) ;; Salience range [-0, 0]
 
 (def STRATEGY 'DEPTH) ;; Alternative 'BREADTH
 
@@ -229,16 +229,11 @@
       (if TRACE (println [:COMPILED cf]))
       cf)))
 
-(defn check-sal [sal]
-  "Check salience in [-MAXSAL, +MAXSAL] and correct to this interval"
-  (cond
-   (> sal MAXSAL)
-     (do (println (str "Salience " sal " is more than maximum " MAXSAL ", corrected to " MAXSAL))
-       MAXSAL)
-   (< sal (- MAXSAL))
-     (do (println (str "Salience " sal " is less than minimum " (- MAXSAL) ", corrected to " (- MAXSAL)))
-       (- MAXSAL))
-   true sal))
+(defn norm-sal [sal]
+  (let [s (if (< sal 0) (- 0 sal) sal)]
+    (if (> s MAXSAL)
+      (def MAXSAL s))
+    (+ MAXSAL sal)))
 
 (defn beta-net-plan
   "Create a plan of the beta net that will be used to its building.
@@ -250,7 +245,7 @@
     (enl (mapcat
            #(beta-net-plan
              (prod-name %)
-             (+ (check-sal (salience %)) MAXSAL)
+             (norm-sal (salience %))
              (lhs %)
              (rhs %))
            pset)))
@@ -350,7 +345,7 @@
   (def IDFACT (volatile! {}))
   (def FMEM (volatile! {}))
   (def FCNT (volatile! 0))
-  (def FIDS (volatile! {})))
+  (def BIDS (volatile! {})))
 
 (defn mk-fact [funarg]
   "Make fact. Returns new fact [funarg id] id or nil if same fact exists"
@@ -369,30 +364,38 @@
 (defn try-func-add-fid [func fid ctx vrs bi]
   ;;(println [:TRY-FUNC-ADD-FID func fid ctx vrs bi])
   (if (or (nil? func) (apply func (var-vals ctx vrs)))
-    (let [fids (get @FIDS fid)]
+    (let [fids (get @BIDS fid)]
       (if (not (some #{bi} fids))
-        (vreset! FIDS (assoc @FIDS fid (cons bi fids))))
+        (vreset! BIDS (assoc @BIDS fid (cons bi fids))))
       ctx)))
 
 (defn match-fact-to-pattern [ffuar pfuar]
   "Match funarg of fact to funarg of pattern"
-  ;;(println [:match-fact-to-pattern ffuar pfuar])
+  ;;(println [:MATCH-FACT-TO-PATTERN ffuar pfuar])
   (every? #(= % true)
           (map (fn [x y] (or (= x y) (keyword? y)))
                ffuar
                pfuar)))
 
-(defn matched-context [ffuar pfuar ctx]
+(defn ground-match [gargs fargs ctx]
+  "Match grounded arguments of pattern with arguments of fact.
+  Return updated context"
+  ;;(println [:GROUND-MATCH gargs fargs ctx])
+  (if (empty? gargs)
+    ctx
+    (let [[g & rgs] gargs
+          [f & rfs] fargs]
+      (ground-match rgs rfs (if (and (keyword? g) (not= g :?) (not= f :?))
+                              (assoc ctx g f)
+                              ctx)))))
+
+(defn matched-context [[f & fargs] [p & pargs] ctx]
   "Returns matched context for given fact, pattern and initial context"
-  ;;(println [:matched-context ffuar pfuar ctx])
-  (let [nfuar (map #(or (ctx %) %) pfuar)]
-    (if (match-fact-to-pattern ffuar nfuar)
-      (let [new-pairs (fn [x y] (if (and (not= y :?) (not= x :?) (keyword? x))
-                                  (assoc {} x y)))
-            pairs (filter some? (map new-pairs nfuar ffuar))]
-        (if (seq pairs)
-          (apply merge (cons ctx pairs))
-          ctx)))))
+  ;;(println [:MATCHED-CONTEXT [f fargs] [p pargs] ctx])
+  (if (= f p)
+    (let [gargs (map #(or (ctx %) %) pargs)]
+      (if (match-fact-to-pattern fargs gargs)
+        (merge ctx (ground-match gargs fargs {}))))))
 
 (defn matched-ctx [[ffuar fid] [pfuar vrs func] ctx bi]
   "Match fact with pattern with respect to context"
@@ -451,7 +454,7 @@
   [aprod match-list]
   ;;(println [:ADD-TO-CONFSET :APROD aprod :MATCH-LIST (count match-list)])
   ;;(doseq [ctx match-list]
-  ;;  (println [:FIDS (ctx :?fids)]))
+  ;;  (println [:BIDS (ctx :?fids)]))
   (let [sal (salience aprod)
         srt [aprod (sort-by sumfids match-list)]
         do (aget CFARR sal)
@@ -593,9 +596,9 @@
   (if-let [funarg (remove-fmem fid)]
     (let [ais (a-indices funarg)
           amem (volatile! {})]
-      (vswap! IDFACT assoc fid :deleted)
-      (retract-b fid (get @FIDS fid))
-      (vreset! FIDS (dissoc @FIDS fid))
+      (vswap! IDFACT dissoc fid)
+      (retract-b fid (get @BIDS fid))
+      (vswap! BIDS dissoc fid)
       (doseq [ai ais]
         (tree-rem funarg (second (aget AMEM ai)) ))
       (if TRACE (println [:<== :fid fid (to-typmap funarg)]))
@@ -663,7 +666,7 @@
     true))
 
 (defn not-deleted [ctx]
-  (not (some #(= (@IDFACT %) :deleted) (ctx :?fids))))
+  (every? #(@IDFACT %) (ctx :?fids)))
 
 (defn resolve-for-ctx [ctx-lst]
   "Resolve conflict set context list based on 'novelty' and 'sumfield' assesment.
@@ -745,10 +748,9 @@
 
 (defn frame-by-id [fid]
   "Extracts frame for fact id from facts memory"
-  (let [funarg (@IDFACT fid)]
-    (if (not= funarg :deleted)
-      (let [[typ mp] (to-typmap funarg)]
-        (cons typ (apply concat (seq mp))) ) )))
+  (if-let [funarg (@IDFACT fid)]
+    (let [[typ mp] (to-typmap funarg)]
+      (cons typ (apply concat (seq mp))) )))
 
 (defn fact-list
   "List of facts (of some type)"
@@ -946,17 +948,9 @@
   "Set conflict resolution strategy to breadth"
   (def STRATEGY 'BREADTH))
 
-(defn clear-deleted []
-  "Clear map @IDFACT from fact-ids marked as :deleted"
-  (doseq [k (keys @IDFACT)]
-    (if (= (@IDFACT k) :deleted)
-      (vswap! IDFACT dissoc k))))
-
-(defn load-facts [path]
-  "Load facts from path and assert all of them into working memory"
+(defn run-loaded-facts [path]
+  "Load facts from path, assert all of them into working memory and run"
   (run (read-string (slurp-with-comments path))))
-;;  (doseq [fact (read-string (slurp-with-comments path))]
-;;    (assert-frame fact)))
 
 (defn save-facts
   "Save all facts or facts of types to a file on a path in a format suitable to load"
@@ -987,6 +981,10 @@
   ([typ slot f value facts]
    (filter #(f (slot-value slot %) value) facts)))
 
+(defn only-load-facts [path]
+  "Load facts from path and assert all of them into working memory"
+  (doseq [fact (read-string (slurp-with-comments path))]
+    (assert-frame fact)))
 
-  ;; The End
+;; The End
 

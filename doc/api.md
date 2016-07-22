@@ -127,14 +127,21 @@ Set conflict resolution strategy to depth.
 ```
 Set conflict resolution strategy to breadth.
 
-### 17. Function load-facts ###
+### 17. Function run-load-facts ###
 ```clj
-(load-facts <path>)
+(run-load-facts <path>)
+```
+Load facts from path, assert all of them into working memory and run,
+- path - string representing a path to a file.
+
+### 18. Function only-load-facts ###
+```clj
+(run-load-facts <path>)
 ```
 Load facts from path and assert all of them into working memory,
 - path - string representing a path to a file.
 
-### 18. Function save-facts ###
+### 19. Function save-facts ###
 ```clj
 (save-facts <path>)
 (save-facts <types> <path>)
@@ -143,7 +150,7 @@ Save all facts or facts of types to a file on a path in a format suitable to loa
 - path - string representing a path to a file,
 - types - collection of types of facts.
 
-### 19. Function slot-value ###
+### 20. Function slot-value ###
 ```clj
 (slot-value <slot> <fact>)
 ```
@@ -151,7 +158,7 @@ Returns value of a slot of a fact,
 - slot - symbol representing a slot of a fact,
 - fact - list representing a fact (as of item of result of the function fact-list).
 
-### 20. Function facts-with-slot-value ###
+### 21. Function facts-with-slot-value ###
 ```clj
 (facts-with-slot-value <slot> <function> <value>)
 (facts-with-slot-value <type> <slot> <function> <value>)
@@ -175,4 +182,4 @@ Examples:
 
 While embedding Rete for Frames into your code you can use other functions. See [source code] (https://github.com/rururu/rete4frames/blob/master/src/rete/core.clj).
 
-Copyright © 2013 Ruslan Sorokin.
+Copyright © 2016 Ruslan Sorokin.
