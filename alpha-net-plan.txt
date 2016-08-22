@@ -1,14 +1,18 @@
-goal-is-to:
- unlock: {:? {:? 0}}
- hold: {:? {:? 3}, blank {:? 15}}
- walk-to: {:? {:? 7}}
- move: {ladder {:? 10}, :? {:? 17}}
- on: {ladder {:? 12}, :? {:? 14}, floor {:? 18}}
- eat: {:? {:? 21}}
-thing:
- :?: {:? {:? {light 1, :? 4}, floor {:? 5}, ceiling {light 8}}, ladder {:? {:? 9}, floor {:? 11}}}
-monkey:
- :?: {:? {:? 2, floor 20}}
- blank: {:? {ladder 13, :? 16, floor 19}}
-chest:
+context:
+ start: 0
+ assign_seats: 3
+ make_path: 7
+ check_done: 9
+ print_results: 12
+Guest:
+ :?: {:? {:? 1}}
+Count:
+ :?: 2
+Seating:
+ :?: {:? {:? {yes {:? {:? {:? 4}}}, no {:? {:? {:? 8}}}, :? {:? {:? {:? 11}}}}}}
+Path:
+ :?: {:? {:? 5}}
+Chosen:
  :?: {:? {:? 6}}
+Last:
+ :?: 10

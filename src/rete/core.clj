@@ -3,7 +3,8 @@
 
 (declare TEMPL ACNT ANET AMEM)
 
-(def MAXSAL 0) ;; Salience range [-0, 0]
+(def MINSAL 0) ;; Salience range [-0, 0]
+(def MAXSAL 0)
 
 (def STRATEGY 'DEPTH) ;; Alternative 'BREADTH
 
@@ -229,12 +230,6 @@
       (if TRACE (println [:COMPILED cf]))
       cf)))
 
-(defn norm-sal [sal]
-  (let [s (if (< sal 0) (- 0 sal) sal)]
-    (if (> s MAXSAL)
-      (def MAXSAL s))
-    (+ MAXSAL sal)))
-
 (defn beta-net-plan
   "Create a plan of the beta net that will be used to its building.
    The plan describes the beta net as a list, mean while the real beta net is an array.
@@ -245,7 +240,7 @@
     (enl (mapcat
            #(beta-net-plan
              (prod-name %)
-             (norm-sal (salience %))
+             (- (salience %) MINSAL)
              (lhs %)
              (rhs %))
            pset)))
@@ -319,6 +314,8 @@
   (when TRACE
     (log-hm "alpha-net-plan.txt" @ANET)
     (println "\n.... Creating BNET PLAN for Pset ...."))
+  (def MINSAL (apply min (map salience pset)))
+  (def MAXSAL (apply max (map salience pset)))
   (def BPLAN (beta-net-plan pset))
   (when TRACE
     (log-lst "beta-net-plan.txt" BPLAN)
@@ -341,7 +338,7 @@
   (def AMEM (object-array @ACNT))
   (dotimes [i (alength AMEM)] (aset AMEM i [nil (volatile! {})]))
   (def BMEM (object-array BCNT))
-  (def CFARR (object-array (inc (* 2 MAXSAL))))
+  (def CFARR (object-array (inc (+ MAXSAL (- 0 MINSAL)))))
   (def IDFACT (volatile! {}))
   (def FMEM (volatile! {}))
   (def FCNT (volatile! 0))

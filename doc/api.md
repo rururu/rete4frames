@@ -127,16 +127,16 @@ Set conflict resolution strategy to depth.
 ```
 Set conflict resolution strategy to breadth.
 
-### 17. Function run-load-facts ###
+### 17. Function run-loaded-facts ###
 ```clj
-(run-load-facts <path>)
+(run-loaded-facts <path>)
 ```
 Load facts from path, assert all of them into working memory and run,
 - path - string representing a path to a file.
 
 ### 18. Function only-load-facts ###
 ```clj
-(run-load-facts <path>)
+(only-load-facts <path>)
 ```
 Load facts from path and assert all of them into working memory,
 - path - string representing a path to a file.

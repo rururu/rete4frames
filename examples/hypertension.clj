@@ -44,7 +44,7 @@
    0
    (FactStore path ?p)
    =>
-   (load-facts ?p)
+   (run-loaded-facts ?p)
    (asser CurrentDate date (h/today))
    (asser PersonalData person-id 0 name ""))
 

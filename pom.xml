@@ -16,7 +16,8 @@
   <scm>
     <connection>scm:git:git://github.com/rururu/rete4frames.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/rururu/rete4frames.git</developerConnection>
-    <tag>4073037ac11b01481d4d8503673c2a2b3838c29c</tag>
+    <tag>c975dea700caf34170504a837ae93defc5f0d598
+</tag>
     <url>https://github.com/rururu/rete4frames</url>
   </scm>
   <build>
@@ -33,7 +34,7 @@
       </testResource>
     </testResources>
     <directory>target</directory>
-    <outputDirectory>target\classes</outputDirectory>
+    <outputDirectory>target/classes</outputDirectory>
     <plugins/>
   </build>
   <repositories>
