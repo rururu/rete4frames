@@ -1,0 +1,278 @@
+; Wed May 14 13:29:58 MSK 2014
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+([Clojure_Class0] of  CloFunction
+
+	(source "(if (or (seq? x) (vector? x) (map? x))\n    (do (ctpls x) (count x))\n    (do (ctpl x) 1))")
+	(title "see [x]"))
+
+([Clojure_Class10] of  CloVar
+
+	(source "(.getCurrentProject (ProjectManager/getProjectManager))")
+	(title "^:dynamic *prj*"))
+
+([Clojure_Class10000] of  CloProgram
+
+	(cloFunctions
+		[Clojure_Class170000]
+		[Clojure_Class30002]
+		[Clojure_Class20000]
+		[Clojure_Class30001]
+		[Clojure_Class50000]
+		[Clojure_Class70009]
+		[Clojure_Class70008]
+		[Clojure_Class30000]
+		[Clojure_Class30008]
+		[Clojure_Class40001]
+		[Clojure_Class40002]
+		[Clojure_Class40000]
+		[Clojure_Class50001]
+		[Clojure_Class60002]
+		[Clojure_Class60003]
+		[Clojure_Class160000]
+		[Clojure_Class60004]
+		[Clojure_Class0]
+		[Clojure_Class120000]
+		[Clojure_Class130000]
+		[Clojure_Class180000]
+		[Clojure_Class190000]
+		[Clojure_Class200000])
+	(cloNamespace [Clojure_Class9])
+	(cloVars
+		[Clojure_Class10]
+		[Clojure_Class11])
+	(title "protege"))
+
+([Clojure_Class100000] of  CloFunction
+
+	(source "([] 1)\n([x] (+ x 1))\n([x & y] (+ x (apply + y) 1))")
+	(title "plus-one"))
+
+([Clojure_Class100004] of  CloFunction
+
+	(source "(str (:nom this) \" flies \" x)")
+	(title "fly [this x]"))
+
+([Clojure_Class100005] of  CloRecord
+
+	(cloImplementations [Clojure_Class90002])
+	(title "Bird"))
+
+([Clojure_Class11] of  CloVar
+
+	(source "(.getKnowledgeBase *prj*)")
+	(title "^:dynamic *kb*"))
+
+([Clojure_Class110000] of  CloMacro
+
+	(source "[[x f y]] `(~f ~x ~y)")
+	(title "infix2"))
+
+([Clojure_Class110011] of  CloExtendType
+
+	(cloImplementations [Clojure_Class110012])
+	(title "java.util.Date"))
+
+([Clojure_Class110012] of  CloImplementation
+
+	(cloFunctions [Clojure_Class90000])
+	(title "Fly"))
+
+([Clojure_Class120000] of  CloFunction
+
+	(source ";; working inside context containing ClsWidget for corresponding instance\n(.getSelection (.getSlotWidget (mp \"clsWidget\") (slt slot)))")
+	(title "selection [mp slot]"))
+
+([Clojure_Class120003] of  CloMacro
+
+	(source "(list f x y)")
+	(title "infix1 [x f y]"))
+
+([Clojure_Class130000] of  CloMacro
+
+	(source "`(try\n   ~code\n   (catch Throwable th#\n      (print-cause-trace th#)\n      (println)))")
+	(title "picat [code]"))
+
+([Clojure_Class140000] of  CloMacro
+
+	(source "`(let [start# (. System (nanoTime))\n        ret# ~expr]\n     (ctpl (str \"Elapsed time: \" (/ (double (- (. System (nanoTime)) start#)) 1000000.0) \" msecs\"))\n     ret#)")
+	(title "rutime [expr]"))
+
+([Clojure_Class150000] of  CloFunction
+
+	(documentation [Clojure_Class150001])
+	(source "`(let [start# (. System (nanoTime))\n       ret# ~expr]\n   (println (str \"Elapsed time: \" (/ (double (- (. System (nanoTime)) start#)) 1000000.0) \" msecs\"))\n   ret#)")
+	(title "rutime [expr]"))
+
+([Clojure_Class150001] of  CloDocumentation
+
+	(source "Calculate and print time of calculation expression.\n   Returns result of calculation"))
+
+([Clojure_Class160000] of  CloFunction
+
+	(source ";; Find insance of class cls with slot of value, or create it\n(ClojureTab/findForSlotValue cls slot value)")
+	(title "fifos [cls slot value]"))
+
+([Clojure_Class170000] of  CloFunction
+
+	(source "(.getInstance *kb* name)")
+	(title "ins [name]"))
+
+([Clojure_Class180000] of  CloMacro
+
+	(source "`(let [x# ~x]\n    (println \"dbg:\" '~x \"=\" x#)\n    x#)")
+	(title "dbg [x]"))
+
+([Clojure_Class190000] of  CloFunction
+
+	(source "(not (or (nil? boolslot) \n           (= boolslot Boolean/FALSE)\n           (= boolslot '?)))")
+	(title "is? [boolslot]"))
+
+([Clojure_Class20000] of  CloFunction
+
+	(source "; Print s into REPL and return s\n(clojuretab.ClojureTab/replappend (print-str s))\ns")
+	(title "ctp [s]"))
+
+([Clojure_Class200000] of  CloFunction
+
+	(source ";; Find annotated instance\n(let [sfs (.getSystemFrames *kb*)\n       acl (.getAnnotationCls sfs)\n       tsl (.getAnnotationTextSlot sfs)\n       isl (.getAnnotatedInstanceSlot sfs)\n       ais (.getInstances acl)]\n  (loop [ail ais]\n    (if (seq ail)\n        (let [ai (first ail)\n               txt (.getOwnSlotValue ai tsl)\n               ins (.getOwnSlotValue ai isl)]\n          (if (and (or (nil? inss) (some #{ins} inss))\n	(or (nil? text) (.startsWith txt text)))\n               ins\n               (recur (rest ail)) ))) ))")
+	(title "fainst [inss text]"))
+
+([Clojure_Class30000] of  CloFunction
+
+	(source "; Return singl slot value of instance\n(.getOwnSlotValue instance (.getSlot *kb* slot-name))")
+	(title "sv [instance slot-name]"))
+
+([Clojure_Class30001] of  CloFunction
+
+	(source "; Print s as line into REPL and return s\n(clojuretab.ClojureTab/replappend (str s \"\\n\"))\ns")
+	(title "ctpl [s]"))
+
+([Clojure_Class30002] of  CloFunction
+
+	(source "; Returns instances of cls\n(.getInstances (.getCls *kb* cls-name))")
+	(title "cls-instances [cls-name]"))
+
+([Clojure_Class30008] of  CloFunction
+
+	(source "; Return multiple slot values of instance\n(.getOwnSlotValues instance (.getSlot *kb* slot-name))")
+	(title "svs [instance slot-name]"))
+
+([Clojure_Class40000] of  CloFunction
+
+	(source "; Create and return class with parent classes\n(let [prs (if parents\n                (map #(.getCls *kb* %) parents)\n                (list (.getCls *kb* \":THING\")))]\n (.createCls *kb* name prs))")
+	(title "crec [name & parents]"))
+
+([Clojure_Class40001] of  CloFunction
+
+	(source "; Set singl slot value of instance\n(.setOwnSlotValue instance (.getSlot *kb* slot-name) value)")
+	(title "ssv [instance slot-name value]"))
+
+([Clojure_Class40002] of  CloFunction
+
+	(source "; Set multiple slot values of instance\n(.setOwnSlotValues instance (.getSlot *kb* slot-name) values)")
+	(title "ssvs [instance slot-name values]"))
+
+([Clojure_Class50000] of  CloFunction
+
+	(source "(doall (map ctpl s))\ns")
+	(title "ctpls [s]"))
+
+([Clojure_Class50001] of  CloFunction
+
+	(source "; Create and return slot.\n; Key parameters: :type, :cardinality, :classes, :default\n(let [opts (apply hash-map options)\n       typ (condp = (opts :type)\n                :instance (ValueType/INSTANCE)\n                :float (ValueType/FLOAT)\n                :integer (ValueType/INTEGER)\n                :boolean (ValueType/BOOLEAN)\n                :class (ValueType/CLS)\n                :any (ValueType/ANY)\n                :symbol (ValueType/SYMBOL)\n                :string (ValueType/STRING)\n                (ValueType/STRING))\n       mlt (condp = (opts :cardinality)\n                :multiple true\n                false)\n       cls (if (opts :classes)\n                (map #(.getCls *kb* %) (opts :classes))\n                (list (.getCls *kb* \":THING\")))\n       dfv (if (opts :default)\n                (condp = typ\n                  :integer (map #(Integer. %) (opts :default))\n                  :float (map #(Float. %) (opts :default))\n                  (opts :default)))\n       slot (.createSlot *kb* name)]\n  (.setValueType slot typ)\n  (.setAllowsMultipleValues slot mlt)\n  (if dfv\n      (.setDefaultValues slot dfv))\n  (if (= typ (ValueType/INSTANCE))\n      (.setAllowedClses slot cls))\n  slot)")
+	(title "cres [name & options]"))
+
+([Clojure_Class60000] of  CloExtendProtocol
+
+	(cloImplementations
+		[Clojure_Class60001]
+		[Clojure_Class70004])
+	(title "Fly"))
+
+([Clojure_Class60001] of  CloImplementation
+
+	(cloFunctions [Clojure_Class90000])
+	(title "String"))
+
+([Clojure_Class60002] of  CloFunction
+
+	(source "; Return new instance of class cls\n(.createInstance *kb* nil (.getCls *kb* cls))")
+	(title "crin [cls]"))
+
+([Clojure_Class60003] of  CloFunction
+
+	(source "; Delete instance\n(.deleteInstance *kb* instance)")
+	(title "delin [instance]"))
+
+([Clojure_Class60004] of  CloFunction
+
+	(source ";; Find insance of class cls with slot of value, or create it\n(let [ins (fifos cls slot value)]\n  (or ins (let [ins (crin cls)] (ssv ins slot value) ins)))")
+	(title "foc [cls slot value]"))
+
+([Clojure_Class70000] of  CloProgram
+
+	(cloExtendProtocols [Clojure_Class60000])
+	(cloExtendTypes [Clojure_Class110011])
+	(cloFunctions
+		[Clojure_Class100000]
+		[Clojure_Class110000]
+		[Clojure_Class120003])
+	(cloNamespace [Clojure_Class80001])
+	(cloProtocols [Clojure_Class90002])
+	(cloRecords [Clojure_Class100005])
+	(title "Fly"))
+
+([Clojure_Class70004] of  CloImplementation
+
+	(cloFunctions [Clojure_Class90001])
+	(title "Double"))
+
+([Clojure_Class70008] of  CloFunction
+
+	(source "(.getSlot *kb* name)")
+	(title "slt [name]"))
+
+([Clojure_Class70009] of  CloFunction
+
+	(source "(.getCls *kb* name)")
+	(title "cls [name]"))
+
+([Clojure_Class80000] of  CloFunction
+
+	(source "(str (:nom this) \" walking \" species)")
+	(title "walk [this]"))
+
+([Clojure_Class80001] of  CloNamespace
+
+	(title "fly.bird"))
+
+([Clojure_Class9] of  CloNamespace
+
+	(source "(:use clojure.stacktrace)\n(:import\n edu.stanford.smi.protege.ui.ProjectManager\n edu.stanford.smi.protege.model.ValueType\n clojuretab.ClojureTab)")
+	(title "protege.core"))
+
+([Clojure_Class90000] of  CloFunction
+
+	(source "(str string \" is flying..\")")
+	(title "fly [string]"))
+
+([Clojure_Class90001] of  CloFunction
+
+	(source "(str \"Double \" dbl \" is flying..\")")
+	(title "fly [dbl]"))
+
+([Clojure_Class90002] of  CloImplementation
+
+	(cloFunctions
+		[Clojure_Class90003]
+		[Clojure_Class100004]
+		[Clojure_Class80000])
+	(title "Fly"))
+
+([Clojure_Class90003] of  CloFunction
+
+	(source "(str (:nom this) \" flies..\")")
+	(title "fly [this]"))

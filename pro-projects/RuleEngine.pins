@@ -1,0 +1,147 @@
+; Sat Sep 10 21:38:32 MSK 2016
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+([RETE_Class2] of  CloFunction
+
+	(source "(when-let [ri (if (string? rule)\n	(p/fifos \"Rule\" \"title\" rule)\n	rule)]\n  (let [nm (p/sv ri \"title\")\n         _ (if (p/is? trace) (println [:MK-RULE nm]))\n        sal (p/sv ri \"salience\")\n        lhs (read-string (str \"(\" (p/sv ri \"lhs\") \")\"))\n        rhs (read-string (str \"(\" (p/sv ri \"rhs\") \")\"))]\n    (concat [nm sal] lhs ['=>] rhs)))")
+	(title "mk-rule [rule trace]"))
+
+([RETE_Class4] of  CloFunction
+
+	(source "([insortit]\n  (when-let [ins (if (string? insortit)\n	     (p/fifos \"Run\" \"title\" insortit)\n	     insortit)]\n    (run-engine (if (string? insortit)\n	    insortit\n	    (p/sv insortit \"title\"))\n	(p/svs ins \"rule-sets\")\n	(p/svs ins \"fact-classes\")\n	(p/svs ins \"facts\")\n	(p/sv   ins \"trace\"))))\n([hm inst]\n  (let [mp (into {} hm)\n         tit (mp \"title\")\n         rss (mp \"rule-sets\")\n         fcs (mp \"fact-classes\")\n         ffs (mp \"facts\")\n         trc (mp \"trace\")]\n    (run-engine tit rss fcs ffs trc)))\n([tit rss fcs ffs trc]\n  (println [:RUN-ENGINE tit])\n    (let [ffc (facts-from-classes fcs)\n           facts (concat ffc ffs)\n           tms (mapcat #(p/svs % \"templates\") rss)\n           rls (mapcat #(p/svs % \"rules\") rss)\n           mts (mk-templates tms)\n           mrs (map #(mk-rule % trc) rls)\n           mtr (map rete/trans-rule mrs)]\n       (println (str \"Trace: \" trc))\n       (println (str \"Templates: \" (count mts)))\n       (println (str \"Rules: \" (count mtr)))\n       (println (str \"Facts: \" (count facts)))\n       (run-engine trc mts mtr facts)))\n([trac templs rules facts]\n  (time\n    (do \n      (if (p/is? trac)\n        (rete/trace)\n        (rete/untrace))\n      (rete/create-rete templs rules)\n      (doseq [f facts]\n          (rete/assert-frame (mk-frame f))\n          (rete/fire)) ) ))")
+	(title "run-engine"))
+
+([RuleEngine_Class0] of  CloFunction
+
+	(source "(letfn [(mk-tpl [cls]\n	(concat [(symbol (.getName cls)) 'INSTANCE]\n	  (map #(symbol (.getName %)) (.getTemplateSlots cls))))]\n  (if (seq? clss)\n    (map mk-tpl clss)\n    (mk-templates (.getSubclasses clss)) ))")
+	(title "mk-templates [clss]"))
+
+([RuleEngine_Class10000] of  CloFunction
+
+	(source "(let [all (rete/fact-list)\n      sel (if (= typ :all) all (filter #(= (second %) typ) all))]\n  (def k 0)\n  (doseq [fact sel]\n    (let [[n typ & rp] fact\n          mp (apply hash-map rp)]\n      (p/ctpl (str k \" \" typ \" \" (or (mp 'title) (mp 'label)) \" status: \" (mp 'status) \" fact: \" n))\n      (def k (inc k)) ) ))")
+	(title "sp [typ]"))
+
+([RuleEngine_Class100000] of  CloFunction
+
+	(source "(if-let [rr (seq (p/cls-instances \"Rule\"))]\n  (let [fn \"Rules.clj\"]\n    (with-open [wrtr (clojure.java.io/writer fn)]\n      (doseq [r rr]\n        (.write wrtr (str \"(\" (p/sv r \"title\") \" \" (p/sv r \"salience\") \"\\n\"))\n        (.write wrtr (str (p/sv r \"lhs\") \"\\n\"))\n        (.write wrtr \"=>\\n\")\n        (.write wrtr (str (p/sv r \"rhs\") \")\\n\\n\")) ))\n    (str \"Written \" (count rr) \" rules into \" fn)))")
+	(title "dr []"))
+
+([RuleEngine_Class110000] of  CloFunction
+
+	(source "(letfn [(ads [stm [fid typ mp]]\n	(if-let [ste (typ stm)]\n	  (assoc stm typ (inc ste))\n	  (assoc stm typ 1)))]\n  (let [fl (rete/fact-list)\n         stm (reduce ads {} fl)\n         sto (sort-by second (seq stm))\n         str (reverse sto)]\n    (p/ctpls str)\n    (count fl)))")
+	(title "sts []"))
+
+([RuleEngine_Class120000] of  CloFunction
+
+	(source "(let [funarg (@rete/IDFACT fid)]\n  (if (not= funarg :deleted)\n    (let [[typ mp] (rete/to-typmap funarg)]\n      [typ mp fid])))")
+	(title "typmap-by-id [fid]"))
+
+([RuleEngine_Class120001] of  CloFunction
+
+	(source "([]\n (filter #(not= (second %) nil)\n          (for [i (range @rete/FCNT)](typmap-by-id i))))\n([typ]\n (filter #(= (first %) typ) (typmapfids)))")
+	(title "typmapfids"))
+
+([RuleEngine_Class130000] of  CloFunction
+
+	(source "(rete/fire)")
+	(title "fire-all-rules [hm inst]"))
+
+([RuleEngine_Class140000] of  CloFunction
+
+	(source "(let [mp (into {} hm)\n      clw (mp \"clsWidget\")\n      sel (.getSelection (.getSlotWidget clw (p/slt \"instances\")))]\n  (if (seq sel)\n    (retract-instances sel)))")
+	(title "retr-inss [hm inst]"))
+
+([RuleEngine_Class150000] of  CloFunction
+
+	(source "(rete/log-lst \"beta-net-plan.txt\" rete/BPLAN)")
+	(title "bnp []"))
+
+([RuleEngine_Class150001] of  CloFunction
+
+	(source "(rete/reset)")
+	(title "do-reset [hm inst]"))
+
+([RuleEngine_Class160000] of  CloFunction
+
+	(source "(doseq [ins inss]\n  (doseq [fact (rete/facts-with-slot-value 'INSTANCE = (.getName ins))]\n    (rete/retract-fact (first fact) true)))")
+	(title "retract-instances [inss]"))
+
+([RuleEngine_Class170000] of  CloFunction
+
+	(source "(let [all (rete/fact-list)\n      sel (if (= typ :all) all (filter #(= (second %) typ) all))]\n  (doseq [fact sel]\n    (p/ctpl \"\")\n    (p/ctpl fact)))")
+	(title "lp [typ]"))
+
+([RuleEngine_Class180001] of  CloVar
+
+	(source "(atom {})")
+	(title "LOGS"))
+
+([RuleEngine_Class20000] of  CloFunction
+
+	(source "(let [all (rete/fact-list)\n      fact (first (filter #(= (first %) n) all))]\n  (if fact\n    (let [[[n typ] & rp] (partition-all 2 fact)]\n      (p/ctpl (str \"Fact\" n \" \" typ))\n      (doseq [sv rp]\n        (p/ctpl (str \"  \" (first sv) \" \" (second sv))) ) )))")
+	(title "f [n]"))
+
+([RuleEngine_Class30000] of  CloProgram
+
+	(cloFunctions
+		[RuleEngine_Class0]
+		[RETE_Class2]
+		[RuleEngine_Class90000]
+		[RuleEngine_Class50000]
+		[RETE_Class4]
+		[RuleEngine_Class70000]
+		[RuleEngine_Class160000]
+		[RuleEngine_Class60002]
+		[RuleEngine_Class140000]
+		[RuleEngine_Class60000]
+		[RuleEngine_Class10000]
+		[RuleEngine_Class170000]
+		[RuleEngine_Class80000]
+		[RuleEngine_Class20000]
+		[RuleEngine_Class100000]
+		[RuleEngine_Class110000]
+		[RuleEngine_Class120000]
+		[RuleEngine_Class120001]
+		[RuleEngine_Class130000]
+		[RuleEngine_Class150001]
+		[RuleEngine_Class150000])
+	(cloNamespace [RuleEngine_Class40000])
+	(cloVars [RuleEngine_Class180001])
+	(title "Rule Engine"))
+
+([RuleEngine_Class40000] of  CloNamespace
+
+	(source "(:require\n  [protege.core :as p]\n  [rete.core :as rete])")
+	(title "ru.rules"))
+
+([RuleEngine_Class50000] of  CloFunction
+
+	(source "(mapcat #(.getInstances %) fcs)")
+	(title "facts-from-classes [fcs]"))
+
+([RuleEngine_Class60000] of  CloFunction
+
+	(source "(let [all (rete/fact-list)\n      sel (if (= typ :all) all (filter #(= (second %) typ) all))]\n  (doseq [fact sel]\n    (p/ctpl \"\")\n    (let [[[n typ] & rp] (partition-all 2 fact)]\n      (p/ctpl (str \"Fact\" n \" \" typ))\n      (doseq [sv rp]\n        (p/ctpl (str \"  \" (first sv) \" \" (second sv))) ) )))")
+	(title "pp [typ]"))
+
+([RuleEngine_Class60002] of  CloFunction
+
+	(source "(let [mp (into {} hm)\n      clw (mp \"clsWidget\")\n      sel (.getSelection (.getSlotWidget clw (p/slt \"instances\")))]\n  (if (seq sel)\n    (assert-instances sel)))")
+	(title "ass-inss [hm inst]"))
+
+([RuleEngine_Class70000] of  CloFunction
+
+	(source "(doseq [ins inss]\n  (rete/assert-frame (mk-frame ins)))")
+	(title "assert-instances [inss]"))
+
+([RuleEngine_Class80000] of  CloFunction
+
+	(source "(let [all (rete/fact-list)\n      sel (filter #(some #{val} %) all)]\n  (def k 0)\n  (doseq [fact sel]\n    (let [[n typ & rp] fact\n          mp (apply hash-map rp)]\n      (p/ctpl (str k \" \" typ \" \" (or (mp 'title) (mp 'label)) \" status: \" (mp 'status) \" fact: \" n))\n      (def k (inc k)) ) ))")
+	(title "cv [val]"))
+
+([RuleEngine_Class90000] of  CloFunction
+
+	(source "(letfn [(sval [slt ins]\n	(if (.getAllowsMultipleValues slt)\n	  (.getOwnSlotValues ins slt)\n                        (or (.getOwnSlotValue ins slt) '?)))]\n  (let [typ (.getDirectType ins)\n        slots (.getTemplateSlots typ)\n        svs (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)\n        svs (cons 'INSTANCE (cons (.getName ins) svs))]\n    (cons (symbol (.getName typ)) svs)))")
+	(title "mk-frame [ins]"))

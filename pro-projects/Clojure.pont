@@ -1,0 +1,263 @@
+; Wed May 14 13:29:58 MSK 2014
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+
+(defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
+	(is-a USER)
+	(role abstract)
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot cloTypes
+		(type INSTANCE)
+;+		(allowed-classes CloType)
+		(create-accessor read-write))
+	(single-slot documentation
+		(type INSTANCE)
+;+		(allowed-classes CloDocumentation)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot cloImplementations
+		(type INSTANCE)
+;+		(allowed-classes CloImplementation)
+		(create-accessor read-write))
+	(single-slot source
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot cloFunctions
+		(type INSTANCE)
+;+		(allowed-classes CloFunction CloMacro)
+		(create-accessor read-write))
+	(multislot fields
+		(type INSTANCE)
+;+		(allowed-classes %3ASTANDARD-SLOT)
+		(create-accessor read-write))
+	(multislot cloVars
+		(type INSTANCE)
+;+		(allowed-classes CloVar)
+		(create-accessor read-write))
+	(multislot cloExtendTypes
+		(type INSTANCE)
+;+		(allowed-classes CloExtendType)
+		(create-accessor read-write))
+	(multislot cloRecords
+		(type INSTANCE)
+;+		(allowed-classes CloRecord)
+		(create-accessor read-write))
+	(multislot cloProtocols
+		(type INSTANCE)
+;+		(allowed-classes CloProtocol)
+		(create-accessor read-write))
+	(multislot cloPrograms
+		(type INSTANCE)
+;+		(allowed-classes CloProgram)
+		(create-accessor read-write))
+	(multislot cloExtendProtocols
+		(type INSTANCE)
+;+		(allowed-classes CloExtendProtocol)
+		(create-accessor read-write))
+	(single-slot cloNamespace
+		(type INSTANCE)
+;+		(allowed-classes CloNamespace)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass ClojureOntology
+	(is-a USER)
+	(role abstract))
+
+(defclass CloFunction
+	(is-a ClojureOntology)
+	(role concrete)
+	(single-slot documentation
+		(type INSTANCE)
+;+		(allowed-classes CloDocumentation)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot source
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass CloMacro
+	(is-a ClojureOntology)
+	(role concrete)
+	(single-slot documentation
+		(type INSTANCE)
+;+		(allowed-classes CloDocumentation)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot source
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass CloFuncall
+	(is-a ClojureOntology)
+	(role concrete)
+	(single-slot source
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass CloNamespace
+	(is-a ClojureOntology)
+	(role concrete)
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot source
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass CloVar
+	(is-a ClojureOntology)
+	(role concrete)
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot source
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass CloProgram
+	(is-a ClojureOntology)
+	(role concrete)
+	(multislot cloFunctions
+		(type INSTANCE)
+;+		(allowed-classes CloFunction CloMacro)
+		(create-accessor read-write))
+	(single-slot documentation
+		(type INSTANCE)
+;+		(allowed-classes CloDocumentation)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot cloVars
+		(type INSTANCE)
+;+		(allowed-classes CloVar)
+		(create-accessor read-write))
+	(multislot cloProtocols
+		(type INSTANCE)
+;+		(allowed-classes CloProtocol)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot cloExtendTypes
+		(type INSTANCE)
+;+		(allowed-classes CloExtendType)
+		(create-accessor read-write))
+	(multislot cloRecords
+		(type INSTANCE)
+;+		(allowed-classes CloRecord)
+		(create-accessor read-write))
+	(multislot cloExtendProtocols
+		(type INSTANCE)
+;+		(allowed-classes CloExtendProtocol)
+		(create-accessor read-write))
+	(multislot cloTypes
+		(type INSTANCE)
+;+		(allowed-classes CloType)
+		(create-accessor read-write))
+	(single-slot cloNamespace
+		(type INSTANCE)
+;+		(allowed-classes CloNamespace)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass CloProtocol
+	(is-a ClojureOntology)
+	(role concrete)
+	(multislot cloFunctions
+		(type INSTANCE)
+;+		(allowed-classes CloFunction CloMacro)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass CloImplementation
+	(is-a CloProtocol)
+	(role concrete))
+
+(defclass CloType
+	(is-a ClojureOntology)
+	(role concrete)
+	(multislot fields
+		(type INSTANCE)
+;+		(allowed-classes %3ASTANDARD-SLOT)
+		(create-accessor read-write))
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot cloImplementations
+		(type INSTANCE)
+;+		(allowed-classes CloImplementation)
+		(create-accessor read-write)))
+
+(defclass CloRecord
+	(is-a CloType)
+	(role concrete))
+
+(defclass CloExtendProtocol
+	(is-a ClojureOntology)
+	(role concrete)
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot cloImplementations
+		(type INSTANCE)
+;+		(allowed-classes CloImplementation)
+		(create-accessor read-write)))
+
+(defclass CloExtendType
+	(is-a ClojureOntology)
+	(role concrete)
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot cloImplementations
+		(type INSTANCE)
+;+		(allowed-classes CloImplementation)
+		(create-accessor read-write)))
+
+(defclass CloDocumentation
+	(is-a ClojureOntology)
+	(role concrete)
+	(single-slot source
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass WorkingPrograms
+	(is-a ClojureOntology)
+	(role concrete)
+	(single-slot title
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot cloPrograms
+		(type INSTANCE)
+;+		(allowed-classes CloProgram)
+		(create-accessor read-write)))

@@ -1,0 +1,8 @@
+2016.09.10 21:32:53.136 MSK INFO: *** SYSTEM START ***
+2016.09.10 21:32:55.574 MSK INFO: *** SYSTEM START ***
+2016.09.10 21:32:57.456 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.09.10 21:32:57.604 MSK SEVERE: Unable to load project from: file:/Users/ru/clojure/rete4frames/projects/Clojure.pprj -- Project.getProjectInstancesReader()
+2016.09.10 21:32:58.781 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/projects/Clojure.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
+2016.09.10 21:37:09.794 MSK INFO: *** SYSTEM START ***
+2016.09.10 21:37:10.262 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.09.10 21:37:10.893 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/RuleEngine.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
