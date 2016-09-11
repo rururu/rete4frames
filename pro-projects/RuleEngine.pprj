@@ -1,4 +1,4 @@
-; Sat Sep 10 21:38:32 MSK 2016
+; Tue Apr 19 22:34:38 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -66,28 +66,28 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_478660_Class205] of  Map
+([KB_614446_Class205] of  Map
 
 	(entries
-		[KB_478660_Class206]
-		[KB_478660_Class207]
-		[KB_478660_Class208]))
+		[KB_614446_Class206]
+		[KB_614446_Class207]
+		[KB_614446_Class208]))
 
-([KB_478660_Class206] of  Map_Entry
+([KB_614446_Class206] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_478660_Class207] of  Map_Entry
+([KB_614446_Class207] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_478660_Class208] of  Map_Entry
+([KB_614446_Class208] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")

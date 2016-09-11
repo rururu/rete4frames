@@ -3,6 +3,7 @@
 (:import
  edu.stanford.smi.protege.ui.ProjectManager
  edu.stanford.smi.protege.model.ValueType
+ edu.stanford.smi.protege.model.Instance
  clojuretab.ClojureTab))
 
 (def ^:dynamic *prj* (.getCurrentProject (ProjectManager/getProjectManager)))
@@ -150,4 +151,92 @@ s)
 	(or (nil? text) (.startsWith txt text)))
                ins
                (recur (rest ail)) ))) )))
+
+(defn itm [val dep]
+  ;; instance to map
+;; val - instance
+;; dep - depth of unfolding inner instances
+(if (instance? Instance val)
+  (let [typ (.getDirectType val)
+         sls (.getTemplateSlots typ)
+         mp (apply hash-map (mapcat #(list (.getName %)
+		(if (.getAllowsMultipleValues %)
+		  (if (= dep 0)
+		    (vec (.getOwnSlotValues val %))
+		    (vec (map (fn [x] (itm x (dec dep))) (.getOwnSlotValues val %))))
+		  (if (= dep 0)
+		    (.getOwnSlotValue val %)
+		    (itm (.getOwnSlotValue val %) (dec dep))))) sls))]
+    (assoc mp :DIRTYP (.getName typ) :DEPTH dep))
+  val))
+
+(defn mti
+  ;; map to instance
+;; mp - map
+([mp]
+  (if (and (map? mp) (>= (:DEPTH mp) 0))
+    (mti mp (:DEPTH mp))))
+([mp dep]
+  (if (< dep 0)
+    mp
+    (if-let [clz (cls (:DIRTYP mp))]
+      (reduce-kv #(mti %1 %2 %3 dep) 
+	(crin (:DIRTYP mp)) 
+	(dissoc mp :DIRTYP :DEPTH)))))
+([ins slt vmis dep]
+  (cond
+    (vector? vmis) (ssvs ins slt (map #(mti % (dec dep)) vmis))
+    (map? vmis) (ssv ins slt (mti vmis (dec dep)))
+    true (ssv ins slt vmis))
+  ins))
+
+(defn get-itm [itm path]
+  (ctpl [:GI itm path])
+(if (and (seq path) itm)
+  (let [[kv & rst] path]
+    (ctpl [:KV kv (vector? kv) (map? itm)])
+    (get-itm
+      (if (and (vector? kv) (vector? itm))
+        (first (filter #(= (get % (first kv)) (second kv)) (seq itm)))
+        (get itm kv))
+    rst))
+  itm))
+
+(defn put-itm [itm path val]
+  (if (seq path)
+  (let [[kv & rst] path]
+    (if (and (vector? kv) (vector? itm))
+      (if-let [fnd (first (filter #(= (get % (first kv)) (second kv)) itm))]
+        (replace {fnd (put-itm fnd rst val)} itm)
+        itm)
+      (assoc itm kv
+        (if (empty? rst)
+          val
+          (if-let [fnd (kv itm)]
+            (put-itm fnd rst val)
+            itm)))))
+  val))
+
+(defmacro condp-> [expr & clauses]
+  (let [g (gensym) 
+      pstep (fn [[pred step]] `(if (~pred ~g) (-> ~g ~step) ~g))] 
+  `(let [~g ~expr 
+           ~@(interleave (repeat g) (map pstep (partition 2 clauses)))] 
+       ~g)))
+
+(defmacro condas-> [expr name & clauses]
+  (assert (even? (count clauses)))
+(let [pstep (fn [[test step]] `(if ~test ~step ~name))]
+  `(let [~name ~expr
+           ~@(interleave (repeat name) (map pstep (partition 2 clauses)))]
+       ~name)))
+
+(defn reg-gen [pfx atm]
+  (let [old (or (@atm pfx) 0)
+       num (inc old)]
+  (swap! atm assoc pfx num)
+  (str pfx num)))
+
+(defn pins? [x]
+  (instance? Instance x))
 

@@ -1,4 +1,4 @@
-; Sat Sep 10 21:38:32 MSK 2016
+; Tue Apr 19 22:34:38 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -10,7 +10,7 @@
 
 ([RETE_Class4] of  CloFunction
 
-	(source "([insortit]\n  (when-let [ins (if (string? insortit)\n	     (p/fifos \"Run\" \"title\" insortit)\n	     insortit)]\n    (run-engine (if (string? insortit)\n	    insortit\n	    (p/sv insortit \"title\"))\n	(p/svs ins \"rule-sets\")\n	(p/svs ins \"fact-classes\")\n	(p/svs ins \"facts\")\n	(p/sv   ins \"trace\"))))\n([hm inst]\n  (let [mp (into {} hm)\n         tit (mp \"title\")\n         rss (mp \"rule-sets\")\n         fcs (mp \"fact-classes\")\n         ffs (mp \"facts\")\n         trc (mp \"trace\")]\n    (run-engine tit rss fcs ffs trc)))\n([tit rss fcs ffs trc]\n  (println [:RUN-ENGINE tit])\n    (let [ffc (facts-from-classes fcs)\n           facts (concat ffc ffs)\n           tms (mapcat #(p/svs % \"templates\") rss)\n           rls (mapcat #(p/svs % \"rules\") rss)\n           mts (mk-templates tms)\n           mrs (map #(mk-rule % trc) rls)\n           mtr (map rete/trans-rule mrs)]\n       (println (str \"Trace: \" trc))\n       (println (str \"Templates: \" (count mts)))\n       (println (str \"Rules: \" (count mtr)))\n       (println (str \"Facts: \" (count facts)))\n       (run-engine trc mts mtr facts)))\n([trac templs rules facts]\n  (time\n    (do \n      (if (p/is? trac)\n        (rete/trace)\n        (rete/untrace))\n      (rete/create-rete templs rules)\n      (doseq [f facts]\n          (rete/assert-frame (mk-frame f))\n          (rete/fire)) ) ))")
+	(source "([title]\n  (when-let [ins (p/fifos \"Run\" \"title\" title)]\n    (run-engine title\n	(p/svs ins \"rule-sets\")\n	(p/svs ins \"fact-classes\")\n	(p/svs ins \"facts\")\n	(p/sv   ins \"trace\"))))\n([hm inst]\n  (let [mp (into {} hm)\n         tit (mp \"title\")\n         rss (mp \"rule-sets\")\n         fcs (mp \"fact-classes\")\n         ffs (mp \"facts\")\n         trc (mp \"trace\")]\n    (run-engine tit rss fcs ffs trc)))\n([tit rss fcs ffs trc]\n  (println [:RUN-ENGINE tit])\n    (let [ffc (facts-from-classes fcs)\n           facts (concat ffc ffs)\n           tms (mapcat #(p/svs % \"templates\") rss)\n           rls (mapcat #(p/svs % \"rules\") rss)\n           mts (mk-templates tms)\n           mrs (map #(mk-rule % trc) rls)\n           mtr (map rete/trans-rule mrs)]\n       (println (str \"Trace: \" trc))\n       (println (str \"Templates: \" (count mts)))\n       (println (str \"Rules: \" (count mtr)))\n       (println (str \"Facts: \" (count facts)))\n       (run-engine trc mts mtr facts)))\n([trac templs rules facts]\n  (time\n    (do \n      (if (p/is? trac)\n        (rete/trace)\n        (rete/untrace))\n      (rete/create-rete templs rules)\n      (doseq [f facts]\n          (rete/assert-frame (mk-frame f))\n          (rete/fire)) ) ))")
 	(title "run-engine"))
 
 ([RuleEngine_Class0] of  CloFunction

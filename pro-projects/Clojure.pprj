@@ -1,4 +1,4 @@
-; Wed May 14 13:29:58 MSK 2014
+; Sun Sep 11 18:15:10 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,19 +20,19 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Clojure_ProjectKB_Class60004]
-		[Clojure_ProjectKB_Class60005]
-		[Clojure_ProjectKB_Class60006]
-		[Clojure_ProjectKB_Class60007]
-		[Clojure_ProjectKB_Class70008]
-		[Clojure_ProjectKB_Class70009]
-		[Clojure_ProjectKB_Class70010]
-		[Clojure_ProjectKB_Class70011]
-		[Clojure_ProjectKB_Class80012]
-		[Clojure_ProjectKB_Class80013]
-		[Clojure_ProjectKB_Class80014]
-		[Clojure_ProjectKB_Class80015]
-		[Clojure_ProjectKB_Class80016]))
+		[Clojure_ProjectKB_Class80149]
+		[Clojure_ProjectKB_Class80150]
+		[Clojure_ProjectKB_Class80151]
+		[Clojure_ProjectKB_Class80152]
+		[Clojure_ProjectKB_Class80153]
+		[Clojure_ProjectKB_Class80154]
+		[Clojure_ProjectKB_Class80155]
+		[Clojure_ProjectKB_Class80156]
+		[Clojure_ProjectKB_Class80157]
+		[Clojure_ProjectKB_Class80158]
+		[Clojure_ProjectKB_Class80159]
+		[Clojure_ProjectKB_Class80160]
+		[Clojure_ProjectKB_Class80161]))
 
 ([Clojure_ProjectKB_Class10004] of  Boolean
 
@@ -629,7 +629,8 @@
 
 	(properties
 		[Clojure_ProjectKB_Class40029]
-		[Clojure_ProjectKB_Class40030]))
+		[Clojure_ProjectKB_Class40030]
+		[Clojure_ProjectKB_Class80117]))
 
 ([Clojure_ProjectKB_Class40029] of  Boolean
 
@@ -670,7 +671,8 @@
 
 	(properties
 		[Clojure_ProjectKB_Class40035]
-		[Clojure_ProjectKB_Class40036]))
+		[Clojure_ProjectKB_Class40036]
+		[Clojure_ProjectKB_Class80118]))
 
 ([Clojure_ProjectKB_Class40035] of  Boolean
 
@@ -909,26 +911,6 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
 
-([Clojure_ProjectKB_Class60004] of  String
-
-	(name "CloFuncall")
-	(string_value "source"))
-
-([Clojure_ProjectKB_Class60005] of  String
-
-	(name "CloRecord")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class60006] of  String
-
-	(name "CloProtocol")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class60007] of  String
-
-	(name "CloExtendType")
-	(string_value "title"))
-
 ([Clojure_ProjectKB_Class60008] of  Property_List
 )
 
@@ -981,73 +963,103 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
-([Clojure_ProjectKB_Class70008] of  String
-
-	(name "CloExtendProtocol")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class70009] of  String
-
-	(name "CloDocumentation")
-	(string_value "source"))
-
-([Clojure_ProjectKB_Class70010] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([Clojure_ProjectKB_Class70011] of  String
-
-	(name "CloFunction")
-	(string_value "title"))
-
 ([Clojure_ProjectKB_Class70012] of  Boolean
 
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
-([Clojure_ProjectKB_Class80012] of  String
+([Clojure_ProjectKB_Class80117] of  Boolean
 
-	(name "CloProgram")
-	(string_value "title"))
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Delete Instance"))
 
-([Clojure_ProjectKB_Class80013] of  String
+([Clojure_ProjectKB_Class80118] of  Boolean
 
-	(name "CloMacro")
-	(string_value "title"))
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Delete Instance"))
 
-([Clojure_ProjectKB_Class80014] of  String
-
-	(name "CloVar")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class80015] of  String
-
-	(name "CloNamespace")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class80016] of  String
+([Clojure_ProjectKB_Class80149] of  String
 
 	(name "WorkingPrograms")
 	(string_value "title"))
 
-([Clojure_ProjectKB_Class80017] of  Map_Entry
+([Clojure_ProjectKB_Class80150] of  String
+
+	(name "CloFunction")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class80151] of  String
+
+	(name "CloExtendType")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class80152] of  String
+
+	(name "CloRecord")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class80153] of  String
+
+	(name "CloProgram")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class80154] of  String
+
+	(name "CloProtocol")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class80155] of  String
+
+	(name "CloFuncall")
+	(string_value "source"))
+
+([Clojure_ProjectKB_Class80156] of  String
+
+	(name "CloVar")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class80157] of  String
+
+	(name "CloMacro")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class80158] of  String
+
+	(name "CloNamespace")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class80159] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([Clojure_ProjectKB_Class80160] of  String
+
+	(name "CloDocumentation")
+	(string_value "source"))
+
+([Clojure_ProjectKB_Class80161] of  String
+
+	(name "CloExtendProtocol")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class80162] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([Clojure_ProjectKB_Class80163] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([Clojure_ProjectKB_Class80018] of  Map_Entry
+([Clojure_ProjectKB_Class80164] of  Map_Entry
 
 	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([Clojure_ProjectKB_Class80019] of  Map_Entry
-
-	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
@@ -1094,6 +1106,9 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
+([KB_028873_Class3] of  Map
+)
+
 ([KB_127677_Class0] of  String
 
 	(name "factory_class_name")
@@ -1102,9 +1117,9 @@
 ([KB_127677_Class1] of  Map
 
 	(entries
-		[Clojure_ProjectKB_Class80017]
-		[Clojure_ProjectKB_Class80018]
-		[Clojure_ProjectKB_Class80019]))
+		[Clojure_ProjectKB_Class80162]
+		[Clojure_ProjectKB_Class80163]
+		[Clojure_ProjectKB_Class80164]))
 
 ([KB_127677_Class100] of  Property_List
 )
@@ -1199,9 +1214,6 @@
 ([KB_127677_Class99] of  Property_List
 )
 
-([KB_353947_Class3] of  Map
-)
-
 ([LAYOUT_PROPERTIES] of  Property_List
 
 	(name "layout properties")
@@ -1285,21 +1297,21 @@
 
 	(browser_slot_names [BROWSER_SLOT_NAMES])
 	(customized_instance_widgets
-		[Clojure_ProjectKB_Class30012]
-		[Clojure_ProjectKB_Class50045]
-		[STANDARD_FACET_FORM_WIDGET]
-		[Clojure_ProjectKB_Class30004]
-		[PAL_FORM_WIDGET]
-		[Clojure_ProjectKB_Class14544]
-		[Clojure_ProjectKB_Class14565]
 		[STANDARD_CLASS_FORM_WIDGET]
-		[Clojure_ProjectKB_Class4]
-		[Clojure_ProjectKB_Class14558]
-		[Clojure_ProjectKB_Class14551]
-		[INSTANCE_ANNOTATION_FORM_WIDGET]
-		[Clojure_ProjectKB_Class40024]
 		[Clojure_ProjectKB_Class50004]
-		[STANDARD_SLOT_FORM_WIDGET])
+		[Clojure_ProjectKB_Class14544]
+		[STANDARD_SLOT_FORM_WIDGET]
+		[Clojure_ProjectKB_Class30012]
+		[Clojure_ProjectKB_Class14565]
+		[Clojure_ProjectKB_Class14558]
+		[INSTANCE_ANNOTATION_FORM_WIDGET]
+		[Clojure_ProjectKB_Class4]
+		[STANDARD_FACET_FORM_WIDGET]
+		[PAL_FORM_WIDGET]
+		[Clojure_ProjectKB_Class14551]
+		[Clojure_ProjectKB_Class30004]
+		[Clojure_ProjectKB_Class40024]
+		[Clojure_ProjectKB_Class50045])
 	(default_cls_metaclass ":STANDARD-CLASS")
 	(default_facet_metaclass ":STANDARD-FACET")
 	(default_instance_widget_class_name "edu.stanford.smi.protege.widget.FormWidget")
