@@ -1,0 +1,70 @@
+; Mon Sep 12 22:00:06 MSK 2016
+; 
+;+ (version "3.5")
+;+ (build "Build 663")
+
+([Examples_Class15] of  RuleSet
+
+	(rules
+		[Examples_Class16]
+		[Examples_Class17]
+		[Examples_Class18]
+		[Examples_Class19]
+		[Examples_Class20]
+		[Examples_Class21]
+		[Examples_Class22])
+	(templates
+		[Chest]
+		[Goal]
+		[Monkey]
+		[Thing])
+	(title "Mab"))
+
+([Examples_Class16] of  Rule
+
+	(lhs "(Goal action unlock \n	argument1 ?chest)\n?monkey (Monkey location ?place \n	on-top-of ?on \n	holding ?chest)\n?thing (Thing name ?chest)")
+	(rhs "(println (str \"Monkey throws the \" ?chest \" off the \" ?on \" onto the floor.\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of floor)")
+	(salience 0)
+	(title "Put-chest-on-floor"))
+
+([Examples_Class17] of  Rule
+
+	(lhs "(Goal action unlock \n	argument1 ?obj)\n(Thing name ?obj \n	on-top-of floor)\n(Chest name ?obj \n	unlocked-by ?key)\n(Monkey holding ?thing\n      (not= ?thing ?key))\n(not Goal action hold argument1 ?key)")
+	(rhs "(asser Goal action hold \n	argument1 ?key)")
+	(salience 0)
+	(title "Get-key-to-unlock"))
+
+([Examples_Class18] of  Rule
+
+	(lhs "(Goal action unlock \n	argument1 ?chest)\n(Monkey location ?mplace \n	holding ?key)\n(Thing name ?chest \n	location ?cplace \n	on-top-of floor\n	(not= ?cplace ?mplace))\n(Chest name ?chest \n	unlocked-by ?key)\n(not Goal action walk-to \n	argument1 ?cplace)")
+	(rhs "(asser Goal action walk-to \n	argument1 ?cplace)")
+	(salience 0)
+	(title "Move-to-chest-with-key"))
+
+([Examples_Class19] of  Rule
+
+	(lhs "?goal (Goal action unlock \n	argument1 ?name)\n?chest (Chest name ?name \n	contents ?contents \n	unlocked-by ?key)\n(Thing name ?name \n	location ?place \n	on-top-of ?on)\n(Monkey location ?place \n	on-top-of ?on \n	holding ?key)")
+	(rhs "(println (str \"Monkey opens the \" ?name \" with the \" ?key \" revealing the \" ?contents \".\" ))\n(modify ?chest contents nothing)\n(asser Thing name ?contents \n	location ?place \n	on-top-of ?name \n	weight light)\n(retract ?goal)")
+	(salience 0)
+	(title "Unlock-chest-with-key"))
+
+([Examples_Class20] of  Rule
+
+	(lhs "(Goal action hold \n	argument1 ?obj)\n(Chest name ?chest \n	contents ?obj)\n(not Goal action unlock \n	argument1 ?chest)")
+	(rhs "(asser Goal action unlock argument1 ?chest)")
+	(salience 0)
+	(title "Unlock-chest-to-hold-object"))
+
+([Examples_Class21] of  Rule
+
+	(lhs "(Goal action hold \n	argument1 ?obj)\n(Thing name ?obj \n	location ?place \n	on-top-of ceiling \n	weight light)\n(not Thing name ladder \n	location ?place)\n(not Goal action move \n	argument1 ladder \n	argument2 ?place)")
+	(rhs "(asser Goal action move \n	argument1 ladder \n	argument2 ?place)")
+	(salience 0)
+	(title "Use-ladder-to-hold"))
+
+([Examples_Class22] of  Rule
+
+	(lhs "(Goal action hold \n	argument1 ?obj)\n(Thing name ?obj \n	location ?place \n	on-top-of ceiling \n	weight light)\n(Thing name ladder \n	location ?place \n	on-top-of floor)\n(Monkey on-top-of ?s\n      (not= ?s ladder))\n(not Goal action on argument1 ladder)")
+	(rhs "(asser Goal action on \n	argument1 ladder)")
+	(salience 0)
+	(title "Climb-ladder-to-hold"))

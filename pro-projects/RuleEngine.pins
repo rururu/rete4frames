@@ -1,4 +1,4 @@
-; Tue Apr 19 22:34:38 MSK 2016
+; Mon Sep 12 17:15:33 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,17 +20,17 @@
 
 ([RuleEngine_Class10000] of  CloFunction
 
-	(source "(let [all (rete/fact-list)\n      sel (if (= typ :all) all (filter #(= (second %) typ) all))]\n  (def k 0)\n  (doseq [fact sel]\n    (let [[n typ & rp] fact\n          mp (apply hash-map rp)]\n      (p/ctpl (str k \" \" typ \" \" (or (mp 'title) (mp 'label)) \" status: \" (mp 'status) \" fact: \" n))\n      (def k (inc k)) ) ))")
+	(source ";; short print facts to REPL\n;; typ - type of facts (symbol with ' prefix) or :all\n(let [all (rete/fact-list)\n      sel (if (= typ :all) all (filter #(= (second %) typ) all))]\n  (def k 0)\n  (doseq [fact sel]\n    (let [[n typ & rp] fact\n          mp (apply hash-map rp)]\n      (p/ctpl (str k \" \" typ \" \" (or (mp 'title) (mp 'label)) \" status: \" (mp 'status) \" fact: \" n))\n      (def k (inc k)) ) ))")
 	(title "sp [typ]"))
 
 ([RuleEngine_Class100000] of  CloFunction
 
-	(source "(if-let [rr (seq (p/cls-instances \"Rule\"))]\n  (let [fn \"Rules.clj\"]\n    (with-open [wrtr (clojure.java.io/writer fn)]\n      (doseq [r rr]\n        (.write wrtr (str \"(\" (p/sv r \"title\") \" \" (p/sv r \"salience\") \"\\n\"))\n        (.write wrtr (str (p/sv r \"lhs\") \"\\n\"))\n        (.write wrtr \"=>\\n\")\n        (.write wrtr (str (p/sv r \"rhs\") \")\\n\\n\")) ))\n    (str \"Written \" (count rr) \" rules into \" fn)))")
+	(source ";; write rules to file Rules.clj\n(if-let [rr (seq (p/cls-instances \"Rule\"))]\n  (let [fn \"Rules.clj\"]\n    (with-open [wrtr (clojure.java.io/writer fn)]\n      (doseq [r rr]\n        (.write wrtr (str \"(\" (p/sv r \"title\") \" \" (p/sv r \"salience\") \"\\n\"))\n        (.write wrtr (str (p/sv r \"lhs\") \"\\n\"))\n        (.write wrtr \"=>\\n\")\n        (.write wrtr (str (p/sv r \"rhs\") \")\\n\\n\")) ))\n    (str \"Written \" (count rr) \" rules into \" fn)))")
 	(title "dr []"))
 
 ([RuleEngine_Class110000] of  CloFunction
 
-	(source "(letfn [(ads [stm [fid typ mp]]\n	(if-let [ste (typ stm)]\n	  (assoc stm typ (inc ste))\n	  (assoc stm typ 1)))]\n  (let [fl (rete/fact-list)\n         stm (reduce ads {} fl)\n         sto (sort-by second (seq stm))\n         str (reverse sto)]\n    (p/ctpls str)\n    (count fl)))")
+	(source ";; fact types statistics\n(letfn [(ads [stm [fid typ mp]]\n	(if-let [ste (typ stm)]\n	  (assoc stm typ (inc ste))\n	  (assoc stm typ 1)))]\n  (let [fl (rete/fact-list)\n         stm (reduce ads {} fl)\n         sto (sort-by second (seq stm))\n         str (reverse sto)]\n    (p/ctpls str)\n    (count fl)))")
 	(title "sts []"))
 
 ([RuleEngine_Class120000] of  CloFunction
@@ -55,7 +55,7 @@
 
 ([RuleEngine_Class150000] of  CloFunction
 
-	(source "(rete/log-lst \"beta-net-plan.txt\" rete/BPLAN)")
+	(source ";; create file with beta net plan\n(rete/log-lst \"beta-net-plan.txt\" rete/BPLAN)")
 	(title "bnp []"))
 
 ([RuleEngine_Class150001] of  CloFunction
@@ -70,7 +70,7 @@
 
 ([RuleEngine_Class170000] of  CloFunction
 
-	(source "(let [all (rete/fact-list)\n      sel (if (= typ :all) all (filter #(= (second %) typ) all))]\n  (doseq [fact sel]\n    (p/ctpl \"\")\n    (p/ctpl fact)))")
+	(source ";; 1 line full print facts to REPL\n;; typ - type of facts (symbol with ' prefix) or :all\n(let [all (rete/fact-list)\n      sel (if (= typ :all) all (filter #(= (second %) typ) all))]\n  (doseq [fact sel]\n    (p/ctpl \"\")\n    (p/ctpl fact)))")
 	(title "lp [typ]"))
 
 ([RuleEngine_Class180001] of  CloVar
@@ -80,7 +80,7 @@
 
 ([RuleEngine_Class20000] of  CloFunction
 
-	(source "(let [all (rete/fact-list)\n      fact (first (filter #(= (first %) n) all))]\n  (if fact\n    (let [[[n typ] & rp] (partition-all 2 fact)]\n      (p/ctpl (str \"Fact\" n \" \" typ))\n      (doseq [sv rp]\n        (p/ctpl (str \"  \" (first sv) \" \" (second sv))) ) )))")
+	(source ";; print fact by number to REPL\n(let [all (rete/fact-list)\n      fact (first (filter #(= (first %) n) all))]\n  (if fact\n    (let [[[n typ] & rp] (partition-all 2 fact)]\n      (p/ctpl (str \"Fact\" n \" \" typ))\n      (doseq [sv rp]\n        (p/ctpl (str \"  \" (first sv) \" \" (second sv))) ) )))")
 	(title "f [n]"))
 
 ([RuleEngine_Class30000] of  CloProgram
@@ -123,7 +123,7 @@
 
 ([RuleEngine_Class60000] of  CloFunction
 
-	(source "(let [all (rete/fact-list)\n      sel (if (= typ :all) all (filter #(= (second %) typ) all))]\n  (doseq [fact sel]\n    (p/ctpl \"\")\n    (let [[[n typ] & rp] (partition-all 2 fact)]\n      (p/ctpl (str \"Fact\" n \" \" typ))\n      (doseq [sv rp]\n        (p/ctpl (str \"  \" (first sv) \" \" (second sv))) ) )))")
+	(source ";; pretty print facts to REPL\n;; typ - type of facts (symbol with ' prefix) or :all\n(let [all (rete/fact-list)\n      sel (if (= typ :all) all (filter #(= (second %) typ) all))]\n  (doseq [fact sel]\n    (p/ctpl \"\")\n    (let [[[n typ] & rp] (partition-all 2 fact)]\n      (p/ctpl (str \"Fact\" n \" \" typ))\n      (doseq [sv rp]\n        (p/ctpl (str \"  \" (first sv) \" \" (second sv))) ) )))")
 	(title "pp [typ]"))
 
 ([RuleEngine_Class60002] of  CloFunction
@@ -138,7 +138,7 @@
 
 ([RuleEngine_Class80000] of  CloFunction
 
-	(source "(let [all (rete/fact-list)\n      sel (filter #(some #{val} %) all)]\n  (def k 0)\n  (doseq [fact sel]\n    (let [[n typ & rp] fact\n          mp (apply hash-map rp)]\n      (p/ctpl (str k \" \" typ \" \" (or (mp 'title) (mp 'label)) \" status: \" (mp 'status) \" fact: \" n))\n      (def k (inc k)) ) ))")
+	(source ";; print fact numbers containing val to REPL\n(let [all (rete/fact-list)\n      sel (filter #(some #{val} %) all)]\n  (def k 0)\n  (doseq [fact sel]\n    (let [[n typ & rp] fact\n          mp (apply hash-map rp)]\n      (p/ctpl (str k \" \" typ \" \" (or (mp 'title) (mp 'label)) \" status: \" (mp 'status) \" fact: \" n))\n      (def k (inc k)) ) ))")
 	(title "cv [val]"))
 
 ([RuleEngine_Class90000] of  CloFunction

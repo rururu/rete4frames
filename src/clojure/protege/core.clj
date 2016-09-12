@@ -172,7 +172,7 @@ s)
 
 (defn mti
   ;; map to instance
-;; mp - map
+;; mp - itm
 ([mp]
   (if (and (map? mp) (>= (:DEPTH mp) 0))
     (mti mp (:DEPTH mp))))
@@ -191,10 +191,10 @@ s)
   ins))
 
 (defn get-itm [itm path]
-  (ctpl [:GI itm path])
+  ;; get in itm
+;; path - vector of slot names or [slot_name slot_value]
 (if (and (seq path) itm)
   (let [[kv & rst] path]
-    (ctpl [:KV kv (vector? kv) (map? itm)])
     (get-itm
       (if (and (vector? kv) (vector? itm))
         (first (filter #(= (get % (first kv)) (second kv)) (seq itm)))
@@ -203,19 +203,20 @@ s)
   itm))
 
 (defn put-itm [itm path val]
-  (if (seq path)
-  (let [[kv & rst] path]
-    (if (and (vector? kv) (vector? itm))
-      (if-let [fnd (first (filter #(= (get % (first kv)) (second kv)) itm))]
-        (replace {fnd (put-itm fnd rst val)} itm)
-        itm)
-      (assoc itm kv
-        (if (empty? rst)
-          val
-          (if-let [fnd (kv itm)]
-            (put-itm fnd rst val)
-            itm)))))
-  val))
+  ;; put into itm
+;; path - vector of slot names or [slot_name slot_value](if (seq path)
+;; val - new value
+(let [[kv & rst] path]
+  (if (and (vector? kv) (vector? itm))
+    (if-let [fnd (first (filter #(= (get % (first kv)) (second kv)) itm))]
+      (replace {fnd (put-itm fnd rst val)} itm)
+      itm)
+    (assoc itm kv
+      (if (empty? rst)
+        val
+        (if-let [fnd (kv itm)]
+          (put-itm fnd rst val)
+          itm))))))
 
 (defmacro condp-> [expr & clauses]
   (let [g (gensym) 
@@ -232,7 +233,10 @@ s)
        ~name)))
 
 (defn reg-gen [pfx atm]
-  (let [old (or (@atm pfx) 0)
+  ;; generator of regular names: <pfx>0,<pfx>1, <pfx>2,.. 
+;; pfx - prfix string (can be "")
+;; atm - new = (atom {}), or existing 
+(let [old (or (@atm pfx) 0)
        num (inc old)]
   (swap! atm assoc pfx num)
   (str pfx num)))

@@ -1,4 +1,3 @@
-(load-file "src/rete/core.clj")
 (app "run:asynch" "examples/manners.clj")
 (facts)
 (app "run:asynch" "examples/mab.clj")
@@ -498,3 +497,4 @@ MINSAL
 (app "run" "examples/waltz.clj" "examples/waltz_f12.clj")
 (app "run" "examples/manners.clj" "examples/manners_f128.clj")
 (exit)
+(-main)

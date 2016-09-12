@@ -1,4 +1,4 @@
-; Sun Sep 11 18:15:10 MSK 2016
+; Mon Sep 12 17:14:42 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -155,7 +155,7 @@
 
 ([Clojure_Class230000] of  CloFunction
 
-	(source ";; put into itm\n;; path - vector of slot names or [slot_name slot_value](if (seq path)\n;; val - new value\n  (let [[kv & rst] path]\n    (if (and (vector? kv) (vector? itm))\n      (if-let [fnd (first (filter #(= (get % (first kv)) (second kv)) itm))]\n        (replace {fnd (put-itm fnd rst val)} itm)\n        itm)\n      (assoc itm kv\n        (if (empty? rst)\n          val\n          (if-let [fnd (kv itm)]\n            (put-itm fnd rst val)\n            itm)))))\n  val)")
+	(source ";; put into itm\n;; path - vector of slot names or [slot_name slot_value](if (seq path)\n;; val - new value\n(let [[kv & rst] path]\n  (if (and (vector? kv) (vector? itm))\n    (if-let [fnd (first (filter #(= (get % (first kv)) (second kv)) itm))]\n      (replace {fnd (put-itm fnd rst val)} itm)\n      itm)\n    (assoc itm kv\n      (if (empty? rst)\n        val\n        (if-let [fnd (kv itm)]\n          (put-itm fnd rst val)\n          itm)))))")
 	(title "put-itm [itm path val]"))
 
 ([Clojure_Class240000] of  CloMacro

@@ -38,13 +38,9 @@
   (mapcat #(.getInstances %) fcs))
 
 (defn run-engine
-  ([insortit]
-  (when-let [ins (if (string? insortit)
-	     (p/fifos "Run" "title" insortit)
-	     insortit)]
-    (run-engine (if (string? insortit)
-	    insortit
-	    (p/sv insortit "title"))
+  ([title]
+  (when-let [ins (p/fifos "Run" "title" title)]
+    (run-engine title
 	(p/svs ins "rule-sets")
 	(p/svs ins "fact-classes")
 	(p/svs ins "facts")
@@ -106,7 +102,9 @@
     (retract-instances sel))))
 
 (defn pp [typ]
-  (let [all (rete/fact-list)
+  ;; pretty print facts to REPL
+;; typ - type of facts (symbol with ' prefix) or :all
+(let [all (rete/fact-list)
       sel (if (= typ :all) all (filter #(= (second %) typ) all))]
   (doseq [fact sel]
     (p/ctpl "")
@@ -116,7 +114,9 @@
         (p/ctpl (str "  " (first sv) " " (second sv))) ) ))))
 
 (defn sp [typ]
-  (let [all (rete/fact-list)
+  ;; short print facts to REPL
+;; typ - type of facts (symbol with ' prefix) or :all
+(let [all (rete/fact-list)
       sel (if (= typ :all) all (filter #(= (second %) typ) all))]
   (def k 0)
   (doseq [fact sel]
@@ -126,14 +126,17 @@
       (def k (inc k)) ) )))
 
 (defn lp [typ]
-  (let [all (rete/fact-list)
+  ;; 1 line full print facts to REPL
+;; typ - type of facts (symbol with ' prefix) or :all
+(let [all (rete/fact-list)
       sel (if (= typ :all) all (filter #(= (second %) typ) all))]
   (doseq [fact sel]
     (p/ctpl "")
     (p/ctpl fact))))
 
 (defn cv [val]
-  (let [all (rete/fact-list)
+  ;; print fact numbers containing val to REPL
+(let [all (rete/fact-list)
       sel (filter #(some #{val} %) all)]
   (def k 0)
   (doseq [fact sel]
@@ -143,7 +146,8 @@
       (def k (inc k)) ) )))
 
 (defn f [n]
-  (let [all (rete/fact-list)
+  ;; print fact by number to REPL
+(let [all (rete/fact-list)
       fact (first (filter #(= (first %) n) all))]
   (if fact
     (let [[[n typ] & rp] (partition-all 2 fact)]
@@ -152,7 +156,8 @@
         (p/ctpl (str "  " (first sv) " " (second sv))) ) ))))
 
 (defn dr []
-  (if-let [rr (seq (p/cls-instances "Rule"))]
+  ;; write rules to file Rules.clj
+(if-let [rr (seq (p/cls-instances "Rule"))]
   (let [fn "Rules.clj"]
     (with-open [wrtr (clojure.java.io/writer fn)]
       (doseq [r rr]
@@ -163,7 +168,8 @@
     (str "Written " (count rr) " rules into " fn))))
 
 (defn sts []
-  (letfn [(ads [stm [fid typ mp]]
+  ;; fact types statistics
+(letfn [(ads [stm [fid typ mp]]
 	(if-let [ste (typ stm)]
 	  (assoc stm typ (inc ste))
 	  (assoc stm typ 1)))]
@@ -194,5 +200,6 @@
   (rete/reset))
 
 (defn bnp []
-  (rete/log-lst "beta-net-plan.txt" rete/BPLAN))
+  ;; create file with beta net plan
+(rete/log-lst "beta-net-plan.txt" rete/BPLAN))
 

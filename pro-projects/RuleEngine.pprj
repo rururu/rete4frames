@@ -1,4 +1,4 @@
-; Tue Apr 19 22:34:38 MSK 2016
+; Mon Sep 12 17:15:33 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,9 +20,9 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[RuleEngine_ProjectKB_Class10211]
-		[RuleEngine_ProjectKB_Class10212]
-		[RuleEngine_ProjectKB_Class10213]))
+		[RuleEngine_ProjectKB_Class10213]
+		[RuleEngine_ProjectKB_Class10214]
+		[RuleEngine_ProjectKB_Class10215]))
 
 ([CLSES_TAB] of  Widget
 
@@ -66,28 +66,28 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_614446_Class205] of  Map
+([KB_453278_Class207] of  Map
 
 	(entries
-		[KB_614446_Class206]
-		[KB_614446_Class207]
-		[KB_614446_Class208]))
+		[KB_453278_Class208]
+		[KB_453278_Class209]
+		[KB_453278_Class210]))
 
-([KB_614446_Class206] of  Map_Entry
+([KB_453278_Class208] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_614446_Class207] of  Map_Entry
+([KB_453278_Class209] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_614446_Class208] of  Map_Entry
+([KB_453278_Class210] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -554,26 +554,26 @@
 ([RuleEngine_ProjectKB_Class10205] of  Property_List
 )
 
-([RuleEngine_ProjectKB_Class10209] of  Widget
+([RuleEngine_ProjectKB_Class10211] of  Widget
 
 	(is_hidden TRUE)
-	(property_list [RuleEngine_ProjectKB_Class10210])
+	(property_list [RuleEngine_ProjectKB_Class10212])
 	(widget_class_name "edu.stanford.smi.protegex.queries_tab.QueriesTab"))
 
-([RuleEngine_ProjectKB_Class10210] of  Property_List
+([RuleEngine_ProjectKB_Class10212] of  Property_List
 )
 
-([RuleEngine_ProjectKB_Class10211] of  String
+([RuleEngine_ProjectKB_Class10213] of  String
 
 	(name "Rule")
 	(string_value "title"))
 
-([RuleEngine_ProjectKB_Class10212] of  String
+([RuleEngine_ProjectKB_Class10214] of  String
 
 	(name "Run")
 	(string_value "title"))
 
-([RuleEngine_ProjectKB_Class10213] of  String
+([RuleEngine_ProjectKB_Class10215] of  String
 
 	(name "RuleSet")
 	(string_value "title"))
