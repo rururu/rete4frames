@@ -1,4 +1,4 @@
-; Mon Sep 12 17:14:42 MSK 2016
+; Tue Sep 13 18:05:33 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,19 +20,19 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
+		[Clojure_ProjectKB_Class70009]
+		[Clojure_ProjectKB_Class70010]
+		[Clojure_ProjectKB_Class70011]
+		[Clojure_ProjectKB_Class80012]
+		[Clojure_ProjectKB_Class80013]
+		[Clojure_ProjectKB_Class80014]
+		[Clojure_ProjectKB_Class80015]
+		[Clojure_ProjectKB_Class80016]
+		[Clojure_ProjectKB_Class80017]
+		[Clojure_ProjectKB_Class80018]
+		[Clojure_ProjectKB_Class80019]
 		[Clojure_ProjectKB_Class80020]
-		[Clojure_ProjectKB_Class80021]
-		[Clojure_ProjectKB_Class80022]
-		[Clojure_ProjectKB_Class80023]
-		[Clojure_ProjectKB_Class80024]
-		[Clojure_ProjectKB_Class80025]
-		[Clojure_ProjectKB_Class80026]
-		[Clojure_ProjectKB_Class80027]
-		[Clojure_ProjectKB_Class80028]
-		[Clojure_ProjectKB_Class80029]
-		[Clojure_ProjectKB_Class80030]
-		[Clojure_ProjectKB_Class80031]
-		[Clojure_ProjectKB_Class80032]))
+		[Clojure_ProjectKB_Class80021]))
 
 ([Clojure_ProjectKB_Class10004] of  Boolean
 
@@ -963,91 +963,91 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
+([Clojure_ProjectKB_Class70009] of  String
+
+	(name "WorkingPrograms")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class70010] of  String
+
+	(name "CloFunction")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class70011] of  String
+
+	(name "CloExtendType")
+	(string_value "title"))
+
 ([Clojure_ProjectKB_Class70012] of  Boolean
 
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
-([Clojure_ProjectKB_Class80020] of  String
-
-	(name "WorkingPrograms")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class80021] of  String
-
-	(name "CloFunction")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class80022] of  String
-
-	(name "CloExtendType")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class80023] of  String
+([Clojure_ProjectKB_Class80012] of  String
 
 	(name "CloRecord")
 	(string_value "title"))
 
-([Clojure_ProjectKB_Class80024] of  String
+([Clojure_ProjectKB_Class80013] of  String
 
 	(name "CloProgram")
 	(string_value "title"))
 
-([Clojure_ProjectKB_Class80025] of  String
+([Clojure_ProjectKB_Class80014] of  String
 
 	(name "CloProtocol")
 	(string_value "title"))
 
-([Clojure_ProjectKB_Class80026] of  String
+([Clojure_ProjectKB_Class80015] of  String
 
 	(name "CloFuncall")
 	(string_value "source"))
 
-([Clojure_ProjectKB_Class80027] of  String
+([Clojure_ProjectKB_Class80016] of  String
 
 	(name "CloVar")
 	(string_value "title"))
 
-([Clojure_ProjectKB_Class80028] of  String
+([Clojure_ProjectKB_Class80017] of  String
 
 	(name "CloMacro")
 	(string_value "title"))
 
-([Clojure_ProjectKB_Class80029] of  String
+([Clojure_ProjectKB_Class80018] of  String
 
 	(name "CloNamespace")
 	(string_value "title"))
 
-([Clojure_ProjectKB_Class80030] of  String
+([Clojure_ProjectKB_Class80019] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([Clojure_ProjectKB_Class80031] of  String
+([Clojure_ProjectKB_Class80020] of  String
 
 	(name "CloDocumentation")
 	(string_value "source"))
 
-([Clojure_ProjectKB_Class80032] of  String
+([Clojure_ProjectKB_Class80021] of  String
 
 	(name "CloExtendProtocol")
 	(string_value "title"))
 
-([Clojure_ProjectKB_Class80033] of  Map_Entry
+([Clojure_ProjectKB_Class80022] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([Clojure_ProjectKB_Class80034] of  Map_Entry
+([Clojure_ProjectKB_Class80023] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([Clojure_ProjectKB_Class80035] of  Map_Entry
+([Clojure_ProjectKB_Class80024] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -1114,9 +1114,9 @@
 ([KB_127677_Class1] of  Map
 
 	(entries
-		[Clojure_ProjectKB_Class80033]
-		[Clojure_ProjectKB_Class80034]
-		[Clojure_ProjectKB_Class80035]))
+		[Clojure_ProjectKB_Class80022]
+		[Clojure_ProjectKB_Class80023]
+		[Clojure_ProjectKB_Class80024]))
 
 ([KB_127677_Class100] of  Property_List
 )
@@ -1211,7 +1211,7 @@
 ([KB_127677_Class99] of  Property_List
 )
 
-([KB_818219_Class3] of  Map
+([KB_830782_Class3] of  Map
 )
 
 ([LAYOUT_PROPERTIES] of  Property_List

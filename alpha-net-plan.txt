@@ -1,18 +1,14 @@
-context:
- start: 0
- assign_seats: 3
- make_path: 7
- check_done: 9
- print_results: 12
-Guest:
- :?: {:? {:? 1}}
-Count:
- :?: 2
-Seating:
- :?: {:? {:? {yes {:? {:? {:? 4}}}, no {:? {:? {:? 8}}}, :? {:? {:? {:? 11}}}}}}
-Path:
- :?: {:? {:? 5}}
-Chosen:
- :?: {:? {:? 6}}
-Last:
- :?: 10
+Goal:
+ unlock: {:? {:? 0}}
+ hold: {:? {:? 5}, blank {:? 15}}
+ walk-to: {:? {:? 6}}
+ move: {ladder {:? 9}, :? {:? 17}}
+ on: {ladder {:? 11}, :? {:? 14}, floor {:? 18}}
+ eat: {:? {:? 21}}
+Monkey:
+ :?: {:? {:? 1, floor 20}}
+ blank: {:? {ladder 12, :? 16, floor 19}}
+Thing:
+ :?: {:? {:? {:? 2, light 13}, floor {:? 3}, ceiling {light 7}}, ladder {:? {:? 8}, floor {:? 10}}}
+Chest:
+ :?: {:? {:? 4}}

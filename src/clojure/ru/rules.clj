@@ -6,7 +6,7 @@
 (def LOGS (atom {}))
 (defn mk-templates [clss]
   (letfn [(mk-tpl [cls]
-	(concat [(symbol (.getName cls)) 'INSTANCE]
+	(cons (symbol (.getName cls))
 	  (map #(symbol (.getName %)) (.getTemplateSlots cls))))]
   (if (seq? clss)
     (map mk-tpl clss)
@@ -23,15 +23,23 @@
         rhs (read-string (str "(" (p/sv ri "rhs") ")"))]
     (concat [nm sal] lhs ['=>] rhs))))
 
+(defn single-value [v]
+  (if (string? v)
+  (if (> (count (clojure.string/split v #"\s")) 1)
+    v
+    (symbol v))
+  v))
+
 (defn mk-frame [ins]
   (letfn [(sval [slt ins]
 	(if (.getAllowsMultipleValues slt)
-	  (.getOwnSlotValues ins slt)
-                        (or (.getOwnSlotValue ins slt) '?)))]
+	  (map single-value (.getOwnSlotValues ins slt))
+                          (if-let [v (.getOwnSlotValue ins slt)]
+                            (single-value v)
+                            '?)))]
   (let [typ (.getDirectType ins)
         slots (.getTemplateSlots typ)
-        svs (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)
-        svs (cons 'INSTANCE (cons (.getName ins) svs))]
+        svs (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)]
     (cons (symbol (.getName typ)) svs))))
 
 (defn facts-from-classes [fcs]
@@ -54,38 +62,25 @@
          trc (mp "trace")]
     (run-engine tit rss fcs ffs trc)))
 ([tit rss fcs ffs trc]
-  (println [:RUN-ENGINE tit])
+  (println [:RUN tit])
     (let [ffc (facts-from-classes fcs)
-           facts (concat ffc ffs)
-           tms (mapcat #(p/svs % "templates") rss)
+           fts (concat ffc ffs)
+           fts (map mk-frame fts)
+           tps (mapcat #(p/svs % "templates") rss)
+           tps (mk-templates tps)
            rls (mapcat #(p/svs % "rules") rss)
-           mts (mk-templates tms)
-           mrs (map #(mk-rule % trc) rls)
-           mtr (map rete/trans-rule mrs)]
-       (println (str "Trace: " trc))
-       (println (str "Templates: " (count mts)))
-       (println (str "Rules: " (count mtr)))
-       (println (str "Facts: " (count facts)))
-       (run-engine trc mts mtr facts)))
-([trac templs rules facts]
-  (time
-    (do 
-      (if (p/is? trac)
-        (rete/trace)
-        (rete/untrace))
-      (rete/create-rete templs rules)
-      (doseq [f facts]
-          (rete/assert-frame (mk-frame f))
-          (rete/fire)) ) )))
+           rls (map #(mk-rule % trc) rls)
+           rls (map rete/trans-rule rls)
+           mod (if (p/is? trc) "trace" "run")]
+       (println (str "Mode: " mod))
+       (println (str "Templates: " (vec tps)))
+       (println (str "Rules: " (vec rls)))
+       (println (str "Facts: " (vec fts)))
+       (rete/run-with mod tps rls fts))))
 
 (defn assert-instances [inss]
   (doseq [ins inss]
   (rete/assert-frame (mk-frame ins))))
-
-(defn retract-instances [inss]
-  (doseq [ins inss]
-  (doseq [fact (rete/facts-with-slot-value 'INSTANCE = (.getName ins))]
-    (rete/retract-fact (first fact) true))))
 
 (defn ass-inss [hm inst]
   (let [mp (into {} hm)
@@ -93,13 +88,6 @@
       sel (.getSelection (.getSlotWidget clw (p/slt "instances")))]
   (if (seq sel)
     (assert-instances sel))))
-
-(defn retr-inss [hm inst]
-  (let [mp (into {} hm)
-      clw (mp "clsWidget")
-      sel (.getSelection (.getSlotWidget clw (p/slt "instances")))]
-  (if (seq sel)
-    (retract-instances sel))))
 
 (defn pp [typ]
   ;; pretty print facts to REPL
@@ -195,9 +183,6 @@
 
 (defn fire-all-rules [hm inst]
   (rete/fire))
-
-(defn do-reset [hm inst]
-  (rete/reset))
 
 (defn bnp []
   ;; create file with beta net plan

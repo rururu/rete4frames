@@ -1,4 +1,4 @@
-; Mon Sep 12 17:15:33 MSK 2016
+; Tue Sep 13 22:33:23 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -66,28 +66,28 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_453278_Class207] of  Map
+([KB_358899_Class207] of  Map
 
 	(entries
-		[KB_453278_Class208]
-		[KB_453278_Class209]
-		[KB_453278_Class210]))
+		[KB_358899_Class208]
+		[KB_358899_Class209]
+		[KB_358899_Class210]))
 
-([KB_453278_Class208] of  Map_Entry
+([KB_358899_Class208] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_453278_Class209] of  Map_Entry
+([KB_358899_Class209] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_453278_Class210] of  Map_Entry
+([KB_358899_Class210] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -432,9 +432,7 @@
 		[RuleEngine_ProjectKB_Class30220]
 		[RuleEngine_ProjectKB_Class20218]
 		[RuleEngine_ProjectKB_Class40222]
-		[RuleEngine_ProjectKB_Class20211]
-		[RuleEngine_ProjectKB_Class30211]
-		[RuleEngine_ProjectKB_Class40211]))
+		[RuleEngine_ProjectKB_Class20211]))
 
 ([RETE_ProjectKB_Class10247] of  Property_List
 
@@ -611,7 +609,7 @@
 	(property_list [RuleEngine_ProjectKB_Class20212])
 	(widget_class_name "clojuretab.ClojureActionButton")
 	(width 200)
-	(x 0)
+	(x 400)
 	(y 470))
 
 ([RuleEngine_ProjectKB_Class20212] of  Property_List
@@ -735,20 +733,6 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
-([RuleEngine_ProjectKB_Class30211] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "butt-reset")
-	(property_list [RuleEngine_ProjectKB_Class30212])
-	(widget_class_name "clojuretab.ClojureActionButton")
-	(width 200)
-	(x 200)
-	(y 470))
-
-([RuleEngine_ProjectKB_Class30212] of  Property_List
-)
-
 ([RuleEngine_ProjectKB_Class30219] of  Property_List
 
 	(properties
@@ -781,20 +765,6 @@
 
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
-
-([RuleEngine_ProjectKB_Class40211] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "butt-retr-inss")
-	(property_list [RuleEngine_ProjectKB_Class40212])
-	(widget_class_name "clojuretab.ClojureActionButton")
-	(width 200)
-	(x 400)
-	(y 470))
-
-([RuleEngine_ProjectKB_Class40212] of  Property_List
-)
 
 ([RuleEngine_ProjectKB_Class40220] of  Boolean
 

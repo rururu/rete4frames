@@ -1,4 +1,4 @@
-; Mon Sep 12 17:15:33 MSK 2016
+; Tue Sep 13 22:33:23 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -30,16 +30,6 @@
 	(single-slot butt-run
 		(type STRING)
 		(default "Run/ru.rules/run-engine")
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot butt-retr-inss
-		(type STRING)
-		(default "Retract Instances/ru.rules/retr-inss")
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot butt-reset
-		(type STRING)
-		(default "Reset/ru.rules/do-reset")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot butt-ass-inss
@@ -119,11 +109,6 @@
 (defclass Run
 	(is-a RuleEngine)
 	(role concrete)
-	(single-slot butt-reset
-		(type STRING)
-		(default "Reset/ru.rules/do-reset")
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(multislot rule-sets
 		(type INSTANCE)
 ;+		(allowed-classes RuleSet)
@@ -153,11 +138,6 @@
 	(single-slot trace
 		(type SYMBOL)
 		(allowed-values FALSE TRUE)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
-	(single-slot butt-retr-inss
-		(type STRING)
-		(default "Retract Instances/ru.rules/retr-inss")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(multislot facts

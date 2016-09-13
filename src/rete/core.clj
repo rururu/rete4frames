@@ -618,6 +618,7 @@
 
 (defn assert-frame [frame]
   "Assert frame and activate corresponding alpha nodes"
+  ;;(println [:ASSERT-FRAME frame])
   (activate-a (ais-for-funarg (mk-funarg frame))))
 
 (defn modify-fact [fid mmp]
@@ -882,7 +883,7 @@
 
 (defn run-with
   [mode temps rules facts]
-  ;; (println [:RUN-WITH mode temps rules facts])
+  ;;(println [:RUN-WITH mode temps rules facts])
   (if (condp = mode
         "run" (do (untrace) true)
         "trace" (do (trace) true)

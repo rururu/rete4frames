@@ -1,7 +1,224 @@
-; Mon Sep 12 22:00:06 MSK 2016
+; Tue Sep 13 22:39:58 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
+
+([Examples_Class0] of  Rule
+
+	(lhs "?goal (Goal action hold \n	argument1 ?name)\n?thing (Thing name ?name \n	location ?place \n	on-top-of ceiling \n	weight light)\n(Thing name ladder \n	location ?place)\n?monkey (Monkey location ?place \n	on-top-of ladder \n	holding blank)")
+	(rhs "(println (str \"Monkey grabs the \" ?name \".\" ))\n(modify ?thing location held \n	on-top-of held)\n(modify ?monkey holding ?name)\n(retract ?goal)")
+	(salience 0)
+	(title "Grab-object-from-ladder"))
+
+([Examples_Class1] of  Rule
+
+	(lhs "(Goal action hold \n	argument1 ?obj)\n(Thing name ?obj \n	location ?place \n	on-top-of ?on \n	weight light\n	(not= ?on ceiling))\n(Monkey location ?place \n	on-top-of ?surf\n	(not= ?surf ?on))\n(not Goal action on \n	argument1 ?on)")
+	(rhs "(asser Goal action on argument1 ?on)")
+	(salience 0)
+	(title "Climb-to-hold"))
+
+([Examples_Class10] of  Rule
+
+	(lhs "?goal (Goal action move \n	argument1 ?obj \n	argument2 ?place)\n(Thing name ?obj location ?place)")
+	(rhs "(retract ?goal)")
+	(salience 0)
+	(title "Already-moved-object"))
+
+([Examples_Class10015] of  Rule
+
+	(lhs "?goal (Goal action walk-to \n	argument1 ?place)\n?monkey (Monkey location ?loc \n	on-top-of floor \n	holding blank\n	(not= ?loc ?place))")
+	(rhs "(println (str \"Monkey walks to \" ?place \".\" ))\n(modify ?monkey location ?place)\n(retract ?goal)")
+	(salience 0)
+	(title "Walk-holding-nothing"))
+
+([Examples_Class10016] of  Rule
+
+	(lhs "?goal (Goal action walk-to \n	argument1 ?place)\n?monkey (Monkey location ?loc \n	on-top-of floor \n	holding ?obj\n	((not= ?loc ?place)\n	 (not= ?obj blank)))")
+	(rhs "(println (str \"Monkey walks to \" ?place \" holding the \" ?obj \".\" ))\n(modify ?monkey location ?place)\n(retract ?goal)")
+	(salience 0)
+	(title "Walk-holding-object"))
+
+([Examples_Class10017] of  Rule
+
+	(lhs "?goal (Goal action on \n	argument1 floor)\n?monkey (Monkey on-top-of ?on\n	(not= ?on floor))")
+	(rhs "(println (str \"Monkey jumps off the \" ?on \" onto the floor.\" ))\n(modify ?monkey on-top-of floor)\n(retract ?goal)")
+	(salience 0)
+	(title "Jump-onto-floor"))
+
+([Examples_Class10018] of  Rule
+
+	(lhs "(Goal action on argument1 ?obj)\n(Thing name ?obj \n	location ?place)\n(Monkey location ?loc\n	(not= ?loc ?place))\n(not Goal action walk-to argument1 ?place)")
+	(rhs "(asser Goal action walk-to \n	argument1 ?place)")
+	(salience 0)
+	(title "Walk-to-place-to-climb"))
+
+([Examples_Class10019] of  Rule
+
+	(lhs "(Goal action on \n	argument1 ?obj)\n(Thing name ?obj \n	location ?place)\n(Monkey location ?place \n	holding ?hold\n	(not= ?hold blank))\n(not Goal action hold \n	argument1 blank)")
+	(rhs "(asser Goal action hold \n	argument1 blank)")
+	(salience 0)
+	(title "Drop-to-climb"))
+
+([Examples_Class10020] of  Rule
+
+	(lhs "(Goal action on \n	argument1 ?obj)\n(Thing name ?obj \n	location ?place \n	on-top-of ?on)\n(Monkey location ?place \n	on-top-of ?on2 \n	holding blank\n	((not= ?on2 ?on)\n	 (not= ?on2 ?obj)))\n(not Goal action on \n	argument1 ?on)")
+	(rhs "(asser Goal action on \n	argument1 ?on)")
+	(salience 0)
+	(title "Climb-indirectly"))
+
+([Examples_Class10021] of  Rule
+
+	(lhs "?goal (Goal action on \n	argument1 ?obj)\n(Thing name ?obj \n	location ?place \n	on-top-of ?on)\n?monkey (Monkey location ?place \n	on-top-of ?on \n	holding blank)")
+	(rhs "(println (str \"Monkey climbs onto the \" ?obj \".\" ))\n(modify ?monkey on-top-of ?obj)\n(retract ?goal)")
+	(salience 0)
+	(title "Climb-directly"))
+
+([Examples_Class10022] of  Rule
+
+	(lhs "?goal (Goal action on \n	argument1 ?obj)\n(Monkey on-top-of ?obj)")
+	(rhs "(retract ?goal)")
+	(salience 0)
+	(title "Already-on-object"))
+
+([Examples_Class10023] of  Rule
+
+	(lhs "(Goal action eat \n	argument1 ?obj)\n(Monkey holding ?h\n	(not= ?h ?obj))\n(not Goal action hold \n	argument1 ?obj)")
+	(rhs "(asser Goal action hold \n	argument1 ?obj)")
+	(salience 0)
+	(title "Hold-to-eat"))
+
+([Examples_Class10024] of  Rule
+
+	(lhs "?goal (Goal action eat \n	argument1 ?name)\n?monkey (Monkey holding ?name)\n?thing (Thing name ?name)")
+	(rhs "(println (str \"Monkey eats the \" ?name \".\" ))\n(modify ?monkey holding blank)\n(retract ?goal ?thing)")
+	(salience 0)
+	(title "Satisfy-hunger"))
+
+([Examples_Class10025] of  Monkey
+
+	(holding "blank")
+	(location "t5-7")
+	(on-top-of "green-couch"))
+
+([Examples_Class10026] of  Thing
+
+	(location "t5-7")
+	(name "green-couch")
+	(on-top-of "floor")
+	(weight "heavy"))
+
+([Examples_Class10027] of  Goal
+
+	(action "eat")
+	(argument1 "bananas"))
+
+([Examples_Class10028] of  Thing
+
+	(location "t2-2")
+	(name "red-couch")
+	(on-top-of "floor")
+	(weight "heavy"))
+
+([Examples_Class10029] of  Thing
+
+	(location "t2-2")
+	(name "big-pillow")
+	(on-top-of "red-couch")
+	(weight "light"))
+
+([Examples_Class10030] of  Thing
+
+	(location "t2-2")
+	(name "red-chest")
+	(on-top-of "big-pillow")
+	(weight "light"))
+
+([Examples_Class10031] of  Thing
+
+	(location "t7-7")
+	(name "blue-chest")
+	(on-top-of "ceiling")
+	(weight "light"))
+
+([Examples_Class10032] of  Thing
+
+	(location "t8-8")
+	(name "blue-couch")
+	(on-top-of "floor")
+	(weight "heavy"))
+
+([Examples_Class10033] of  Thing
+
+	(location "t8-8")
+	(name "green-chest")
+	(on-top-of "ceiling")
+	(weight "light"))
+
+([Examples_Class10034] of  Thing
+
+	(location "t1-3")
+	(name "red-key")
+	(on-top-of "floor")
+	(weight "light"))
+
+([Examples_Class10035] of  Chest
+
+	(contents "ladder")
+	(name "red-chest")
+	(unlocked-by "red-key"))
+
+([Examples_Class10036] of  Chest
+
+	(contents "bananas")
+	(name "blue-chest")
+	(unlocked-by "blue-key"))
+
+([Examples_Class10037] of  Chest
+
+	(contents "blue-key")
+	(name "green-chest")
+	(unlocked-by "red-key"))
+
+([Examples_Class10038] of  Run
+
+	(butt-ass-inss "Assert Instances/ru.rules/ass-inss")
+	(butt-fire "Fire/ru.rules/fire-all-rules")
+	(butt-run "Run/ru.rules/run-engine")
+	(facts
+		[Examples_Class10025]
+		[Examples_Class10026]
+		[Examples_Class10028]
+		[Examples_Class10029]
+		[Examples_Class10030]
+		[Examples_Class10035]
+		[Examples_Class10031]
+		[Examples_Class10036]
+		[Examples_Class10032]
+		[Examples_Class10033]
+		[Examples_Class10037]
+		[Examples_Class10034]
+		[Examples_Class10027])
+	(rule-sets [Examples_Class15])
+	(title "Mab Run")
+	(trace TRUE))
+
+([Examples_Class10040] of  CloFuncall
+
+	(source "(ru.rules/sp :all)"))
+
+([Examples_Class11] of  Rule
+
+	(lhs "?goal (Goal action walk-to argument1 ?place)\n(Monkey location ?place)")
+	(rhs "(retract ?goal)")
+	(salience 0)
+	(title "Already-at-place"))
+
+([Examples_Class13] of  Rule
+
+	(lhs "(Goal action walk-to \n	argument1 ?place)\n(Monkey location ?loc \n	on-top-of ?surf\n	((not= ?loc ?place)\n	 (not= ?surf floor)))\n(not Goal action on \n	argument1 floor)")
+	(rhs "(asser Goal action on \n	argument1 floor)")
+	(salience 0)
+	(title "Get-on-floor-to-walk"))
 
 ([Examples_Class15] of  RuleSet
 
@@ -12,7 +229,30 @@
 		[Examples_Class19]
 		[Examples_Class20]
 		[Examples_Class21]
-		[Examples_Class22])
+		[Examples_Class22]
+		[Examples_Class0]
+		[Examples_Class1]
+		[Examples_Class2]
+		[Examples_Class3]
+		[Examples_Class4]
+		[Examples_Class5]
+		[Examples_Class6]
+		[Examples_Class7]
+		[Examples_Class8]
+		[Examples_Class9]
+		[Examples_Class10]
+		[Examples_Class11]
+		[Examples_Class13]
+		[Examples_Class10015]
+		[Examples_Class10016]
+		[Examples_Class10017]
+		[Examples_Class10018]
+		[Examples_Class10019]
+		[Examples_Class10020]
+		[Examples_Class10021]
+		[Examples_Class10022]
+		[Examples_Class10023]
+		[Examples_Class10024])
 	(templates
 		[Chest]
 		[Goal]
@@ -48,6 +288,13 @@
 	(salience 0)
 	(title "Unlock-chest-with-key"))
 
+([Examples_Class2] of  Rule
+
+	(lhs "(Goal action hold \n	argument1 ?obj)\n(Thing name ?obj \n	location ?place \n	on-top-of ?surf \n	weight light\n	(not= ?surf ceiling))\n(Monkey location ?loc\n	(not= ?loc ?place))\n(not Goal action walk-to argument1 ?place)")
+	(rhs "(asser Goal action walk-to argument1 ?place)")
+	(salience 0)
+	(title "Walk-to-hold"))
+
 ([Examples_Class20] of  Rule
 
 	(lhs "(Goal action hold \n	argument1 ?obj)\n(Chest name ?chest \n	contents ?obj)\n(not Goal action unlock \n	argument1 ?chest)")
@@ -68,3 +315,52 @@
 	(rhs "(asser Goal action on \n	argument1 ladder)")
 	(salience 0)
 	(title "Climb-ladder-to-hold"))
+
+([Examples_Class3] of  Rule
+
+	(lhs "(Goal action hold \n	argument1 ?obj)\n(Thing name ?obj \n	location ?place \n	on-top-of ?on \n	weight light)\n(Monkey location ?place \n	on-top-of ?on \n	holding ?hold\n	(not= ?hold blank))\n(not Goal action hold argument1 blank)")
+	(rhs "(asser Goal action hold argument1 blank)")
+	(salience 0)
+	(title "Drop-to-hold"))
+
+([Examples_Class4] of  Rule
+
+	(lhs "?goal (Goal action hold \n	argument1 ?name)\n?thing (Thing name ?name \n	location ?place \n	on-top-of ?on \n	weight light)\n?monkey (Monkey location ?place \n	on-top-of ?on \n	holding blank)")
+	(rhs "(println (str \"Monkey grabs the \" ?name \".\" ))\n(modify ?thing location held \n	on-top-of held)\n(modify ?monkey holding ?name)\n(retract ?goal)")
+	(salience 0)
+	(title "Grab-object"))
+
+([Examples_Class5] of  Rule
+
+	(lhs "?goal (Goal action hold argument1 blank)\n?monkey (Monkey location ?place \n	on-top-of ?on \n	holding ?name\n	(not= ?name blank))\n?thing (Thing name ?name)")
+	(rhs "(println (str \"Monkey drops the \" ?name \".\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of ?on)\n(retract ?goal)")
+	(salience 0)
+	(title "Drop-object"))
+
+([Examples_Class6] of  Rule
+
+	(lhs "(Goal action move \n	argument1 ?obj \n	argument2 ?place)\n(Chest name ?chest \n	contents ?obj)\n(not Goal action unlock argument1 ?chest)")
+	(rhs "(asser Goal action unlock \n	argument1 ?chest)")
+	(salience 0)
+	(title "Unlock-chest-to-move-object"))
+
+([Examples_Class7] of  Rule
+
+	(lhs "(Goal action move \n	argument1 ?obj \n	argument2 ?place)\n(Thing name ?obj \n	location ?loc \n	weight light\n	(not= ?loc ?place))\n(Monkey holding ?hold\n	(not= ?hold ?obj))\n(not Goal action hold \n	argument1 ?obj)")
+	(rhs "(asser Goal action hold \n	argument1 ?obj)")
+	(salience 0)
+	(title "Hold-object-to-move"))
+
+([Examples_Class8] of  Rule
+
+	(lhs "(Goal action move \n	argument1 ?obj \n	argument2 ?place)\n(Monkey location ?loc \n	holding ?obj\n	(not= ?loc ?place))\n(not Goal action walk-to \n	argument1 ?place)")
+	(rhs "(asser Goal action walk-to \n	argument1 ?place)")
+	(salience 0)
+	(title "Move-object-to-place"))
+
+([Examples_Class9] of  Rule
+
+	(lhs "?goal (Goal action move \n	argument1 ?name \n	argument2 ?place)\n?monkey (Monkey location ?place \n	holding ?obj)\n?thing (Thing name ?name \n	weight light)")
+	(rhs "(println (str \"Monkey drops the \" ?name \".\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of floor)\n(retract ?goal)")
+	(salience 0)
+	(title "Drop-object-once-moved"))

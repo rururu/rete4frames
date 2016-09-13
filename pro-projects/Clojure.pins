@@ -1,4 +1,4 @@
-; Mon Sep 12 17:14:42 MSK 2016
+; Tue Sep 13 18:05:33 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -182,14 +182,6 @@
 
 	(source "(instance? Instance x)")
 	(title "pins? [x]"))
-
-([Clojure_Class290059] of  CloFuncall
-
-	(source "(def GEN (atom {}))"))
-
-([Clojure_Class290060] of  CloFuncall
-
-	(source "(reg-gen \"see\" GEN)"))
 
 ([Clojure_Class30000] of  CloFunction
 
