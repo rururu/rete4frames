@@ -91,3 +91,8 @@
 2016.09.13 22:39:04.269 MSK INFO: *** SYSTEM START ***
 2016.09.13 22:39:04.725 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2016.09.13 22:39:05.357 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
+2016.09.14 07:30:27.348 MSK INFO: *** SYSTEM START ***
+2016.09.14 07:30:37.767 MSK INFO: *** SYSTEM START ***
+2016.09.14 07:30:37.784 MSK WARNING: Look and feel not found: com.apple.laf.AquaLookAndFeel -- SystemUtilities.setLookAndFeel()
+2016.09.14 07:30:38.232 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.09.14 07:30:40.748 MSK INFO: Load time for file:/home/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 1 sec (ui) -- ProjectManager$3.run()

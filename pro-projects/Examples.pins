@@ -1,4 +1,4 @@
-; Tue Sep 13 22:39:58 MSK 2016
+; Wed Sep 14 08:27:45 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -23,6 +23,13 @@
 	(rhs "(retract ?goal)")
 	(salience 0)
 	(title "Already-moved-object"))
+
+([Examples_Class10000] of  Rule
+
+	(lhs "(Goal action unlock \n	argument1 ?chest)\n(Thing name ?chest \n	on-top-of ?surf \n	weight light\n	(not= ?surf floor))\n(Monkey holding ?thing\n	(not= ?thing ?chest))\n(not Goal action hold argument1 ?chest)")
+	(rhs "(asser Goal action hold \n	argument1 ?chest)")
+	(salience 0)
+	(title "Hold-chest-to-put-on-floor"))
 
 ([Examples_Class10015] of  Rule
 
@@ -223,6 +230,7 @@
 ([Examples_Class15] of  RuleSet
 
 	(rules
+		[Examples_Class10000]
 		[Examples_Class16]
 		[Examples_Class17]
 		[Examples_Class18]
