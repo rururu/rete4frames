@@ -1,7 +1,10 @@
 (ns ru.rules
 (:require
   [protege.core :as p]
-  [rete.core :as rete]))
+  [rete.core :as rete])
+(:import
+  edu.stanford.smi.protege.ui.DisplayUtilities
+  javax.swing.JOptionPane))
 
 (def LOGS (atom {}))
 (defn mk-templates [clss]
@@ -73,9 +76,9 @@
            rls (map rete/trans-rule rls)
            mod (if (p/is? trc) "trace" "run")]
        (println (str "Mode: " mod))
-       (println (str "Templates: " (vec tps)))
-       (println (str "Rules: " (vec rls)))
-       (println (str "Facts: " (vec fts)))
+       (println (str "Templates: " (count tps)))
+       (println (str "Rules: " (count rls)))
+       (println (str "Facts: " (count fts)))
        (rete/run-with mod tps rls fts))))
 
 (defn assert-instances [inss]
@@ -187,4 +190,26 @@
 (defn bnp []
   ;; create file with beta net plan
 (rete/log-lst "beta-net-plan.txt" rete/BPLAN))
+
+(defn display [mess]
+  (let [dis (if-let [dss (seq (p/cls-instances "Display"))]
+                (first dss)
+                (p/crin "Display"))
+       src (p/sv dis "source")]
+  (p/ssv dis "source" (str src mess "\n"))
+  (.show p/*prj* dis)))
+
+(defn clear-display []
+  (if-let [dss (seq (p/cls-instances "Display"))]
+   (p/ssv (first dss) "source" "")))
+
+(defn select [question answers]
+  (DisplayUtilities/pickSymbol nil question (first answers) answers))
+
+(defn confirm [question]
+  (let [ans (JOptionPane/showConfirmDialog nil question)]
+  (condp = ans
+    JOptionPane/YES_OPTION true
+    JOptionPane/NO_OPTION false
+    nil)))
 

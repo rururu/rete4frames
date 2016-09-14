@@ -1,4 +1,4 @@
-; Wed Sep 14 08:27:45 MSK 2016
+; Wed Sep 14 20:53:04 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,12 +20,13 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Examples_ProjectKB_Class10349]
-		[Examples_ProjectKB_Class10350]
-		[Examples_ProjectKB_Class10351]
-		[Examples_ProjectKB_Class10352]
-		[Examples_ProjectKB_Class10353]
-		[Examples_ProjectKB_Class10354]))
+		[Examples_ProjectKB_Class10478]
+		[Examples_ProjectKB_Class10479]
+		[Examples_ProjectKB_Class10480]
+		[Examples_ProjectKB_Class10481]
+		[Examples_ProjectKB_Class10482]
+		[Examples_ProjectKB_Class10483]
+		[Examples_ProjectKB_Class10484]))
 
 ([CLSES_TAB] of  Widget
 
@@ -40,32 +41,37 @@
 
 	(name ":CREATOR"))
 
-([Examples_ProjectKB_Class10349] of  String
+([Examples_ProjectKB_Class10478] of  String
 
 	(name "Thing")
 	(string_value "{Thing+}name{+location+}location{+weight+}weight{+on-top-of+}on-top-of"))
 
-([Examples_ProjectKB_Class10350] of  String
+([Examples_ProjectKB_Class10479] of  String
 
 	(name "Monkey")
 	(string_value "{Monkey+location+}location{+on-top-of+}on-top-of{+holding++}holding"))
 
-([Examples_ProjectKB_Class10351] of  String
+([Examples_ProjectKB_Class10480] of  String
 
 	(name "Chest")
 	(string_value "{Chest+}name{+contents+}contents{+unlocked-by+}unlocked-by"))
 
-([Examples_ProjectKB_Class10352] of  String
+([Examples_ProjectKB_Class10481] of  String
+
+	(name "Stage")
+	(string_value "value"))
+
+([Examples_ProjectKB_Class10482] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([Examples_ProjectKB_Class10353] of  String
+([Examples_ProjectKB_Class10483] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
 
-([Examples_ProjectKB_Class10354] of  String
+([Examples_ProjectKB_Class10484] of  String
 
 	(name "Goal")
 	(string_value "{Goal+}action{+arg1+}argument1{+arg2+}argument2"))
@@ -337,34 +343,6 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_009491_Class339] of  Map
-
-	(entries
-		[KB_009491_Class340]
-		[KB_009491_Class341]
-		[KB_009491_Class342]))
-
-([KB_009491_Class340] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_009491_Class341] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_009491_Class342] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
 ([KB_106946_Class0] of  String
 
 	(name "factory_class_name")
@@ -464,6 +442,34 @@
 
 	(name "instances_file_name")
 	(string_value "Examples.pins"))
+
+([KB_319821_Class346] of  Map
+
+	(entries
+		[KB_319821_Class347]
+		[KB_319821_Class348]
+		[KB_319821_Class349]))
+
+([KB_319821_Class347] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_319821_Class348] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_319821_Class349] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
 
 ([LAYOUT_PROPERTIES] of  Property_List
 

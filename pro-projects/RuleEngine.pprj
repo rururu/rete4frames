@@ -1,4 +1,4 @@
-; Tue Sep 13 22:33:23 MSK 2016
+; Wed Sep 14 14:56:32 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -66,28 +66,28 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_358899_Class207] of  Map
+([KB_363982_Class207] of  Map
 
 	(entries
-		[KB_358899_Class208]
-		[KB_358899_Class209]
-		[KB_358899_Class210]))
+		[KB_363982_Class208]
+		[KB_363982_Class209]
+		[KB_363982_Class210]))
 
-([KB_358899_Class208] of  Map_Entry
+([KB_363982_Class208] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_358899_Class209] of  Map_Entry
+([KB_363982_Class209] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_358899_Class210] of  Map_Entry
+([KB_363982_Class210] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -277,6 +277,7 @@
 		[STANDARD_CLASS_FORM_WIDGET]
 		[STANDARD_SLOT_FORM_WIDGET]
 		[INSTANCE_ANNOTATION_FORM_WIDGET]
+		[RuleEngine_ProjectKB_Class20213]
 		[RETE_ProjectKB_Class10245]
 		[RETE_ProjectKB_Class10226]
 		[STANDARD_FACET_FORM_WIDGET]
@@ -615,6 +616,41 @@
 ([RuleEngine_ProjectKB_Class20212] of  Property_List
 )
 
+([RuleEngine_ProjectKB_Class20213] of  Widget
+
+	(is_hidden FALSE)
+	(name "Display")
+	(property_list [RuleEngine_ProjectKB_Class20214])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
+
+([RuleEngine_ProjectKB_Class20214] of  Property_List
+
+	(properties
+		[RuleEngine_ProjectKB_Class20215]
+		[RuleEngine_ProjectKB_Class20216]))
+
+([RuleEngine_ProjectKB_Class20215] of  Property_List
+
+	(name "layout properties"))
+
+([RuleEngine_ProjectKB_Class20216] of  Widget
+
+	(height 620)
+	(is_hidden FALSE)
+	(label "messages")
+	(name "source")
+	(property_list [RuleEngine_ProjectKB_Class20217])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextAreaWidget")
+	(width 700)
+	(x 0)
+	(y 0))
+
+([RuleEngine_ProjectKB_Class20217] of  Property_List
+
+	(properties
+		[RuleEngine_ProjectKB_Class50224]
+		[RuleEngine_ProjectKB_Class50225]))
+
 ([RuleEngine_ProjectKB_Class20218] of  Widget
 
 	(height 350)
@@ -789,6 +825,15 @@
 
 ([RuleEngine_ProjectKB_Class40223] of  Property_List
 )
+
+([RuleEngine_ProjectKB_Class50224] of  String
+
+	(name "tooltip_text"))
+
+([RuleEngine_ProjectKB_Class50225] of  Boolean
+
+	(boolean_value FALSE)
+	(name "readOnly_configured"))
 
 ([SLOTS_TAB] of  Widget
 

@@ -1,4 +1,4 @@
-; Wed Sep 14 08:27:45 MSK 2016
+; Wed Sep 14 20:53:04 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -6,7 +6,7 @@
 ([Examples_Class0] of  Rule
 
 	(lhs "?goal (Goal action hold \n	argument1 ?name)\n?thing (Thing name ?name \n	location ?place \n	on-top-of ceiling \n	weight light)\n(Thing name ladder \n	location ?place)\n?monkey (Monkey location ?place \n	on-top-of ladder \n	holding blank)")
-	(rhs "(println (str \"Monkey grabs the \" ?name \".\" ))\n(modify ?thing location held \n	on-top-of held)\n(modify ?monkey holding ?name)\n(retract ?goal)")
+	(rhs "(ru.rules/display (str \"Monkey grabs the \" ?name \".\" ))\n(modify ?thing location held \n	on-top-of held)\n(modify ?monkey holding ?name)\n(retract ?goal)")
 	(salience 0)
 	(title "Grab-object-from-ladder"))
 
@@ -34,21 +34,21 @@
 ([Examples_Class10015] of  Rule
 
 	(lhs "?goal (Goal action walk-to \n	argument1 ?place)\n?monkey (Monkey location ?loc \n	on-top-of floor \n	holding blank\n	(not= ?loc ?place))")
-	(rhs "(println (str \"Monkey walks to \" ?place \".\" ))\n(modify ?monkey location ?place)\n(retract ?goal)")
+	(rhs "(ru.rules/display (str \"Monkey walks to \" ?place \".\" ))\n(modify ?monkey location ?place)\n(retract ?goal)")
 	(salience 0)
 	(title "Walk-holding-nothing"))
 
 ([Examples_Class10016] of  Rule
 
 	(lhs "?goal (Goal action walk-to \n	argument1 ?place)\n?monkey (Monkey location ?loc \n	on-top-of floor \n	holding ?obj\n	((not= ?loc ?place)\n	 (not= ?obj blank)))")
-	(rhs "(println (str \"Monkey walks to \" ?place \" holding the \" ?obj \".\" ))\n(modify ?monkey location ?place)\n(retract ?goal)")
+	(rhs "(ru.rules/display (str \"Monkey walks to \" ?place \" holding the \" ?obj \".\" ))\n(modify ?monkey location ?place)\n(retract ?goal)")
 	(salience 0)
 	(title "Walk-holding-object"))
 
 ([Examples_Class10017] of  Rule
 
 	(lhs "?goal (Goal action on \n	argument1 floor)\n?monkey (Monkey on-top-of ?on\n	(not= ?on floor))")
-	(rhs "(println (str \"Monkey jumps off the \" ?on \" onto the floor.\" ))\n(modify ?monkey on-top-of floor)\n(retract ?goal)")
+	(rhs "(ru.rules/display (str \"Monkey jumps off the \" ?on \" onto the floor.\" ))\n(modify ?monkey on-top-of floor)\n(retract ?goal)")
 	(salience 0)
 	(title "Jump-onto-floor"))
 
@@ -76,7 +76,7 @@
 ([Examples_Class10021] of  Rule
 
 	(lhs "?goal (Goal action on \n	argument1 ?obj)\n(Thing name ?obj \n	location ?place \n	on-top-of ?on)\n?monkey (Monkey location ?place \n	on-top-of ?on \n	holding blank)")
-	(rhs "(println (str \"Monkey climbs onto the \" ?obj \".\" ))\n(modify ?monkey on-top-of ?obj)\n(retract ?goal)")
+	(rhs "(ru.rules/display (str \"Monkey climbs onto the \" ?obj \".\" ))\n(modify ?monkey on-top-of ?obj)\n(retract ?goal)")
 	(salience 0)
 	(title "Climb-directly"))
 
@@ -97,7 +97,7 @@
 ([Examples_Class10024] of  Rule
 
 	(lhs "?goal (Goal action eat \n	argument1 ?name)\n?monkey (Monkey holding ?name)\n?thing (Thing name ?name)")
-	(rhs "(println (str \"Monkey eats the \" ?name \".\" ))\n(modify ?monkey holding blank)\n(retract ?goal ?thing)")
+	(rhs "(ru.rules/display (str \"Monkey eats the \" ?name \".\" ))\n(modify ?monkey holding blank)\n(retract ?goal ?thing)")
 	(salience 0)
 	(title "Satisfy-hunger"))
 
@@ -207,7 +207,7 @@
 		[Examples_Class10027])
 	(rule-sets [Examples_Class15])
 	(title "Mab Run")
-	(trace TRUE))
+	(trace FALSE))
 
 ([Examples_Class10040] of  CloFuncall
 
@@ -271,7 +271,7 @@
 ([Examples_Class16] of  Rule
 
 	(lhs "(Goal action unlock \n	argument1 ?chest)\n?monkey (Monkey location ?place \n	on-top-of ?on \n	holding ?chest)\n?thing (Thing name ?chest)")
-	(rhs "(println (str \"Monkey throws the \" ?chest \" off the \" ?on \" onto the floor.\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of floor)")
+	(rhs "(ru.rules/display (str \"Monkey throws the \" ?chest \" off the \" ?on \" onto the floor.\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of floor)")
 	(salience 0)
 	(title "Put-chest-on-floor"))
 
@@ -292,7 +292,7 @@
 ([Examples_Class19] of  Rule
 
 	(lhs "?goal (Goal action unlock \n	argument1 ?name)\n?chest (Chest name ?name \n	contents ?contents \n	unlocked-by ?key)\n(Thing name ?name \n	location ?place \n	on-top-of ?on)\n(Monkey location ?place \n	on-top-of ?on \n	holding ?key)")
-	(rhs "(println (str \"Monkey opens the \" ?name \" with the \" ?key \" revealing the \" ?contents \".\" ))\n(modify ?chest contents nothing)\n(asser Thing name ?contents \n	location ?place \n	on-top-of ?name \n	weight light)\n(retract ?goal)")
+	(rhs "(ru.rules/display (str \"Monkey opens the \" ?name \" with the \" ?key \" revealing the \" ?contents \".\" ))\n(modify ?chest contents nothing)\n(asser Thing name ?contents \n	location ?place \n	on-top-of ?name \n	weight light)\n(retract ?goal)")
 	(salience 0)
 	(title "Unlock-chest-with-key"))
 
@@ -309,6 +309,51 @@
 	(rhs "(asser Goal action unlock argument1 ?chest)")
 	(salience 0)
 	(title "Unlock-chest-to-hold-object"))
+
+([Examples_Class20000] of  Run
+
+	(butt-ass-inss "Assert Instances/ru.rules/ass-inss")
+	(butt-fire "Fire/ru.rules/fire-all-rules")
+	(butt-run "Run/ru.rules/run-engine")
+	(facts [Examples_Class30023])
+	(rule-sets [Examples_Class20001])
+	(title "Auto Run"))
+
+([Examples_Class20001] of  RuleSet
+
+	(rules
+		[Examples_Class20005]
+		[Examples_Class30009]
+		[Examples_Class30010]
+		[Examples_Class30011]
+		[Examples_Class30012]
+		[Examples_Class30013]
+		[Examples_Class30014]
+		[Examples_Class30015]
+		[Examples_Class30016]
+		[Examples_Class30017]
+		[Examples_Class30018]
+		[Examples_Class30019]
+		[Examples_Class30020]
+		[Examples_Class30021]
+		[Examples_Class30022]
+		[Examples_Class30024])
+	(templates
+		[Working-state]
+		[Charge-state]
+		[Repair]
+		[Rotation-state]
+		[Spark-state]
+		[Stage]
+		[Symptom])
+	(title "Auto"))
+
+([Examples_Class20005] of  Rule
+
+	(lhs "(Working-state engine normal)")
+	(rhs "(asser Repair advice \"No repair needed.\")\n(asser Spark-state engine normal)\n(asser Charge-state battery charged)\n(asser Rotation-state engine rotates)")
+	(salience 8)
+	(title "Normal-engine-state-conclusions"))
 
 ([Examples_Class21] of  Rule
 
@@ -331,17 +376,130 @@
 	(salience 0)
 	(title "Drop-to-hold"))
 
+([Examples_Class30009] of  Rule
+
+	(lhs "(Working-state engine unsatisfactory)")
+	(rhs "(asser Charge-state battery charged)\n(asser Rotation-state engine rotates)")
+	(salience 8)
+	(title "Unsatisfactory-engine-state-conclusions"))
+
+([Examples_Class30010] of  Rule
+
+	(lhs "(Stage value diagnose)\n(not Working-state engine ?ws)\n(not Repair advice ?a)")
+	(rhs "(if (ru.rules/confirm \"Does the engine start?\")\n    (if (ru.rules/confirm \"Does the engine run normally?\")\n       (asser Working-state engine normal)\n       (asser Working-state engine unsatisfactory))\n    (asser Working-state engine does-not-start))")
+	(salience 8)
+	(title "Determine-engine-state"))
+
+([Examples_Class30011] of  Rule
+
+	(lhs "(Working-state engine does-not-start)\n(not Rotation-state engine ?rs)\n(not Repair advice ?a)")
+	(rhs "(if (ru.rules/confirm \"Does the engine rotate?\")\n     (do\n       (asser Rotation-state engine rotates)\n       (asser Spark-state engine irregular-spark))\n     (do\n       (asser Rotation-state engine does-not-rotate)\n       (asser Spark-state engine does-not-spark)))")
+	(salience 0)
+	(title "Determine-rotation-state"))
+
+([Examples_Class30012] of  Rule
+
+	(lhs "(Working-state engine unsatisfactory)\n(not Repair advice ?a)")
+	(rhs "(if (ru.rules/confirm \"Is the engine sluggish?\")\n     (asser Repair advice \"Clean the fuel line.\"))")
+	(salience 3)
+	(title "Determine-sluggishness"))
+
+([Examples_Class30013] of  Rule
+
+	(lhs "(Working-state engine unsatisfactory)\n(not Repair advice ?a)")
+	(rhs "(if (ru.rules/confirm \"Does the engine misfire?\")\n     (do\n       (asser Repair advice \"Point gap adjustment.\")\n       (asser Spark-state engine irregular-spark)))")
+	(salience 2)
+	(title "Determine-misfiring"))
+
+([Examples_Class30014] of  Rule
+
+	(lhs "(Working-state engine unsatisfactory)\n(not Repair advice ?a)")
+	(rhs "(if (ru.rules/confirm \"Does the engine knock?\")\n     (asser Repair advice \"Timing adjustment.\"))")
+	(salience 1)
+	(title "Determine-knocking"))
+
+([Examples_Class30015] of  Rule
+
+	(lhs "(Working-state engine unsatisfactory)\n(not Symptom engine ?se)\n(not Repair advice ?a)")
+	(rhs "(if (ru.rules/confirm \"Is the output of the engine low?\")\n     (asser Symptom engine low-output)\n     (asser Symptom engine not-low-output))")
+	(salience 0)
+	(title "Determine-low-output"))
+
+([Examples_Class30016] of  Rule
+
+	(lhs "(Working-state engine does-not-start)\n(Rotation-state engine rotates)\n(not Repair advice ?a)")
+	(rhs "(if (not (ru.rules/confirm \"Does the tank have any gas in it?\"))\n     (asser Repair advice \"Add gas.\"))")
+	(salience 0)
+	(title "Determine-gas-level"))
+
+([Examples_Class30017] of  Rule
+
+	(lhs "(Rotation-state engine does-not-rotate)\n(not Charge-state battery ?cs)\n(not Repair advice ?a)")
+	(rhs "(if (ru.rules/confirm \"Is the battery charged?\")\n     (asser Charge-state battery charged)\n     (do\n       (asser Repair advice \"Charge the battery.\")\n       (asser Charge-state battery dead)))")
+	(salience 0)
+	(title "Determine-battery-state"))
+
+([Examples_Class30018] of  Rule
+
+	(lhs "(Working-state engine does-not-start)\n(Spark-state engine irregular-spark)\n(not Repair advice ?a)")
+	(rhs "(condp = (ru.rules/select \"What is the surface state of the points?\" \n	'[normal burned contaminated])\n     'burned (asser Repair advice \"Replace the points.\")\n     'contaminated (asser Repair advice \"Clean the points.\")\n     'normal)")
+	(salience 8)
+	(title "Determine-point-surface-state-1"))
+
+([Examples_Class30019] of  Rule
+
+	(lhs "(Symptom engine low-output)\n(not Repair advice ?a)")
+	(rhs "(condp = (ru.rules/select \"What is the surface state of the points?\" \n	'[normal burned contaminated])\n     'burned (asser Repair advice \"Replace the points.\")\n     'contaminated (asser Repair advice \"Clean the points.\")\n     'normal)")
+	(salience 0)
+	(title "Determine-point-surface-state-2"))
+
+([Examples_Class30020] of  Rule
+
+	(lhs "(Working-state engine does-not-start)\n(Spark-state engine does-not-spark)\n(Charge-state battery charged)\n(not Repair advice ?a)")
+	(rhs "(if (ru.rules/confirm \"Is the conductivity test for the ignition coil positive?\")\n     (asser Repair advice \"Repair the distributor lead wire.\")\n     (asser Repair advice \"Replace the ignition coil.\"))")
+	(salience 0)
+	(title "Determine-conductivity-test"))
+
+([Examples_Class30021] of  Rule
+
+	(lhs "(Stage value diagnose)\n(not Repair advice ?a)")
+	(rhs "(asser Repair advice \"Take your car to a mechanic.\")")
+	(salience -8)
+	(title "No-repairs"))
+
+([Examples_Class30022] of  Rule
+
+	(lhs "(Repair advice ?a)")
+	(rhs "(ru.rules/display (str \"Suggested Repair:\\n\" ?a))")
+	(salience -8)
+	(title "Print-repair"))
+
+([Examples_Class30023] of  Stage
+
+	(value "start"))
+
+([Examples_Class30024] of  Rule
+
+	(lhs "?s (Stage value start)")
+	(rhs "(ru.rules/display (str \"The Engine Diagnosis Expert System . Date: \" (java.util.Date.)))\n(modify ?s value diagnose)")
+	(salience 0)
+	(title "System-banner"))
+
+([Examples_Class30025] of  Display
+
+	(source "The Engine Diagnosis Expert System . Date: Wed Sep 14 20:45:31 MSK 2016\nSuggested Repair:\nNo repair needed.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:45:51 MSK 2016\nSuggested Repair:\nReplace the points.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:46:18 MSK 2016\nSuggested Repair:\nRepair the distributor lead wire.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:46:43 MSK 2016\nSuggested Repair:\nTiming adjustment.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:47:12 MSK 2016\nSuggested Repair:\nPoint gap adjustment.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:47:27 MSK 2016\nSuggested Repair:\nNo repair needed.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:47:36 MSK 2016\nSuggested Repair:\nClean the fuel line.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:47:51 MSK 2016\nSuggested Repair:\nRepair the distributor lead wire.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:48:42 MSK 2016\nSuggested Repair:\nClean the points.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:49:10 MSK 2016\nSuggested Repair:\nTiming adjustment.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:49:58 MSK 2016\nSuggested Repair:\nTake your car to a mechanic.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:50:35 MSK 2016\nSuggested Repair:\nRepair the distributor lead wire.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:50:51 MSK 2016\nSuggested Repair:\nCharge the battery.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:50:59 MSK 2016\nSuggested Repair:\nPoint gap adjustment.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:52:04 MSK 2016\nSuggested Repair:\nClean the fuel line.\nThe Engine Diagnosis Expert System . Date: Wed Sep 14 20:52:19 MSK 2016\nSuggested Repair:\nClean the points.\n"))
+
 ([Examples_Class4] of  Rule
 
 	(lhs "?goal (Goal action hold \n	argument1 ?name)\n?thing (Thing name ?name \n	location ?place \n	on-top-of ?on \n	weight light)\n?monkey (Monkey location ?place \n	on-top-of ?on \n	holding blank)")
-	(rhs "(println (str \"Monkey grabs the \" ?name \".\" ))\n(modify ?thing location held \n	on-top-of held)\n(modify ?monkey holding ?name)\n(retract ?goal)")
+	(rhs "(ru.rules/display (str \"Monkey grabs the \" ?name \".\" ))\n(modify ?thing location held \n	on-top-of held)\n(modify ?monkey holding ?name)\n(retract ?goal)")
 	(salience 0)
 	(title "Grab-object"))
 
 ([Examples_Class5] of  Rule
 
 	(lhs "?goal (Goal action hold argument1 blank)\n?monkey (Monkey location ?place \n	on-top-of ?on \n	holding ?name\n	(not= ?name blank))\n?thing (Thing name ?name)")
-	(rhs "(println (str \"Monkey drops the \" ?name \".\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of ?on)\n(retract ?goal)")
+	(rhs "(ru.rules/display (str \"Monkey drops the \" ?name \".\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of ?on)\n(retract ?goal)")
 	(salience 0)
 	(title "Drop-object"))
 
@@ -369,6 +527,6 @@
 ([Examples_Class9] of  Rule
 
 	(lhs "?goal (Goal action move \n	argument1 ?name \n	argument2 ?place)\n?monkey (Monkey location ?place \n	holding ?obj)\n?thing (Thing name ?name \n	weight light)")
-	(rhs "(println (str \"Monkey drops the \" ?name \".\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of floor)\n(retract ?goal)")
+	(rhs "(ru.rules/display (str \"Monkey drops the \" ?name \".\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of floor)\n(retract ?goal)")
 	(salience 0)
 	(title "Drop-object-once-moved"))

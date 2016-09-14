@@ -1,4 +1,4 @@
-; Wed Sep 14 08:27:45 MSK 2016
+; Wed Sep 14 20:53:04 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -27,11 +27,13 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(multislot butt-retr-inss
-;+		(type ANY)
+	(single-slot advice
+		(type STRING)
+;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(multislot butt-reset
-;+		(type ANY)
+	(single-slot value
+		(type STRING)
+;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot action
 		(type STRING)
@@ -46,6 +48,14 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot weight
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot battery
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot engine
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -122,6 +132,66 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot action
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Auto
+	(is-a USER)
+	(role abstract))
+
+(defclass Working-state
+	(is-a Auto)
+	(role concrete)
+	(single-slot engine
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Spark-state
+	(is-a Auto)
+	(role concrete)
+	(single-slot engine
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Charge-state
+	(is-a Auto)
+	(role concrete)
+	(single-slot battery
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Rotation-state
+	(is-a Auto)
+	(role concrete)
+	(single-slot engine
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Symptom
+	(is-a Auto)
+	(role concrete)
+	(single-slot engine
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Repair
+	(is-a Auto)
+	(role concrete)
+	(single-slot advice
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Stage
+	(is-a Auto)
+	(role concrete)
+	(single-slot value
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
