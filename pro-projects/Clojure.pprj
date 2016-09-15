@@ -1,4 +1,4 @@
-; Tue Sep 13 18:05:33 MSK 2016
+; Thu Sep 15 14:45:03 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,6 +20,11 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
+		[Clojure_ProjectKB_Class60004]
+		[Clojure_ProjectKB_Class60005]
+		[Clojure_ProjectKB_Class60006]
+		[Clojure_ProjectKB_Class60007]
+		[Clojure_ProjectKB_Class70008]
 		[Clojure_ProjectKB_Class70009]
 		[Clojure_ProjectKB_Class70010]
 		[Clojure_ProjectKB_Class70011]
@@ -27,12 +32,7 @@
 		[Clojure_ProjectKB_Class80013]
 		[Clojure_ProjectKB_Class80014]
 		[Clojure_ProjectKB_Class80015]
-		[Clojure_ProjectKB_Class80016]
-		[Clojure_ProjectKB_Class80017]
-		[Clojure_ProjectKB_Class80018]
-		[Clojure_ProjectKB_Class80019]
-		[Clojure_ProjectKB_Class80020]
-		[Clojure_ProjectKB_Class80021]))
+		[Clojure_ProjectKB_Class80016]))
 
 ([Clojure_ProjectKB_Class10004] of  Boolean
 
@@ -479,12 +479,12 @@
 
 ([Clojure_ProjectKB_Class30007] of  Widget
 
-	(height 690)
+	(height 620)
 	(is_hidden FALSE)
 	(name "source")
 	(property_list [Clojure_ProjectKB_Class40008])
-	(widget_class_name "edu.stanford.smi.protege.widget.TextAreaWidget")
-	(width 420)
+	(widget_class_name "edu.stanford.smi.protegex.widget.editorpane.EditorPaneWidget")
+	(width 830)
 	(x 0)
 	(y 0))
 
@@ -911,6 +911,26 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
 
+([Clojure_ProjectKB_Class60004] of  String
+
+	(name "WorkingPrograms")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class60005] of  String
+
+	(name "CloFunction")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class60006] of  String
+
+	(name "CloExtendType")
+	(string_value "title"))
+
+([Clojure_ProjectKB_Class60007] of  String
+
+	(name "CloRecord")
+	(string_value "title"))
+
 ([Clojure_ProjectKB_Class60008] of  Property_List
 )
 
@@ -963,19 +983,24 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
+([Clojure_ProjectKB_Class70008] of  String
+
+	(name "CloProgram")
+	(string_value "title"))
+
 ([Clojure_ProjectKB_Class70009] of  String
 
-	(name "WorkingPrograms")
+	(name "CloProtocol")
 	(string_value "title"))
 
 ([Clojure_ProjectKB_Class70010] of  String
 
-	(name "CloFunction")
-	(string_value "title"))
+	(name "CloFuncall")
+	(string_value "source"))
 
 ([Clojure_ProjectKB_Class70011] of  String
 
-	(name "CloExtendType")
+	(name "CloVar")
 	(string_value "title"))
 
 ([Clojure_ProjectKB_Class70012] of  Boolean
@@ -985,69 +1010,44 @@
 
 ([Clojure_ProjectKB_Class80012] of  String
 
-	(name "CloRecord")
+	(name "CloMacro")
 	(string_value "title"))
 
 ([Clojure_ProjectKB_Class80013] of  String
 
-	(name "CloProgram")
+	(name "CloNamespace")
 	(string_value "title"))
 
 ([Clojure_ProjectKB_Class80014] of  String
 
-	(name "CloProtocol")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class80015] of  String
-
-	(name "CloFuncall")
-	(string_value "source"))
-
-([Clojure_ProjectKB_Class80016] of  String
-
-	(name "CloVar")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class80017] of  String
-
-	(name "CloMacro")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class80018] of  String
-
-	(name "CloNamespace")
-	(string_value "title"))
-
-([Clojure_ProjectKB_Class80019] of  String
-
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([Clojure_ProjectKB_Class80020] of  String
+([Clojure_ProjectKB_Class80015] of  String
 
 	(name "CloDocumentation")
 	(string_value "source"))
 
-([Clojure_ProjectKB_Class80021] of  String
+([Clojure_ProjectKB_Class80016] of  String
 
 	(name "CloExtendProtocol")
 	(string_value "title"))
 
-([Clojure_ProjectKB_Class80022] of  Map_Entry
+([Clojure_ProjectKB_Class80017] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([Clojure_ProjectKB_Class80023] of  Map_Entry
+([Clojure_ProjectKB_Class80018] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([Clojure_ProjectKB_Class80024] of  Map_Entry
+([Clojure_ProjectKB_Class80019] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -1106,6 +1106,9 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
+([KB_087974_Class3] of  Map
+)
+
 ([KB_127677_Class0] of  String
 
 	(name "factory_class_name")
@@ -1114,9 +1117,9 @@
 ([KB_127677_Class1] of  Map
 
 	(entries
-		[Clojure_ProjectKB_Class80022]
-		[Clojure_ProjectKB_Class80023]
-		[Clojure_ProjectKB_Class80024]))
+		[Clojure_ProjectKB_Class80017]
+		[Clojure_ProjectKB_Class80018]
+		[Clojure_ProjectKB_Class80019]))
 
 ([KB_127677_Class100] of  Property_List
 )
@@ -1209,9 +1212,6 @@
 )
 
 ([KB_127677_Class99] of  Property_List
-)
-
-([KB_830782_Class3] of  Map
 )
 
 ([LAYOUT_PROPERTIES] of  Property_List

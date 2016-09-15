@@ -1,4 +1,4 @@
-; Wed Sep 14 20:53:04 MSK 2016
+; Thu Sep 15 18:28:53 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -27,20 +27,59 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot treatment
+		(type SYMBOL)
+		(allowed-values pennicillin allergy_shot bed_rest)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot advice
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot innoculated
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot temperature
+		(type INTEGER)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot value
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot diagnosis
+		(type SYMBOL)
+		(allowed-values measles allergy flu)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot sore_throat
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot action
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot spots
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot unlocked-by
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot rash
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot fever
+		(type SYMBOL)
+		(allowed-values high mild)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot contents
@@ -193,5 +232,56 @@
 	(role concrete)
 	(single-slot value
 		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Medic
+	(is-a USER)
+	(role abstract))
+
+(defclass Patient
+	(is-a Medic)
+	(role concrete)
+	(single-slot temperature
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot spots
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot fever
+		(type SYMBOL)
+		(allowed-values high mild)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot innoculated
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot rash
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot sore_throat
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass Disease
+	(is-a Medic)
+	(role concrete)
+	(single-slot diagnosis
+		(type SYMBOL)
+		(allowed-values measles allergy flu)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot treatment
+		(type SYMBOL)
+		(allowed-values pennicillin allergy_shot bed_rest)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))

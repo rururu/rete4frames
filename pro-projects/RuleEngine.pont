@@ -1,4 +1,4 @@
-; Wed Sep 14 14:56:32 MSK 2016
+; Thu Sep 15 17:48:36 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -10,6 +10,11 @@
 	(multislot instances
 		(type INSTANCE)
 ;+		(allowed-classes)
+		(create-accessor read-write))
+	(single-slot document
+		(type INSTANCE)
+;+		(allowed-classes Document)
+;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot lhs
 		(type STRING)
@@ -67,7 +72,12 @@
 
 (defclass RuleEngine
 	(is-a USER)
-	(role abstract))
+	(role abstract)
+	(single-slot document
+		(type INSTANCE)
+;+		(allowed-classes Document)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
 
 (defclass RuleSet
 	(is-a RuleEngine)
@@ -150,8 +160,16 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
+(defclass Document
+	(is-a USER)
+	(role concrete)
+	(single-slot source
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
 (defclass Display
-	(is-a RuleEngine)
+	(is-a USER)
 	(role concrete)
 	(single-slot source
 		(type STRING)

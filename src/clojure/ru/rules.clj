@@ -191,17 +191,19 @@
   ;; create file with beta net plan
 (rete/log-lst "beta-net-plan.txt" rete/BPLAN))
 
+(defn clear-display []
+  (if-let [dss (seq (p/cls-instances "Display"))]
+   (p/ssv (first dss) "source" "<html>")))
+
 (defn display [mess]
   (let [dis (if-let [dss (seq (p/cls-instances "Display"))]
                 (first dss)
-                (p/crin "Display"))
+                (let [d (p/crin "Display")]
+                  (clear-display)
+                  d))
        src (p/sv dis "source")]
-  (p/ssv dis "source" (str src mess "\n"))
+  (p/ssv dis "source" (str src mess "<br>"))
   (.show p/*prj* dis)))
-
-(defn clear-display []
-  (if-let [dss (seq (p/cls-instances "Display"))]
-   (p/ssv (first dss) "source" "")))
 
 (defn select [question answers]
   (DisplayUtilities/pickSymbol nil question (first answers) answers))
@@ -212,4 +214,7 @@
     JOptionPane/YES_OPTION true
     JOptionPane/NO_OPTION false
     nil)))
+
+(defn input [question default]
+  (DisplayUtilities/editString nil question default nil))
 
