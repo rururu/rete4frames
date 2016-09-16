@@ -1,4 +1,4 @@
-; Thu Sep 15 18:28:53 MSK 2016
+; Fri Sep 16 22:05:03 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,13 +20,13 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Examples_ProjectKB_Class374]
-		[Examples_ProjectKB_Class375]
-		[Examples_ProjectKB_Class376]
-		[Examples_ProjectKB_Class377]
-		[Examples_ProjectKB_Class378]
-		[Examples_ProjectKB_Class379]
-		[Examples_ProjectKB_Class380]))
+		[Examples_ProjectKB_Class20402]
+		[Examples_ProjectKB_Class20403]
+		[Examples_ProjectKB_Class20404]
+		[Examples_ProjectKB_Class20405]
+		[Examples_ProjectKB_Class20406]
+		[Examples_ProjectKB_Class20407]
+		[Examples_ProjectKB_Class20408]))
 
 ([CLSES_TAB] of  Widget
 
@@ -41,9 +41,96 @@
 
 	(name ":CREATOR"))
 
-([Examples_ProjectKB_Class10403] of  String
+([Examples_ProjectKB_Class10374] of  Widget
 
-	(name "Document"))
+	(height 60)
+	(is_hidden FALSE)
+	(name "fever")
+	(property_list [Examples_ProjectKB_Class10375])
+	(widget_class_name "edu.stanford.smi.protege.widget.ComboBoxWidget")
+	(width 100)
+	(x 0)
+	(y 320))
+
+([Examples_ProjectKB_Class10375] of  Property_List
+)
+
+([Examples_ProjectKB_Class10376] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "innoculated")
+	(property_list [Examples_ProjectKB_Class10377])
+	(widget_class_name "edu.stanford.smi.protege.widget.CheckBoxWidget")
+	(width 200)
+	(x 0)
+	(y 260))
+
+([Examples_ProjectKB_Class10377] of  Property_List
+)
+
+([Examples_ProjectKB_Class10378] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "rash")
+	(property_list [Examples_ProjectKB_Class10379])
+	(widget_class_name "edu.stanford.smi.protege.widget.CheckBoxWidget")
+	(width 200)
+	(x 0)
+	(y 120))
+
+([Examples_ProjectKB_Class10379] of  Property_List
+)
+
+([Examples_ProjectKB_Class10380] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "sore_throat")
+	(property_list [Examples_ProjectKB_Class10381])
+	(widget_class_name "edu.stanford.smi.protege.widget.CheckBoxWidget")
+	(width 200)
+	(x 0)
+	(y 60))
+
+([Examples_ProjectKB_Class10381] of  Property_List
+)
+
+([Examples_ProjectKB_Class20402] of  String
+
+	(name "Thing")
+	(string_value "{Thing+}name{+location+}location{+weight+}weight{+on-top-of+}on-top-of"))
+
+([Examples_ProjectKB_Class20403] of  String
+
+	(name "Monkey")
+	(string_value "{Monkey+location+}location{+on-top-of+}on-top-of{+holding++}holding"))
+
+([Examples_ProjectKB_Class20404] of  String
+
+	(name "Chest")
+	(string_value "{Chest+}name{+contents+}contents{+unlocked-by+}unlocked-by"))
+
+([Examples_ProjectKB_Class20405] of  String
+
+	(name "Stage")
+	(string_value "value"))
+
+([Examples_ProjectKB_Class20406] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([Examples_ProjectKB_Class20407] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([Examples_ProjectKB_Class20408] of  String
+
+	(name "Goal")
+	(string_value "{Goal+}action{+arg1+}argument1{+arg2+}argument2"))
 
 ([Examples_ProjectKB_Class347] of  Widget
 
@@ -85,40 +172,55 @@
 ([Examples_ProjectKB_Class354] of  Property_List
 )
 
-([Examples_ProjectKB_Class374] of  String
+([Examples_ProjectKB_Class367] of  Widget
 
-	(name "Thing")
-	(string_value "{Thing+}name{+location+}location{+weight+}weight{+on-top-of+}on-top-of"))
+	(is_hidden FALSE)
+	(name "Patient")
+	(property_list [Examples_ProjectKB_Class368])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
 
-([Examples_ProjectKB_Class375] of  String
+([Examples_ProjectKB_Class368] of  Property_List
 
-	(name "Monkey")
-	(string_value "{Monkey+location+}location{+on-top-of+}on-top-of{+holding++}holding"))
+	(properties
+		[Examples_ProjectKB_Class369]
+		[Examples_ProjectKB_Class370]
+		[Examples_ProjectKB_Class372]
+		[Examples_ProjectKB_Class10374]
+		[Examples_ProjectKB_Class10376]
+		[Examples_ProjectKB_Class10378]
+		[Examples_ProjectKB_Class10380]))
 
-([Examples_ProjectKB_Class376] of  String
+([Examples_ProjectKB_Class369] of  Property_List
 
-	(name "Chest")
-	(string_value "{Chest+}name{+contents+}contents{+unlocked-by+}unlocked-by"))
+	(name "layout properties"))
 
-([Examples_ProjectKB_Class377] of  String
+([Examples_ProjectKB_Class370] of  Widget
 
-	(name "Stage")
-	(string_value "value"))
+	(height 60)
+	(is_hidden FALSE)
+	(name "temperature")
+	(property_list [Examples_ProjectKB_Class371])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 100)
+	(x 0)
+	(y 0))
 
-([Examples_ProjectKB_Class378] of  String
+([Examples_ProjectKB_Class371] of  Property_List
+)
 
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
+([Examples_ProjectKB_Class372] of  Widget
 
-([Examples_ProjectKB_Class379] of  String
+	(height 60)
+	(is_hidden FALSE)
+	(name "spots")
+	(property_list [Examples_ProjectKB_Class373])
+	(widget_class_name "edu.stanford.smi.protege.widget.CheckBoxWidget")
+	(width 200)
+	(x 0)
+	(y 190))
 
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([Examples_ProjectKB_Class380] of  String
-
-	(name "Goal")
-	(string_value "{Goal+}action{+arg1+}argument1{+arg2+}argument2"))
+([Examples_ProjectKB_Class373] of  Property_List
+)
 
 ([Examples_ProjectKB_Class401] of  Widget
 
@@ -347,6 +449,34 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
+([KB_055901_Class363] of  Map
+
+	(entries
+		[KB_055901_Class364]
+		[KB_055901_Class365]
+		[KB_055901_Class366]))
+
+([KB_055901_Class364] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_055901_Class365] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_055901_Class366] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
 ([KB_106946_Class0] of  String
 
 	(name "factory_class_name")
@@ -447,34 +577,6 @@
 	(name "instances_file_name")
 	(string_value "Examples.pins"))
 
-([KB_766174_Class363] of  Map
-
-	(entries
-		[KB_766174_Class364]
-		[KB_766174_Class365]
-		[KB_766174_Class366]))
-
-([KB_766174_Class364] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_766174_Class365] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_766174_Class366] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
 ([LAYOUT_PROPERTIES] of  Property_List
 
 	(name "layout properties")
@@ -559,6 +661,7 @@
 	(browser_slot_names [BROWSER_SLOT_NAMES])
 	(customized_instance_widgets
 		[STANDARD_CLASS_FORM_WIDGET]
+		[Examples_ProjectKB_Class367]
 		[STANDARD_SLOT_FORM_WIDGET]
 		[Examples_ProjectKB_Class416]
 		[Examples_ProjectKB_Class401]

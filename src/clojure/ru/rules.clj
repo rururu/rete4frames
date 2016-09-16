@@ -39,7 +39,7 @@
 	  (map single-value (.getOwnSlotValues ins slt))
                           (if-let [v (.getOwnSlotValue ins slt)]
                             (single-value v)
-                            '?)))]
+                            :?)))]
   (let [typ (.getDirectType ins)
         slots (.getTemplateSlots typ)
         svs (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)]
@@ -215,6 +215,12 @@
     JOptionPane/NO_OPTION false
     nil)))
 
-(defn input [question default]
-  (DisplayUtilities/editString nil question default nil))
+(defn input [question default validator]
+  (loop [v nil]
+  (if (or (nil? validator) (validator v))
+    v
+    (-> (DisplayUtilities/editString nil question default nil)
+      (or "nil")
+      read-string
+      recur))))
 

@@ -1,4 +1,4 @@
-; Thu Sep 15 17:48:36 MSK 2016
+; Fri Sep 16 21:39:36 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -90,8 +90,8 @@
 
 ([RuleEngine_Class190000] of  CloFunction
 
-	(source "(DisplayUtilities/editString nil question default nil)")
-	(title "input [question default]"))
+	(source "(loop [v nil]\n  (if (or (nil? validator) (validator v))\n    v\n    (-> (DisplayUtilities/editString nil question default nil)\n      (or \"nil\")\n      read-string\n      recur)))")
+	(title "input [question default validator]"))
 
 ([RuleEngine_Class20000] of  CloFunction
 
@@ -161,5 +161,5 @@
 
 ([RuleEngine_Class90000] of  CloFunction
 
-	(source "(letfn [(sval [slt ins]\n	(if (.getAllowsMultipleValues slt)\n	  (map single-value (.getOwnSlotValues ins slt))\n                          (if-let [v (.getOwnSlotValue ins slt)]\n                            (single-value v)\n                            '?)))]\n  (let [typ (.getDirectType ins)\n        slots (.getTemplateSlots typ)\n        svs (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)]\n    (cons (symbol (.getName typ)) svs)))")
+	(source "(letfn [(sval [slt ins]\n	(if (.getAllowsMultipleValues slt)\n	  (map single-value (.getOwnSlotValues ins slt))\n                          (if-let [v (.getOwnSlotValue ins slt)]\n                            (single-value v)\n                            :?)))]\n  (let [typ (.getDirectType ins)\n        slots (.getTemplateSlots typ)\n        svs (mapcat #(list (symbol (.getName %)) (sval % ins)) slots)]\n    (cons (symbol (.getName typ)) svs)))")
 	(title "mk-frame [ins]"))
