@@ -75,7 +75,7 @@ And one more: es-boat - a prototype of an expert system for coastal navigation. 
 Integrated Development Environment
 ----
 
-IDE based on Protege-3.5 ontology editor:
+IDE based on [Protege-3.5 ontology editor] (http://protege.stanford.edu):
 
 Simple start IDE:
 ```clj
@@ -106,4 +106,4 @@ Copyright and license
 Copyright © 2014-2016 Ruslan Sorokin.
 
 Licensed under the EPL (see the file epl.html).
-[License of Protege-3.5] (https://github.com/rururu/proframes/blob/master/LICENSE_PROTEGE)
+[License of Protege-3.5] (https://github.com/rururu/rete4frames/blob/master/LICENSE_PROTEGE)
