@@ -1,4 +1,4 @@
-; Fri Sep 16 22:05:03 MSK 2016
+; Sat Sep 17 15:34:52 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,13 +20,13 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Examples_ProjectKB_Class20402]
-		[Examples_ProjectKB_Class20403]
-		[Examples_ProjectKB_Class20404]
-		[Examples_ProjectKB_Class20405]
-		[Examples_ProjectKB_Class20406]
-		[Examples_ProjectKB_Class20407]
-		[Examples_ProjectKB_Class20408]))
+		[Examples_ProjectKB_Class10367]
+		[Examples_ProjectKB_Class10368]
+		[Examples_ProjectKB_Class10369]
+		[Examples_ProjectKB_Class10370]
+		[Examples_ProjectKB_Class10371]
+		[Examples_ProjectKB_Class10372]
+		[Examples_ProjectKB_Class10373]))
 
 ([CLSES_TAB] of  Widget
 
@@ -40,6 +40,41 @@
 ([CREATOR_WIDGET] of  Widget
 
 	(name ":CREATOR"))
+
+([Examples_ProjectKB_Class10367] of  String
+
+	(name "Thing")
+	(string_value "{Thing+}name{+location+}location{+weight+}weight{+on-top-of+}on-top-of"))
+
+([Examples_ProjectKB_Class10368] of  String
+
+	(name "Monkey")
+	(string_value "{Monkey+location+}location{+on-top-of+}on-top-of{+holding++}holding"))
+
+([Examples_ProjectKB_Class10369] of  String
+
+	(name "Chest")
+	(string_value "{Chest+}name{+contents+}contents{+unlocked-by+}unlocked-by"))
+
+([Examples_ProjectKB_Class10370] of  String
+
+	(name "Stage")
+	(string_value "value"))
+
+([Examples_ProjectKB_Class10371] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([Examples_ProjectKB_Class10372] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([Examples_ProjectKB_Class10373] of  String
+
+	(name "Goal")
+	(string_value "{Goal+}action{+arg1+}argument1{+arg2+}argument2"))
 
 ([Examples_ProjectKB_Class10374] of  Widget
 
@@ -96,41 +131,6 @@
 
 ([Examples_ProjectKB_Class10381] of  Property_List
 )
-
-([Examples_ProjectKB_Class20402] of  String
-
-	(name "Thing")
-	(string_value "{Thing+}name{+location+}location{+weight+}weight{+on-top-of+}on-top-of"))
-
-([Examples_ProjectKB_Class20403] of  String
-
-	(name "Monkey")
-	(string_value "{Monkey+location+}location{+on-top-of+}on-top-of{+holding++}holding"))
-
-([Examples_ProjectKB_Class20404] of  String
-
-	(name "Chest")
-	(string_value "{Chest+}name{+contents+}contents{+unlocked-by+}unlocked-by"))
-
-([Examples_ProjectKB_Class20405] of  String
-
-	(name "Stage")
-	(string_value "value"))
-
-([Examples_ProjectKB_Class20406] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([Examples_ProjectKB_Class20407] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([Examples_ProjectKB_Class20408] of  String
-
-	(name "Goal")
-	(string_value "{Goal+}action{+arg1+}argument1{+arg2+}argument2"))
 
 ([Examples_ProjectKB_Class347] of  Widget
 
@@ -449,34 +449,6 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_055901_Class363] of  Map
-
-	(entries
-		[KB_055901_Class364]
-		[KB_055901_Class365]
-		[KB_055901_Class366]))
-
-([KB_055901_Class364] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_055901_Class365] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_055901_Class366] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
 ([KB_106946_Class0] of  String
 
 	(name "factory_class_name")
@@ -576,6 +548,34 @@
 
 	(name "instances_file_name")
 	(string_value "Examples.pins"))
+
+([KB_495953_Class363] of  Map
+
+	(entries
+		[KB_495953_Class364]
+		[KB_495953_Class365]
+		[KB_495953_Class366]))
+
+([KB_495953_Class364] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_495953_Class365] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_495953_Class366] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
 
 ([LAYOUT_PROPERTIES] of  Property_List
 

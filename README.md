@@ -19,7 +19,21 @@ Test results obtained on the same hardware and OS (Linux Mint 17, Qiana) 2 febru
 As can be seen from the results, rete4frames initially far behind and then starts to catch up CLIPS v 6.24.
 On the most difficult test rete4frames almost 6 times faster than CLIPS v 6.24.
 
-To get the results run in REPL:
+[Leiningen](https://github.com/technomancy/leiningen) dependency information:
+
+```clj
+ [rete "5.2.5-SNAPSHOT"]
+```
+[Maven](http://maven.apache.org/) dependency information:
+
+```xml
+<dependency>
+  <groupId>rete</groupId>
+  <artifactId>rete</artifactId>
+  <version>5.2.5-SNAPSHOT</version>
+</dependency>
+```
+To get the Manners Benchmark results run in REPL:
 
 ```clj
 (require 'rete.core)
@@ -27,10 +41,6 @@ To get the results run in REPL:
 (app "run" "examples/manners.clj" "examples/manners_f8.clj")
 ```
 The benchmark table for Waltz algorithm is in [Waltz Benchmark Table] (https://github.com/rururu/rete4frames/blob/master/doc/waltz_benchmark.md)
-
-To include Rete for Frames into your Leiningen project:
-
-:dependencies [rete "5.2.4-SNAPSHOT"]
 
 Running examples:
 ```clj
@@ -62,6 +72,28 @@ Yet another example: "Real" air traffic control system - client-server ClojureSc
 
 And one more: es-boat - a prototype of an expert system for coastal navigation. It uses [Protege-3.5 ontology editor] (http://protege.stanford.edu/) as a knowledge representation system and server-side GUI, [OpenStreetMap] (https://wiki.openstreetmap.org/wiki/API) API, Leaflet JavaScript library, [Cesium] (https://cesiumjs.org/) WebGL virtual globe and map engine, [GeoNames] (http://www.geonames.org/) geographical database and Wikipedia. Link to this prpject: https://github.com/rururu/es-boat
 
+Integrated Development Environment
+----
+
+IDE based on Protege-3.5 ontology editor:
+
+Simple start IDE:
+```clj
+$ cd <..>/rete4frames
+$ lein run
+```
+Start IDE for developers
+```clj
+$ cd <..>/rete4frames
+$ lein repl
+...
+rete.protege=> (-main)
+```
+
+![screenshot](screenshot.jpg)
+
+3.30 minute IDE [screencast] (https://www.youtube.com/watch?v=2Q9Y_jUDF8U).
+
 How to include Rete for Frames into your Java programs see example [Eclipse project] (https://github.com/rururu/rete4frames/blob/master/Rete4framesEclipseTest/).
 
 For further information see [Documentation] (https://github.com/rururu/rete4frames/blob/master/doc/intro.md)
@@ -74,3 +106,4 @@ Copyright and license
 Copyright © 2014-2016 Ruslan Sorokin.
 
 Licensed under the EPL (see the file epl.html).
+[License of Protege-3.5] (https://github.com/rururu/proframes/blob/master/LICENSE_PROTEGE)

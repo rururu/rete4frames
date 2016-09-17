@@ -1,4 +1,4 @@
-; Fri Sep 16 22:05:03 MSK 2016
+; Sat Sep 17 15:34:52 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -34,21 +34,21 @@
 ([Examples_Class100000] of  Rule
 
 	(lhs "(Patient spots true)\n(not Disease diagnosis measles)")
-	(rhs "(asser Disease diagnosis allergy)\n(println \"Allergy diagnosed from spots and lack of measles\")")
+	(rhs "(asser Disease diagnosis allergy)\n(ru.rules/display \"Allergy diagnosed from spots and lack of measles<br>\")")
 	(salience -1)
 	(title "Allergy1"))
 
 ([Examples_Class100001] of  Rule
 
 	(lhs "(Patient rash true)")
-	(rhs "(asser Disease diagnosis allergy)\n(println \"Allergy diagnosed from rash\")")
+	(rhs "(asser Disease diagnosis allergy)\n(ru.rules/display \"Allergy diagnosed from rash<br>\")")
 	(salience 0)
 	(title "Allergy2"))
 
 ([Examples_Class100002] of  Rule
 
 	(lhs "(Patient sore_throat true \n	fever ?f\n	[(= ?f mild)\n	 (= ?f high)])")
-	(rhs "(asser Disease diagnosis flu)\n(println \"Flu diagnosed\")")
+	(rhs "(asser Disease diagnosis flu)\n(ru.rules/display \"Flu diagnosed<br>\")")
 	(salience 0)
 	(title "Flu"))
 
@@ -241,6 +241,43 @@
 	(salience 0)
 	(title "Already-at-place"))
 
+([Examples_Class110000] of  RuleSet
+
+	(rules
+		[Examples_Class110001]
+		[Examples_Class110002]
+		[Examples_Class110003]
+		[Examples_Class120000])
+	(title "Treatment"))
+
+([Examples_Class110001] of  Rule
+
+	(lhs "?d (Disease diagnosis measles\n	treatment ?t\n	(nil? ?t))")
+	(rhs "(modify ?d treatment pennicillin)\n(ru.rules/display \"Penicillin prescribed<br>\")")
+	(salience 0)
+	(title "Penicillin"))
+
+([Examples_Class110002] of  Rule
+
+	(lhs "?d (Disease diagnosis allergy\n	treatment ?t\n	(nil? ?t))")
+	(rhs "(modify ?d treatment allergy_shot)\n(ru.rules/display \"Allergy shot prescribed<br>\")")
+	(salience 0)
+	(title "Allergy_pills"))
+
+([Examples_Class110003] of  Rule
+
+	(lhs "?d (Disease diagnosis flu\n	treatment ?t\n	(nil? ?t))")
+	(rhs "(modify ?d treatment bed_rest)\n(ru.rules/display \"Bed rest prescribed<br>\")")
+	(salience 0)
+	(title "Bed_rest"))
+
+([Examples_Class120000] of  Rule
+
+	(lhs "(Patient)\n(not Disease)")
+	(rhs "(ru.rules/display \"No diagnosis\")\n(ru.rules/display \"<span style='color:green'>Healthy lifestyle prescribed</span><br>\")")
+	(salience -2)
+	(title "Healthy"))
+
 ([Examples_Class13] of  Rule
 
 	(lhs "(Goal action walk-to \n	argument1 ?place)\n(Monkey location ?loc \n	on-top-of ?surf\n	((not= ?loc ?place)\n	 (not= ?surf floor)))\n(not Goal action on \n	argument1 floor)")
@@ -401,10 +438,6 @@
 
 	(source "<html>\n  <head>\n    <style type=\"text/css\">\n      <!--\n        body { font-family: arial; font-size: 12pt }\n        p { font-family: arial; margin-top: 2; margin-right: 2; margin-bottom: 2; margin-left: 2 }\n      -->\n    </style>\n    \n  </head>\n  <body>\n    <b>Initial CLIPS file Patient.clp (<a href=\"http://www.csis.ysu.edu/~john/824/examples/EMH9.txt\">http://www.csis.ysu.edu/~john/824/examples/EMH9.txt</a>)</b><br><br>; This is a very simple example of a CLIPS knowledge base,<br>; just using the pattern matching to create new knowledge.<br><br>; We have modified this to use binding to prompt users for input.<br><br>; In this example, instead of having separate facts, we will have<br>; a single Patient template which stores all information about<br>; the patient. We will then modify this fact as knowledge is added.<br><br>; Note that (unless we do some other things) this only allows one value<br>; per slot, which is why we will keep diganosis and treatment separate.<br><br>(deftemplate Patient (slot temperature)<br>(slot spots)<br>(slot rash)<br>(slot sore_throat)<br>(slot innoculated)<br>(slot fever))<br><br>; One thing that we will need is an initial patient fact, since<br>; we will modify this instead of creating new facts.<br><br>(deffacts Initial<br>(Patient ))<br><br>; Our first rules will be used to gather symptoms from the user.<br>; Note that there are no conditions, which meand that they will<br>; always fire. The action is to print a prompt, bind the (read)<br>; to a variable, and then assert a new fact using that value. Note<br>; that one of thes tests is for temperature to be nil, which means<br>; that temperature is not yet known (if this is left out, the shell<br>; will loop).<br><br>; For each of these rules, we bind the Patient fact to a variable<br>; and then modfiy it.<br><br>(defrule GetTemperature<br>(declare (salience 500))<br>?p &lt;- (Patient (temperature nil))<br>=&gt;<br>(printout t &quot;Enter patient temperature: &quot;)<br>(bind ?response (read))<br>(modify ?p (temperature ?response)))<br><br>(defrule GetSpots<br>(declare (salience 500))<br>?p &lt;- (Patient (spots nil))<br>=&gt;<br>(printout t &quot;Does the patient have spots (yes or no): &quot;)<br>(bind ?response (read))<br>(modify ?p (spots ?response)))<br><br>(defrule GetRash<br>(declare (salience 500))<br>?p &lt;- (Patient (rash nil))<br>=&gt;<br>(printout t &quot;Does the patient have a rash (yes or no): &quot;)<br>(bind ?response (read))<br>(modify ?p (rash ?response)))<br><br>(defrule GetSoreThroat<br>(declare (salience 500))<br>?p &lt;- (Patient (sore_throat nil))<br>=&gt;<br>(printout t &quot;Does the patient have a sore throat (yes or no): &quot;)<br>(bind ?response (read))<br>(modify ?p (sore_throat ?response)))<br><br>; We can also ask for certain information only if necessary. For example,<br>; it doesn't make sense to ask whether the patient has been innoculated<br>; unless there is a possiblity of measles.<br><br>(defrule GetInnoculated<br>(declare (salience 500))<br>?p &lt;- (Patient (fever high) (spots yes) (innoculated nil))<br>=&gt;<br>(printout t &quot;Has the patient been innoculated for measles (yes or no): &quot;)<br>(bind ?response (read))<br>(modify ?p (innoculated ?response)))<br><br>; Rules for concluding fever from temperature.<br><br>; Note that these rules find the patient temperature, and then bind<br>; it to ?t. The next part uses the test keyword to evaluate the<br>; conditional expression as true or false.<br><br>; The numberp is a test to check whether the argument is a numeric value.<br>; This is placed before the numeric comparison to keep the compiler from<br>; complaining that the initial patient fact does not have a numeric<br>; temperature value.<br><br>(defrule Fever1<br>?p &lt;- (Patient (temperature ?t) (fever nil))<br>(test (numberp ?t))<br>(test (&gt;= ?t 101))<br>=&gt;<br>(modify ?p (fever high))<br>(printout t &quot;High fever diagnosed&quot; crlf))<br><br>(defrule Fever2<br>?p &lt;- (Patient (temperature ?t) (fever nil))<br>(test (numberp ?t))<br>(test (and (&lt; ?t 101) (&gt; ?t 98.6)))<br>=&gt;<br>(modify ?p (fever mild))<br>(printout t &quot;Mild fever diagnosed&quot; crlf))<br><br>; Rules for determining diagnosis on the basis of patient symptoms<br>; Salience added to give this rule priority<br><br>(defrule Measles<br>(declare (salience 100))<br>(Patient (spots yes) (innoculated no) (fever high))<br>=&gt;<br>(assert (diagnosis measles))<br>(printout t &quot;Measles diagnosed&quot; crlf))<br><br>; Modified to only fire if no measles<br><br>(defrule Allergy1<br>(declare (salience -100))<br>(and (Patient (spots yes))<br>(not (diagnosis measles)))<br>=&gt;<br>(assert (diagnosis allergy))<br>(printout t &quot;Allergy diagnosed from spots and lack of measles&quot; crlf))<br><br>(defrule Allergy2<br>(Patient (rash yes))<br>=&gt;<br>(assert (diagnosis allergy))<br>(printout t &quot;Allergy diagnosed from rash&quot; crlf))<br><br>(defrule Flu<br>(Patient (sore_throat yes) (fever mild|high))<br>=&gt;<br>(assert (diagnosis flu))<br>(printout t &quot;Flu diagnosed&quot; crlf))<br><br>; Rules for recommedaing treatments on the basis of<br>; Diagnosis facts created.<br><br>(defrule Penicillin<br>(diagnosis measles)<br>=&gt;<br>(assert (treatment pennicillin))<br>(printout t &quot;Penicillin prescribed&quot; crlf))<br><br>(defrule Allergy_pills<br>(diagnosis allergy)<br>=&gt;<br>(assert (treatment allergy_shot))<br>(printout t &quot;Allergy shot prescribed&quot; crlf))<br><br>(defrule Bed_rest<br>(diagnosis flu)<br>=&gt;<br>(assert (treatment bed_rest))<br>(printout t &quot;Bed rest prescribed&quot; crlf))<br><br>; Finally, if there are no diagnosis facts, we print the<br>; metaknowledge that the expert system does not apply to<br>; this problem, and another expert must be consulted. Note<br>; that the salience must be set to make this the last rule<br>; checked.<br><br>(defrule None<br>(declare (salience -100))<br>(not (diagnosis ?))<br>=&gt;<br>(printout t &quot;No diagnosis possible -- consult human expert&quot; crlf))</body>\n</html>"))
 
-([Examples_Class30001] of  Display
-
-	(source "<html><br><br>The Engine Diagnosis Expert System . Date: Thu Sep 15 12:38:39 MSK 2016<br><br>Suggested Repair: <b>Clean the fuel line.</b><br><br><br>The Engine Diagnosis Expert System . Date: Thu Sep 15 12:38:55 MSK 2016<br><br>Suggested Repair: <b>Replace the points.</b><br><br><br>The Engine Diagnosis Expert System . Date: Thu Sep 15 12:39:16 MSK 2016<br><br>Suggested Repair: <b>Charge the battery.</b><br>Monkey jumps off the green-couch onto the floor.<br>Monkey walks to t2-2.<br>Monkey climbs onto the red-couch.<br>Monkey climbs onto the big-pillow.<br>Monkey grabs the red-chest.<br>Monkey throws the red-chest off the big-pillow onto the floor.<br>Monkey jumps off the big-pillow onto the floor.<br>Monkey walks to t1-3.<br>Monkey grabs the red-key.<br>Monkey walks to t2-2 holding the red-key.<br>Monkey opens the red-chest with the red-key revealing the ladder.<br>Monkey drops the red-key.<br>Monkey climbs onto the red-chest.<br>Monkey grabs the ladder.<br>Monkey jumps off the red-chest onto the floor.<br>Monkey walks to t7-7 holding the ladder.<br>Monkey drops the ladder.<br>Monkey climbs onto the ladder.<br>Monkey grabs the blue-chest.<br>Monkey throws the blue-chest off the ladder onto the floor.<br>Monkey jumps off the ladder onto the floor.<br>Monkey grabs the ladder.<br>Monkey walks to t8-8 holding the ladder.<br>Monkey drops the ladder.<br>Monkey climbs onto the ladder.<br>Monkey grabs the green-chest.<br>Monkey throws the green-chest off the ladder onto the floor.<br>Monkey jumps off the ladder onto the floor.<br>Monkey walks to t2-2.<br>Monkey grabs the red-key.<br>Monkey walks to t8-8 holding the red-key.<br>Monkey opens the green-chest with the red-key revealing the blue-key.<br>Monkey drops the red-key.<br>Monkey climbs onto the green-chest.<br>Monkey grabs the blue-key.<br>Monkey jumps off the green-chest onto the floor.<br>Monkey walks to t7-7 holding the blue-key.<br>Monkey opens the blue-chest with the blue-key revealing the bananas.<br>Monkey drops the blue-key.<br>Monkey climbs onto the blue-chest.<br>Monkey grabs the bananas.<br>Monkey eats the bananas.<br>Monkey jumps off the green-couch onto the floor.<br>Monkey walks to t2-2.<br>Monkey climbs onto the red-couch.<br>Monkey climbs onto the big-pillow.<br>Monkey grabs the red-chest.<br>Monkey throws the red-chest off the big-pillow onto the floor.<br>Monkey jumps off the big-pillow onto the floor.<br>Monkey walks to t1-3.<br>Monkey grabs the red-key.<br>Monkey walks to t2-2 holding the red-key.<br>Monkey opens the red-chest with the red-key revealing the ladder.<br>Monkey drops the red-key.<br>Monkey climbs onto the red-chest.<br>Monkey grabs the ladder.<br>Monkey jumps off the red-chest onto the floor.<br>Monkey walks to t7-7 holding the ladder.<br>Monkey drops the ladder.<br>Monkey climbs onto the ladder.<br>Monkey grabs the blue-chest.<br>Monkey throws the blue-chest off the ladder onto the floor.<br>Monkey jumps off the ladder onto the floor.<br>Monkey grabs the ladder.<br>Monkey walks to t8-8 holding the ladder.<br>Monkey drops the ladder.<br>Monkey climbs onto the ladder.<br>Monkey grabs the green-chest.<br>Monkey throws the green-chest off the ladder onto the floor.<br>Monkey jumps off the ladder onto the floor.<br>Monkey walks to t2-2.<br>Monkey grabs the red-key.<br>Monkey walks to t8-8 holding the red-key.<br>Monkey opens the green-chest with the red-key revealing the blue-key.<br>Monkey drops the red-key.<br>Monkey climbs onto the green-chest.<br>Monkey grabs the blue-key.<br>Monkey jumps off the green-chest onto the floor.<br>Monkey walks to t7-7 holding the blue-key.<br>Monkey opens the blue-chest with the blue-key revealing the bananas.<br>Monkey drops the blue-key.<br>Monkey climbs onto the blue-chest.<br>Monkey grabs the bananas.<br>Monkey eats the bananas.<br>"))
-
 ([Examples_Class30009] of  Rule
 
 	(lhs "(Working-state engine unsatisfactory)")
@@ -525,7 +558,7 @@
 
 	(lhs "?p (Patient temperature ?t\n	(nil? ?t))")
 	(rhs "(modify ?p temperature (ru.rules/input \n	\"Enter patient temperature (Fahrenheit)\" \n	0 \n	#(and (number? %) (< 86 % 119))))")
-	(salience 5)
+	(salience 2)
 	(title "GetTemperature"))
 
 ([Examples_Class40001] of  Patient
@@ -540,8 +573,10 @@
 	(facts [Examples_Class40001])
 	(rule-sets
 		[Examples_Class40012]
-		[Examples_Class70000])
-	(title "Patient Run"))
+		[Examples_Class70000]
+		[Examples_Class110000])
+	(title "Patient Run")
+	(trace FALSE))
 
 ([Examples_Class40012] of  RuleSet
 
@@ -576,28 +611,28 @@
 
 	(lhs "?p (Patient spots ?v\n	(nil? ?v))")
 	(rhs "(modify ?p spots (ru.rules/confirm \"Does the patient have spots?\"))")
-	(salience 5)
+	(salience 2)
 	(title "GetSpots"))
 
 ([Examples_Class60001] of  Rule
 
 	(lhs "?p (Patient rash ?v\n	(nil? ?v))")
 	(rhs "(modify ?p rash (ru.rules/confirm \"Does the patient have a rash?\"))")
-	(salience 5)
+	(salience 2)
 	(title "GetRash"))
 
 ([Examples_Class60002] of  Rule
 
 	(lhs "?p (Patient sore_throat ?v\n	(nil? ?v))")
-	(rhs "(modify ?p sore_throat (ru.rules/confirm \"Does the patient have a sore throat?\"))")
-	(salience 5)
+	(rhs "(modify ?p sore_throat (ru.rules/confirm \"Does the patient have a sore throat?\"))\n(ru.rules/display (str \"<br><br><b>The Patient Treatment Expert System.</b> Date: \" (java.util.Date.) \"<br>\"))")
+	(salience 2)
 	(title "GetSoreThroat"))
 
 ([Examples_Class60003] of  Rule
 
 	(lhs "?p (Patient fever high \n	spots true\n	innoculated ?v\n	(nil? ?v))")
 	(rhs "(modify ?p innoculated (ru.rules/confirm \"Has the patient been innoculated for measles?\"))")
-	(salience 5)
+	(salience 2)
 	(title "GetInnoculated"))
 
 ([Examples_Class7] of  Rule
@@ -624,7 +659,7 @@
 ([Examples_Class70001] of  Rule
 
 	(lhs "?p (Patient fever ?v\n	temperature ?t\n	((number? ?t)\n	 (>= ?t 101)\n	 (nil? ?v)))")
-	(rhs "(modify ?p fever high)\n(println \"High fever diagnosed\")")
+	(rhs "(modify ?p fever high)\n(ru.rules/display \"<span style='color:red'>High fever diagnosed</span><br>\")")
 	(salience 0)
 	(title "FeverHigh"))
 
@@ -638,7 +673,7 @@
 ([Examples_Class80000] of  Rule
 
 	(lhs "?p (Patient fever ?v\n	temperature ?t\n	((number? ?t)\n	 (< 98.6 ?t 101)\n	 (nil? ?v)))")
-	(rhs "(modify ?p fever mild)\n(println \"Mild fever diagnosed\")")
+	(rhs "(modify ?p fever mild)\n(ru.rules/display \"Mild fever diagnosed<br>\")")
 	(salience 0)
 	(title "FeverMild"))
 
@@ -652,6 +687,6 @@
 ([Examples_Class90000] of  Rule
 
 	(lhs "(Patient fever high\n	spots true \n	innoculated false)")
-	(rhs "(asser Disease diagnosis measles)\n(println \"Measles diagnosed\")")
+	(rhs "(asser Disease diagnosis measles)\n(ru.rules/display \"Measles diagnosed<br>\")")
 	(salience 1)
 	(title "Measles"))

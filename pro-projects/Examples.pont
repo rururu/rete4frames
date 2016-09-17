@@ -1,4 +1,4 @@
-; Fri Sep 16 22:05:03 MSK 2016
+; Sat Sep 17 15:34:52 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -29,7 +29,7 @@
 		(create-accessor read-write))
 	(single-slot treatment
 		(type SYMBOL)
-		(allowed-values pennicillin allergy_shot bed_rest)
+		(allowed-values pennicillin allergy_shot bed_rest no)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot advice
@@ -51,7 +51,7 @@
 		(create-accessor read-write))
 	(single-slot diagnosis
 		(type SYMBOL)
-		(allowed-values measles allergy flu)
+		(allowed-values measles allergy flu no)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot sore_throat
@@ -277,11 +277,11 @@
 	(role concrete)
 	(single-slot diagnosis
 		(type SYMBOL)
-		(allowed-values measles allergy flu)
+		(allowed-values measles allergy flu no)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot treatment
 		(type SYMBOL)
-		(allowed-values pennicillin allergy_shot bed_rest)
+		(allowed-values pennicillin allergy_shot bed_rest no)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))

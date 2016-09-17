@@ -3,7 +3,7 @@
   <groupId>rete</groupId>
   <artifactId>rete</artifactId>
   <packaging>jar</packaging>
-  <version>5.2.4-SNAPSHOT</version>
+  <version>5.2.5-SNAPSHOT</version>
   <name>rete</name>
   <description>Clojure RETE implementation for frames</description>
   <url>https://github.com/rururu/rete4frames</url>
@@ -16,7 +16,7 @@
   <scm>
     <connection>scm:git:git://github.com/rururu/rete4frames.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/rururu/rete4frames.git</developerConnection>
-    <tag>c975dea700caf34170504a837ae93defc5f0d598
+    <tag>53531d16ac9abb768067832c82365032de1380a3
 </tag>
     <url>https://github.com/rururu/rete4frames</url>
   </scm>
@@ -58,12 +58,57 @@
         <enabled>true</enabled>
       </releases>
     </repository>
+    <repository>
+      <id>local</id>
+      <url>file:/Users/ru/clojure/rete4frames/repo</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
       <version>1.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>protege</groupId>
+      <artifactId>protege</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>protege</groupId>
+      <artifactId>standard-extensions</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>protege</groupId>
+      <artifactId>looks</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>protege</groupId>
+      <artifactId>unicode_panel</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>protege</groupId>
+      <artifactId>JGo</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>protege</groupId>
+      <artifactId>JGoLayout</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>protege</groupId>
+      <artifactId>ClojureTab</artifactId>
+      <version>1.5.0</version>
     </dependency>
   </dependencies>
 </project>

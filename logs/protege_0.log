@@ -216,3 +216,26 @@
 2016.09.16 21:45:12.458 MSK INFO: *** SYSTEM START ***
 2016.09.16 21:45:12.882 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2016.09.16 21:45:13.576 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
+2016.09.17 12:25:23.721 MSK INFO: *** SYSTEM START ***
+2016.09.17 12:25:24.789 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.09.17 12:25:26.441 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 1 sec (ui) -- ProjectManager$3.run()
+2016.09.17 13:45:01.998 MSK INFO: Project load time for file:/Users/ru/clojure/rete4frames/pro-projects/RuleEngine.pprj: 0 sec -- ProjectChooser.loadProject()
+2016.09.17 13:45:02.128 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2016.09.17 13:45:39.642 MSK INFO: Project load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj: 0 sec -- ProjectChooser.loadProject()
+2016.09.17 13:45:39.767 MSK INFO: UI display time = 0 sec -- ProjectManager$2.run()
+2016.09.17 15:25:15.520 MSK INFO: *** SYSTEM START ***
+2016.09.17 15:25:16.530 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.09.17 15:25:17.330 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
+2016.09.17 15:33:59.319 MSK INFO: *** SYSTEM START ***
+2016.09.17 15:33:59.734 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.09.17 15:34:00.435 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
+2016.09.17 15:37:36.020 MSK INFO: *** SYSTEM START ***
+2016.09.17 15:37:36.428 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.09.17 15:37:37.083 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
+2016.09.17 15:38:31.233 MSK INFO: *** SYSTEM START ***
+2016.09.17 15:38:31.648 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.09.17 15:38:32.303 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
+2016.09.17 19:54:37.109 MSK INFO: *** SYSTEM START ***
+2016.09.17 20:19:12.750 MSK INFO: *** SYSTEM START ***
+2016.09.17 20:19:13.193 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
+2016.09.17 20:19:13.865 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
