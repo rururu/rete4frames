@@ -1,2 +1,14 @@
-Patient:
- :?: {:? {:? {:? {:? {:? 0}}}}}
+Goal:
+ unlock: {:? {:? 0}}
+ hold: {:? {:? 3}, blank {:? 15}}
+ walk-to: {:? {:? 7}}
+ move: {ladder {:? 10}, :? {:? 17}}
+ on: {ladder {:? 12}, :? {:? 14}, floor {:? 18}}
+ eat: {:? {:? 21}}
+Thing:
+ :?: {:? {:? {light 1, :? 4}, floor {:? 5}, ceiling {light 8}}, ladder {:? {:? 9}, floor {:? 11}}}
+Monkey:
+ :?: {:? {:? 2, floor 20}}
+ blank: {:? {ladder 13, :? 16, floor 19}}
+Chest:
+ :?: {:? {:? 6}}

@@ -1,4 +1,4 @@
-; Sat Sep 17 13:45:32 MSK 2016
+; Wed Sep 21 23:08:16 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -47,19 +47,25 @@
 		(default "Fire/ru.rules/fire-all-rules")
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
+	(single-slot steps
+		(type INTEGER)
+		(range 1 %3FVARIABLE)
+		(default 1)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(multislot rules
 		(type INSTANCE)
 ;+		(allowed-classes Rule)
+		(create-accessor read-write))
+	(single-slot butt-step
+		(type STRING)
+		(default "Step/ru.rules/step-engine")
+;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot salience
 		(type INTEGER)
 		(default 0)
 ;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(single-slot trace
-		(type SYMBOL)
-		(allowed-values FALSE TRUE)
-;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(multislot facts
 		(type INSTANCE)
@@ -68,6 +74,12 @@
 	(multislot templates
 		(type INSTANCE)
 ;+		(allowed-classes %3ASTANDARD-CLASS)
+		(create-accessor read-write))
+	(single-slot mode
+		(type SYMBOL)
+		(allowed-values run trace step)
+		(default run)
+;+		(cardinality 0 1)
 		(create-accessor read-write)))
 
 (defclass RuleEngine
@@ -132,6 +144,11 @@
 		(type INSTANCE)
 ;+		(allowed-classes %3ASTANDARD-CLASS)
 		(create-accessor read-write))
+	(single-slot butt-step
+		(type STRING)
+		(default "Step/ru.rules/step-engine")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(multislot instances
 		(type INSTANCE)
 ;+		(allowed-classes)
@@ -145,18 +162,25 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(single-slot trace
-		(type SYMBOL)
-		(allowed-values FALSE TRUE)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(multislot facts
 		(type INSTANCE)
 ;+		(allowed-classes %3ATHING)
 		(create-accessor read-write))
+	(single-slot steps
+		(type INTEGER)
+		(range 1 %3FVARIABLE)
+		(default 1)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
 	(single-slot butt-run
 		(type STRING)
 		(default "Run/ru.rules/run-engine")
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot mode
+		(type SYMBOL)
+		(allowed-values run trace step)
+		(default run)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
 

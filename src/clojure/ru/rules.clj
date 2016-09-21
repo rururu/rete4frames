@@ -15,12 +15,12 @@
     (map mk-tpl clss)
     (mk-templates (.getSubclasses clss)) )))
 
-(defn mk-rule [rule trace]
+(defn mk-rule [rule mode]
   (when-let [ri (if (string? rule)
 	(p/fifos "Rule" "title" rule)
 	rule)]
   (let [nm (p/sv ri "title")
-         _ (if (p/is? trace) (println [:MK-RULE nm]))
+         _ (if (not= mode "run") (println [:MK-RULE nm]))
         sal (p/sv ri "salience")
         lhs (read-string (str "(" (p/sv ri "lhs") ")"))
         rhs (read-string (str "(" (p/sv ri "rhs") ")"))]
@@ -55,16 +55,16 @@
 	(p/svs ins "rule-sets")
 	(p/svs ins "fact-classes")
 	(p/svs ins "facts")
-	(p/sv   ins "trace"))))
+	(p/sv   ins "mode"))))
 ([hm inst]
   (let [mp (into {} hm)
          tit (mp "title")
          rss (mp "rule-sets")
          fcs (mp "fact-classes")
          ffs (mp "facts")
-         trc (mp "trace")]
-    (run-engine tit rss fcs ffs trc)))
-([tit rss fcs ffs trc]
+         mod (mp "mode")]
+    (run-engine tit rss fcs ffs mod)))
+([tit rss fcs ffs mod]
   (println [:RUN tit])
     (let [ffc (facts-from-classes fcs)
            fts (concat ffc ffs)
@@ -72,9 +72,8 @@
            tps (mapcat #(p/svs % "templates") rss)
            tps (mk-templates tps)
            rls (mapcat #(p/svs % "rules") rss)
-           rls (map #(mk-rule % trc) rls)
-           rls (map rete/trans-rule rls)
-           mod (if (p/is? trc) "trace" "run")]
+           rls (map #(mk-rule % mod) rls)
+           rls (map rete/trans-rule rls)]
        (println (str "Mode: " mod))
        (println (str "Templates: " (count tps)))
        (println (str "Rules: " (count rls)))
@@ -223,4 +222,10 @@
       (or "nil")
       read-string
       recur))))
+
+(defn step-engine [hm inst]
+  (let [mp (into {} hm)
+        sts (mp "steps")]
+  (println [:STEPS sts])
+  (rete/step sts)))
 

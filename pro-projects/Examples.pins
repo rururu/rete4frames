@@ -1,4 +1,4 @@
-; Sat Sep 17 15:34:52 MSK 2016
+; Wed Sep 21 23:03:23 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -226,9 +226,10 @@
 		[Examples_Class10037]
 		[Examples_Class10034]
 		[Examples_Class10027])
+	(mode run)
 	(rule-sets [Examples_Class15])
-	(title "Mab Run")
-	(trace FALSE))
+	(steps 1)
+	(title "Mab Run"))
 
 ([Examples_Class10040] of  CloFuncall
 
@@ -284,6 +285,18 @@
 	(rhs "(asser Goal action on \n	argument1 floor)")
 	(salience 0)
 	(title "Get-on-floor-to-walk"))
+
+([Examples_Class140001] of  Run
+
+	(butt-ass-inss "Assert Instances/ru.rules/ass-inss")
+	(butt-fire "Fire/ru.rules/fire-all-rules")
+	(butt-run "Run/ru.rules/run-engine")
+	(butt-step "Step/ru.rules/step-engine")
+	(facts [Examples_Class30023])
+	(mode run)
+	(rule-sets [Examples_Class20001])
+	(steps 1)
+	(title "Auto Run"))
 
 ([Examples_Class15] of  RuleSet
 
@@ -367,15 +380,6 @@
 	(rhs "(asser Goal action unlock argument1 ?chest)")
 	(salience 0)
 	(title "Unlock-chest-to-hold-object"))
-
-([Examples_Class20000] of  Run
-
-	(butt-ass-inss "Assert Instances/ru.rules/ass-inss")
-	(butt-fire "Fire/ru.rules/fire-all-rules")
-	(butt-run "Run/ru.rules/run-engine")
-	(facts [Examples_Class30023])
-	(rule-sets [Examples_Class20001])
-	(title "Auto Run"))
 
 ([Examples_Class20001] of  RuleSet
 
@@ -571,12 +575,13 @@
 	(butt-run "Run/ru.rules/run-engine")
 	(document [Examples_Class30000])
 	(facts [Examples_Class40001])
+	(mode run)
 	(rule-sets
 		[Examples_Class40012]
 		[Examples_Class70000]
 		[Examples_Class110000])
-	(title "Patient Run")
-	(trace FALSE))
+	(steps 1)
+	(title "Patient Run"))
 
 ([Examples_Class40012] of  RuleSet
 

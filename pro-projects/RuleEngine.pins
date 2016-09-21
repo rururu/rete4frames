@@ -1,16 +1,16 @@
-; Sat Sep 17 13:45:32 MSK 2016
+; Wed Sep 21 23:08:16 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
 
 ([RETE_Class2] of  CloFunction
 
-	(source "(when-let [ri (if (string? rule)\n	(p/fifos \"Rule\" \"title\" rule)\n	rule)]\n  (let [nm (p/sv ri \"title\")\n         _ (if (p/is? trace) (println [:MK-RULE nm]))\n        sal (p/sv ri \"salience\")\n        lhs (read-string (str \"(\" (p/sv ri \"lhs\") \")\"))\n        rhs (read-string (str \"(\" (p/sv ri \"rhs\") \")\"))]\n    (concat [nm sal] lhs ['=>] rhs)))")
-	(title "mk-rule [rule trace]"))
+	(source "(when-let [ri (if (string? rule)\n	(p/fifos \"Rule\" \"title\" rule)\n	rule)]\n  (let [nm (p/sv ri \"title\")\n         _ (if (not= mode \"run\") (println [:MK-RULE nm]))\n        sal (p/sv ri \"salience\")\n        lhs (read-string (str \"(\" (p/sv ri \"lhs\") \")\"))\n        rhs (read-string (str \"(\" (p/sv ri \"rhs\") \")\"))]\n    (concat [nm sal] lhs ['=>] rhs)))")
+	(title "mk-rule [rule mode]"))
 
 ([RETE_Class4] of  CloFunction
 
-	(source "([title]\n  (when-let [ins (p/fifos \"Run\" \"title\" title)]\n    (run-engine title\n	(p/svs ins \"rule-sets\")\n	(p/svs ins \"fact-classes\")\n	(p/svs ins \"facts\")\n	(p/sv   ins \"trace\"))))\n([hm inst]\n  (let [mp (into {} hm)\n         tit (mp \"title\")\n         rss (mp \"rule-sets\")\n         fcs (mp \"fact-classes\")\n         ffs (mp \"facts\")\n         trc (mp \"trace\")]\n    (run-engine tit rss fcs ffs trc)))\n([tit rss fcs ffs trc]\n  (println [:RUN tit])\n    (let [ffc (facts-from-classes fcs)\n           fts (concat ffc ffs)\n           fts (map mk-frame fts)\n           tps (mapcat #(p/svs % \"templates\") rss)\n           tps (mk-templates tps)\n           rls (mapcat #(p/svs % \"rules\") rss)\n           rls (map #(mk-rule % trc) rls)\n           rls (map rete/trans-rule rls)\n           mod (if (p/is? trc) \"trace\" \"run\")]\n       (println (str \"Mode: \" mod))\n       (println (str \"Templates: \" (count tps)))\n       (println (str \"Rules: \" (count rls)))\n       (println (str \"Facts: \" (count fts)))\n       (rete/run-with mod tps rls fts)))")
+	(source "([title]\n  (when-let [ins (p/fifos \"Run\" \"title\" title)]\n    (run-engine title\n	(p/svs ins \"rule-sets\")\n	(p/svs ins \"fact-classes\")\n	(p/svs ins \"facts\")\n	(p/sv   ins \"mode\"))))\n([hm inst]\n  (let [mp (into {} hm)\n         tit (mp \"title\")\n         rss (mp \"rule-sets\")\n         fcs (mp \"fact-classes\")\n         ffs (mp \"facts\")\n         mod (mp \"mode\")]\n    (run-engine tit rss fcs ffs mod)))\n([tit rss fcs ffs mod]\n  (println [:RUN tit])\n    (let [ffc (facts-from-classes fcs)\n           fts (concat ffc ffs)\n           fts (map mk-frame fts)\n           tps (mapcat #(p/svs % \"templates\") rss)\n           tps (mk-templates tps)\n           rls (mapcat #(p/svs % \"rules\") rss)\n           rls (map #(mk-rule % mod) rls)\n           rls (map rete/trans-rule rls)]\n       (println (str \"Mode: \" mod))\n       (println (str \"Templates: \" (count tps)))\n       (println (str \"Rules: \" (count rls)))\n       (println (str \"Facts: \" (count fts)))\n       (rete/run-with mod tps rls fts)))")
 	(title "run-engine"))
 
 ([RuleEngine_Class0] of  CloFunction
@@ -98,6 +98,11 @@
 	(source ";; print fact by number to REPL\n(let [all (rete/fact-list)\n      fact (first (filter #(= (first %) n) all))]\n  (if fact\n    (let [[[n typ] & rp] (partition-all 2 fact)]\n      (p/ctpl (str \"Fact\" n \" \" typ))\n      (doseq [sv rp]\n        (p/ctpl (str \"  \" (first sv) \" \" (second sv))) ) )))")
 	(title "f [n]"))
 
+([RuleEngine_Class200002] of  CloFunction
+
+	(source "(let [mp (into {} hm)\n        sts (mp \"steps\")]\n  (println [:STEPS sts])\n  (rete/step sts))")
+	(title "step-engine [hm inst]"))
+
 ([RuleEngine_Class30000] of  CloProgram
 
 	(cloFunctions
@@ -124,7 +129,8 @@
 		[RuleEngine_Class160001]
 		[RuleEngine_Class160000]
 		[RuleEngine_Class180000]
-		[RuleEngine_Class190000])
+		[RuleEngine_Class190000]
+		[RuleEngine_Class200002])
 	(cloNamespace [RuleEngine_Class40000])
 	(cloVars [RuleEngine_Class180001])
 	(title "Rule Engine"))

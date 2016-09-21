@@ -1,4 +1,4 @@
-; Sat Sep 17 15:34:52 MSK 2016
+; Wed Sep 21 23:03:23 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -93,6 +93,9 @@
 	(single-slot battery
 		(type STRING)
 ;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot trace
+;+		(type ANY)
 		(create-accessor read-write))
 	(single-slot engine
 		(type STRING)
