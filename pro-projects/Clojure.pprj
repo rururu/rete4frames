@@ -1,4 +1,4 @@
-; Thu Sep 15 14:45:03 MSK 2016
+; Sat Sep 24 22:03:00 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -580,7 +580,8 @@
 
 	(properties
 		[Clojure_ProjectKB_Class40006]
-		[Clojure_ProjectKB_Class40007]))
+		[Clojure_ProjectKB_Class40007]
+		[Clojure_ProjectKB_Class70004]))
 
 ([Clojure_ProjectKB_Class40006] of  Boolean
 
@@ -773,7 +774,8 @@
 
 	(properties
 		[Clojure_ProjectKB_Class50010]
-		[Clojure_ProjectKB_Class50011]))
+		[Clojure_ProjectKB_Class50011]
+		[Clojure_ProjectKB_Class70005]))
 
 ([Clojure_ProjectKB_Class50010] of  Boolean
 
@@ -983,6 +985,16 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Delete Instance"))
 
+([Clojure_ProjectKB_Class70004] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
+
+([Clojure_ProjectKB_Class70005] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
+
 ([Clojure_ProjectKB_Class70008] of  String
 
 	(name "CloProgram")
@@ -1106,9 +1118,6 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_087974_Class3] of  Map
-)
-
 ([KB_127677_Class0] of  String
 
 	(name "factory_class_name")
@@ -1212,6 +1221,9 @@
 )
 
 ([KB_127677_Class99] of  Property_List
+)
+
+([KB_792625_Class3] of  Map
 )
 
 ([LAYOUT_PROPERTIES] of  Property_List

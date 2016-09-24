@@ -1,4 +1,4 @@
-; Wed Sep 21 23:03:23 MSK 2016
+; Sat Sep 24 22:01:25 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,14 +20,13 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Examples_ProjectKB_Class393]
-		[Examples_ProjectKB_Class394]
-		[Examples_ProjectKB_Class395]
-		[Examples_ProjectKB_Class396]
-		[Examples_ProjectKB_Class397]
-		[Examples_ProjectKB_Class398]
-		[Examples_ProjectKB_Class399]
-		[Examples_ProjectKB_Class400]))
+		[Examples_ProjectKB_Class20401]
+		[Examples_ProjectKB_Class20402]
+		[Examples_ProjectKB_Class20403]
+		[Examples_ProjectKB_Class20404]
+		[Examples_ProjectKB_Class20405]
+		[Examples_ProjectKB_Class20406]
+		[Examples_ProjectKB_Class20407]))
 
 ([CLSES_TAB] of  Widget
 
@@ -98,10 +97,205 @@
 ([Examples_ProjectKB_Class10381] of  Property_List
 )
 
+([Examples_ProjectKB_Class10384] of  Property_List
+
+	(properties
+		[Examples_ProjectKB_Class10385]
+		[Examples_ProjectKB_Class10396]
+		[Examples_ProjectKB_Class10398]
+		[Examples_ProjectKB_Class20447]
+		[Examples_ProjectKB_Class20449]
+		[Examples_ProjectKB_Class20451]
+		[Examples_ProjectKB_Class20453]
+		[Examples_ProjectKB_Class20455]
+		[Examples_ProjectKB_Class20457]
+		[Examples_ProjectKB_Class20459]
+		[Examples_ProjectKB_Class384]))
+
+([Examples_ProjectKB_Class10385] of  Property_List
+
+	(name "layout properties"))
+
+([Examples_ProjectKB_Class10396] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "name")
+	(property_list [Examples_ProjectKB_Class10397])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 0))
+
+([Examples_ProjectKB_Class10397] of  Property_List
+)
+
+([Examples_ProjectKB_Class10398] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "date")
+	(property_list [Examples_ProjectKB_Class10399])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 60))
+
+([Examples_ProjectKB_Class10399] of  Property_List
+)
+
 ([Examples_ProjectKB_Class20373] of  Boolean
 
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
+
+([Examples_ProjectKB_Class20384] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
+
+([Examples_ProjectKB_Class20385] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
+
+([Examples_ProjectKB_Class20386] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
+
+([Examples_ProjectKB_Class20401] of  String
+
+	(name "Thing")
+	(string_value "{Thing+}name{+location+}location{+weight+}weight{+on-top-of+}on-top-of"))
+
+([Examples_ProjectKB_Class20402] of  String
+
+	(name "Monkey")
+	(string_value "{Monkey+location+}location{+on-top-of+}on-top-of{+holding++}holding"))
+
+([Examples_ProjectKB_Class20403] of  String
+
+	(name "Chest")
+	(string_value "{Chest+}name{+contents+}contents{+unlocked-by+}unlocked-by"))
+
+([Examples_ProjectKB_Class20404] of  String
+
+	(name "Stage")
+	(string_value "value"))
+
+([Examples_ProjectKB_Class20405] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([Examples_ProjectKB_Class20406] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([Examples_ProjectKB_Class20407] of  String
+
+	(name "Goal")
+	(string_value "{Goal+}action{+arg1+}argument1{+arg2+}argument2"))
+
+([Examples_ProjectKB_Class20447] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "treatment")
+	(property_list [Examples_ProjectKB_Class20448])
+	(widget_class_name "edu.stanford.smi.protege.widget.ComboBoxWidget")
+	(width 200)
+	(x 200)
+	(y 300))
+
+([Examples_ProjectKB_Class20448] of  Property_List
+)
+
+([Examples_ProjectKB_Class20449] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "temperature")
+	(property_list [Examples_ProjectKB_Class20450])
+	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
+	(width 200)
+	(x 0)
+	(y 120))
+
+([Examples_ProjectKB_Class20450] of  Property_List
+)
+
+([Examples_ProjectKB_Class20451] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "spots")
+	(property_list [Examples_ProjectKB_Class20452])
+	(widget_class_name "edu.stanford.smi.protege.widget.CheckBoxWidget")
+	(width 200)
+	(x 200)
+	(y 240))
+
+([Examples_ProjectKB_Class20452] of  Property_List
+)
+
+([Examples_ProjectKB_Class20453] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "fever")
+	(property_list [Examples_ProjectKB_Class20454])
+	(widget_class_name "edu.stanford.smi.protege.widget.ComboBoxWidget")
+	(width 200)
+	(x 200)
+	(y 120))
+
+([Examples_ProjectKB_Class20454] of  Property_List
+)
+
+([Examples_ProjectKB_Class20455] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "innoculated")
+	(property_list [Examples_ProjectKB_Class20456])
+	(widget_class_name "edu.stanford.smi.protege.widget.CheckBoxWidget")
+	(width 200)
+	(x 200)
+	(y 180))
+
+([Examples_ProjectKB_Class20456] of  Property_List
+)
+
+([Examples_ProjectKB_Class20457] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "rash")
+	(property_list [Examples_ProjectKB_Class20458])
+	(widget_class_name "edu.stanford.smi.protege.widget.CheckBoxWidget")
+	(width 200)
+	(x 0)
+	(y 240))
+
+([Examples_ProjectKB_Class20458] of  Property_List
+)
+
+([Examples_ProjectKB_Class20459] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "sore_throat")
+	(property_list [Examples_ProjectKB_Class20460])
+	(widget_class_name "edu.stanford.smi.protege.widget.CheckBoxWidget")
+	(width 200)
+	(x 0)
+	(y 180))
+
+([Examples_ProjectKB_Class20460] of  Property_List
+)
 
 ([Examples_ProjectKB_Class347] of  Widget
 
@@ -193,49 +387,26 @@
 ([Examples_ProjectKB_Class373] of  Property_List
 )
 
-([Examples_ProjectKB_Class377] of  Boolean
+([Examples_ProjectKB_Class383] of  Widget
 
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
+	(is_hidden FALSE)
+	(name "History")
+	(property_list [Examples_ProjectKB_Class10384])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
 
-([Examples_ProjectKB_Class393] of  String
+([Examples_ProjectKB_Class384] of  Widget
 
-	(name "Thing")
-	(string_value "{Thing+}name{+location+}location{+weight+}weight{+on-top-of+}on-top-of"))
+	(height 60)
+	(is_hidden FALSE)
+	(name "diagnosis")
+	(property_list [Examples_ProjectKB_Class385])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 300))
 
-([Examples_ProjectKB_Class394] of  String
-
-	(name "Monkey")
-	(string_value "{Monkey+location+}location{+on-top-of+}on-top-of{+holding++}holding"))
-
-([Examples_ProjectKB_Class395] of  String
-
-	(name "Chest")
-	(string_value "{Chest+}name{+contents+}contents{+unlocked-by+}unlocked-by"))
-
-([Examples_ProjectKB_Class396] of  String
-
-	(name "Stage")
-	(string_value "value"))
-
-([Examples_ProjectKB_Class397] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([Examples_ProjectKB_Class398] of  String
-
-	(name "Document"))
-
-([Examples_ProjectKB_Class399] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([Examples_ProjectKB_Class400] of  String
-
-	(name "Goal")
-	(string_value "{Goal+}action{+arg1+}argument1{+arg2+}argument2"))
+([Examples_ProjectKB_Class385] of  Property_List
+)
 
 ([Examples_ProjectKB_Class401] of  Widget
 
@@ -565,28 +736,28 @@
 	(name "instances_file_name")
 	(string_value "Examples.pins"))
 
-([KB_385965_Class373] of  Map
+([KB_267006_Class380] of  Map
 
 	(entries
-		[KB_385965_Class374]
-		[KB_385965_Class375]
-		[KB_385965_Class376]))
+		[KB_267006_Class381]
+		[KB_267006_Class382]
+		[KB_267006_Class383]))
 
-([KB_385965_Class374] of  Map_Entry
+([KB_267006_Class381] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_385965_Class375] of  Map_Entry
+([KB_267006_Class382] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_385965_Class376] of  Map_Entry
+([KB_267006_Class383] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -679,12 +850,13 @@
 		[STANDARD_CLASS_FORM_WIDGET]
 		[Examples_ProjectKB_Class367]
 		[STANDARD_SLOT_FORM_WIDGET]
+		[INSTANCE_ANNOTATION_FORM_WIDGET]
+		[PAL_FORM_WIDGET]
+		[Examples_ProjectKB_Class383]
 		[Examples_ProjectKB_Class416]
 		[Examples_ProjectKB_Class401]
 		[Examples_ProjectKB_Class454]
-		[INSTANCE_ANNOTATION_FORM_WIDGET]
-		[STANDARD_FACET_FORM_WIDGET]
-		[PAL_FORM_WIDGET])
+		[STANDARD_FACET_FORM_WIDGET])
 	(default_cls_metaclass ":STANDARD-CLASS")
 	(default_facet_metaclass ":STANDARD-FACET")
 	(default_instance_widget_class_name "edu.stanford.smi.protege.widget.FormWidget")

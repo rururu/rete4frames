@@ -1,4 +1,4 @@
-; Wed Sep 21 23:03:23 MSK 2016
+; Sat Sep 24 22:01:25 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -286,6 +286,35 @@
 	(salience 0)
 	(title "Get-on-floor-to-walk"))
 
+([Examples_Class130000] of  Run
+
+	(butt-ass-inss "Assert Instances/ru.rules/ass-inss")
+	(butt-fire "Fire/ru.rules/fire-all-rules")
+	(butt-run "Run/ru.rules/run-engine")
+	(document [Examples_Class30000])
+	(facts [Examples_Class40001])
+	(mode run)
+	(rule-sets
+		[Examples_Class40012]
+		[Examples_Class70000]
+		[Examples_Class110000])
+	(steps 1)
+	(title "Patient Run"))
+
+([Examples_Class130001] of  RuleSet
+
+	(rules
+		[Examples_Class150001]
+		[Examples_Class150002])
+	(templates
+		[Disease]
+		[Patient]
+		[Visit])
+	(title "Visit"))
+
+([Examples_Class140000] of  Visit
+)
+
 ([Examples_Class140001] of  Run
 
 	(butt-ass-inss "Assert Instances/ru.rules/ass-inss")
@@ -338,6 +367,20 @@
 		[Monkey]
 		[Thing])
 	(title "Mab"))
+
+([Examples_Class150001] of  Rule
+
+	(lhs "?v (Visit name ?n\n	(nil? ?n))")
+	(rhs "(let [n (ru.rules/input \"What is a name of a next patient?\" \"\" nil)\n       d (str (java.util.Date.))]\n  (modify ?v name n\n	date d)\n  (asser Patient))")
+	(salience 3)
+	(title "StartVisit"))
+
+([Examples_Class150002] of  Rule
+
+	(lhs "(Visit name ?n date ?d)\n(Patient fever ?f\n	innoculated ?i\n	rash ?r\n	sore_throat ?st\n	spots ?s\n	temperature ?t)\n(Disease diagnosis ?ds\n	treatment ?tr)\n(not Disease)")
+	(rhs "(let [mp {:DIRTYP \"History\"\n	\"name\" ?n\n	\"date\" ?d\n	\"fever\" ?f\n	\"innoculated\" ?i\n	\"rash\" ?r\n	\"sore_throat\" ?st\n	\"spots\" ?s\n	\"temperature\" ?t\n	\"diagnosis\" ?ds\n	\"treatment\" ?tr\n	:DEPTH 0}\n       _ (println [:MP mp])\n       ins (protege.core/mti mp)]\n  (ru.rules/assert-instances [ins])\n  (.show protege.core/*prj* ins))")
+	(salience -3)
+	(title "WriteHistory"))
 
 ([Examples_Class16] of  Rule
 
@@ -573,15 +616,15 @@
 	(butt-ass-inss "Assert Instances/ru.rules/ass-inss")
 	(butt-fire "Fire/ru.rules/fire-all-rules")
 	(butt-run "Run/ru.rules/run-engine")
-	(document [Examples_Class30000])
-	(facts [Examples_Class40001])
-	(mode run)
+	(facts [Examples_Class140000])
+	(mode trace)
 	(rule-sets
 		[Examples_Class40012]
 		[Examples_Class70000]
-		[Examples_Class110000])
+		[Examples_Class110000]
+		[Examples_Class130001])
 	(steps 1)
-	(title "Patient Run"))
+	(title "Visit Run"))
 
 ([Examples_Class40012] of  RuleSet
 

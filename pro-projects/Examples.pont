@@ -1,4 +1,4 @@
-; Wed Sep 21 23:03:23 MSK 2016
+; Sat Sep 24 22:01:25 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -51,7 +51,7 @@
 		(create-accessor read-write))
 	(single-slot diagnosis
 		(type SYMBOL)
-		(allowed-values measles allergy flu no)
+		(allowed-values flu measles allergy)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot sore_throat
@@ -91,6 +91,10 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot battery
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot date
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
@@ -280,7 +284,7 @@
 	(role concrete)
 	(single-slot diagnosis
 		(type SYMBOL)
-		(allowed-values measles allergy flu no)
+		(allowed-values flu measles allergy)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(single-slot treatment
@@ -288,3 +292,19 @@
 		(allowed-values pennicillin allergy_shot bed_rest no)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
+
+(defclass Visit
+	(is-a Medic)
+	(role concrete)
+	(single-slot name_
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot date
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass History
+	(is-a Visit Disease Patient)
+	(role concrete))

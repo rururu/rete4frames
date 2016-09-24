@@ -216,7 +216,7 @@
 
 (defn input [question default validator]
   (loop [v nil]
-  (if (or (nil? validator) (validator v))
+  (if (or (and validator (validator v)) (some? v))
     v
     (-> (DisplayUtilities/editString nil question default nil)
       (or "nil")

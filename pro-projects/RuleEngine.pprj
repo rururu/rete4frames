@@ -1,4 +1,4 @@
-; Wed Sep 21 23:08:16 MSK 2016
+; Sat Sep 24 17:57:38 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,9 +20,9 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[RuleEngine_ProjectKB_Class50219]
-		[RuleEngine_ProjectKB_Class50220]
-		[RuleEngine_ProjectKB_Class50221]))
+		[RuleEngine_ProjectKB_Class60215]
+		[RuleEngine_ProjectKB_Class60216]
+		[RuleEngine_ProjectKB_Class60217]))
 
 ([CLSES_TAB] of  Widget
 
@@ -66,28 +66,28 @@
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_281272_Class207] of  Map
+([KB_040563_Class207] of  Map
 
 	(entries
-		[KB_281272_Class208]
-		[KB_281272_Class209]
-		[KB_281272_Class210]))
+		[KB_040563_Class208]
+		[KB_040563_Class209]
+		[KB_040563_Class210]))
 
-([KB_281272_Class208] of  Map_Entry
+([KB_040563_Class208] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_281272_Class209] of  Map_Entry
+([KB_040563_Class209] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_281272_Class210] of  Map_Entry
+([KB_040563_Class210] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -890,6 +890,11 @@
 ([RuleEngine_ProjectKB_Class40223] of  Property_List
 )
 
+([RuleEngine_ProjectKB_Class50214] of  Boolean
+
+	(boolean_value FALSE)
+	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
+
 ([RuleEngine_ProjectKB_Class50215] of  String
 
 	(name "tooltip_text"))
@@ -907,21 +912,6 @@
 
 	(boolean_value FALSE)
 	(name "readOnly_configured"))
-
-([RuleEngine_ProjectKB_Class50219] of  String
-
-	(name "Rule")
-	(string_value "title{+}salience"))
-
-([RuleEngine_ProjectKB_Class50220] of  String
-
-	(name "Run")
-	(string_value "title"))
-
-([RuleEngine_ProjectKB_Class50221] of  String
-
-	(name "RuleSet")
-	(string_value "title"))
 
 ([RuleEngine_ProjectKB_Class50222] of  Boolean
 
@@ -962,6 +952,21 @@
 
 	(boolean_value TRUE)
 	(name "readOnly_configured"))
+
+([RuleEngine_ProjectKB_Class60215] of  String
+
+	(name "Rule")
+	(string_value "title{+}salience"))
+
+([RuleEngine_ProjectKB_Class60216] of  String
+
+	(name "Run")
+	(string_value "title"))
+
+([RuleEngine_ProjectKB_Class60217] of  String
+
+	(name "RuleSet")
+	(string_value "title"))
 
 ([RuleEngine_ProjectKB_Class60226] of  Boolean
 

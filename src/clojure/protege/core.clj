@@ -187,6 +187,9 @@ s)
   (cond
     (vector? vmis) (ssvs ins slt (map #(mti % (dec dep)) vmis))
     (map? vmis) (ssv ins slt (mti vmis (dec dep)))
+    (symbol? vmis) (ssv ins slt (name vmis))
+    (= (type vmis) java.lang.Long) (ssv ins slt (int vmis))
+    (= (type vmis) java.lang.Double) (ssv ins slt (float vmis))
     true (ssv ins slt vmis))
   ins))
 

@@ -1,4 +1,4 @@
-; Wed Sep 21 23:08:16 MSK 2016
+; Sat Sep 24 17:57:38 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -90,7 +90,7 @@
 
 ([RuleEngine_Class190000] of  CloFunction
 
-	(source "(loop [v nil]\n  (if (or (nil? validator) (validator v))\n    v\n    (-> (DisplayUtilities/editString nil question default nil)\n      (or \"nil\")\n      read-string\n      recur)))")
+	(source "(loop [v nil]\n  (if (or (and validator (validator v)) (some? v))\n    v\n    (-> (DisplayUtilities/editString nil question default nil)\n      (or \"nil\")\n      read-string\n      recur)))")
 	(title "input [question default validator]"))
 
 ([RuleEngine_Class20000] of  CloFunction
