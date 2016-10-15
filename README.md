@@ -22,7 +22,7 @@ On the most difficult test rete4frames more than 3 times faster than CLIPS.
 [Leiningen](https://github.com/technomancy/leiningen) dependency information:
 
 ```clj
- [rete "5.2.5-SNAPSHOT"]
+ [rete "5.3.0-SNAPSHOT"]
 ```
 [Maven](http://maven.apache.org/) dependency information:
 
@@ -30,7 +30,7 @@ On the most difficult test rete4frames more than 3 times faster than CLIPS.
 <dependency>
   <groupId>rete</groupId>
   <artifactId>rete</artifactId>
-  <version>5.2.5-SNAPSHOT</version>
+  <version>5.3.0-SNAPSHOT</version>
 </dependency>
 ```
 To get the Manners Benchmark results run in REPL:

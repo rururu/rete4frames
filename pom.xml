@@ -3,7 +3,7 @@
   <groupId>rete</groupId>
   <artifactId>rete</artifactId>
   <packaging>jar</packaging>
-  <version>5.2.5-SNAPSHOT</version>
+  <version>5.3.0-SNAPSHOT</version>
   <name>rete</name>
   <description>Clojure RETE implementation for frames</description>
   <url>https://github.com/rururu/rete4frames</url>
@@ -16,7 +16,7 @@
   <scm>
     <connection>scm:git:git://github.com/rururu/rete4frames.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/rururu/rete4frames.git</developerConnection>
-    <tag>53531d16ac9abb768067832c82365032de1380a3
+    <tag>5c97e343e9fae914d35c1c1af7795dc4c60a80cf
 </tag>
     <url>https://github.com/rururu/rete4frames</url>
   </scm>
@@ -60,7 +60,7 @@
     </repository>
     <repository>
       <id>local</id>
-      <url>file:/Users/ru/clojure/rete4frames/repo</url>
+      <url>file:/Users/ru/clojure/rete4frames/repo/</url>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>

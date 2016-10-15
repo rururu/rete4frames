@@ -1,12 +1,3 @@
-(app "trace:asynch" "examples/auto.clj")
-(load-file "src/rete/core.clj")
-(app "run:asynch" "examples/waltz.clj" "examples/waltz_f25.clj")
-(app "run:asynch" "examples/waltz.clj" "examples/waltz_f37.clj")
-(app "run:asynch" "examples/waltz.clj" "examples/waltz_f50.clj")
-(app "trace:asynch" "examples/waltz.clj" "examples/waltz_f50.clj")
-(app "run:asynch" "examples/waltz.clj" "examples/waltz_f50.clj")
-(app "trace:asynch" "examples/mab.clj")
-(load-file "src/rete/core.clj")
 (app "trace:asynch" "examples/mab.clj")
 (load-file "src/rete/core.clj")
 (app "trace:asynch" "examples/mab.clj")
@@ -497,4 +488,13 @@ MINSAL
 (rete.core/facts)
 (facts)
 (rete.core/facts)
+(exit)
+lein run
+lein
+(-main)
+rete.core/RUN
+ru.rules/RUN
+(facts)
+(rete.core/facts)
+(-main)
 (exit)

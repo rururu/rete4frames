@@ -1,4 +1,4 @@
-; Sat Oct 15 15:08:37 MSK 2016
+; Sat Oct 15 16:28:14 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -368,7 +368,7 @@
 
 ([Examples_Class150002] of  Rule
 
-	(lhs "(Visit name ?n date ?d)\n(Patient fever ?f\n	innoculated ?i\n	rash ?r\n	sore_throat ?st\n	spots ?s\n	temperature ?t)\n(Disease diagnosis ?ds\n	treatment ?tr)\n(not Disease)")
+	(lhs "(Visit name ?n date ?d)\n(Patient fever ?f\n	innoculated ?i\n	rash ?r\n	sore_throat ?st\n	spots ?s\n	temperature ?t)\n(Disease diagnosis ?ds\n	treatment ?tr)")
 	(rhs "(let [mp {:DIRTYP \"History\"\n	\"name\" ?n\n	\"date\" ?d\n	\"fever\" ?f\n	\"innoculated\" ?i\n	\"rash\" ?r\n	\"sore_throat\" ?st\n	\"spots\" ?s\n	\"temperature\" ?t\n	\"diagnosis\" ?ds\n	\"treatment\" ?tr\n	:DEPTH 0}\n       _ (println [:MP mp])\n       ins (protege.core/mti mp)]\n  (ru.rules/assert-instances [ins])\n  (.show protege.core/*prj* ins))")
 	(salience -3)
 	(title "WriteHistory"))
@@ -379,6 +379,10 @@
 	(rhs "(ru.rules/display (str \"Monkey throws the \" ?chest \" off the \" ?on \" onto the floor.\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of floor)")
 	(salience 0)
 	(title "Put-chest-on-floor"))
+
+([Examples_Class160000] of  Display
+
+	(source "<html>Monkey jumps off the green-couch onto the floor.<br>Monkey walks to t2-2.<br>Monkey climbs onto the red-couch.<br>Monkey climbs onto the big-pillow.<br>Monkey grabs the red-chest.<br>Monkey throws the red-chest off the big-pillow onto the floor.<br>Monkey jumps off the big-pillow onto the floor.<br>Monkey walks to t1-3.<br>Monkey grabs the red-key.<br>Monkey walks to t2-2 holding the red-key.<br>Monkey opens the red-chest with the red-key revealing the ladder.<br>Monkey drops the red-key.<br>Monkey climbs onto the red-chest.<br>Monkey grabs the ladder.<br>Monkey jumps off the red-chest onto the floor.<br>Monkey walks to t7-7 holding the ladder.<br>Monkey drops the ladder.<br>Monkey climbs onto the ladder.<br>Monkey grabs the blue-chest.<br>Monkey throws the blue-chest off the ladder onto the floor.<br>Monkey jumps off the ladder onto the floor.<br>Monkey grabs the ladder.<br>Monkey walks to t8-8 holding the ladder.<br>Monkey drops the ladder.<br>Monkey climbs onto the ladder.<br>Monkey grabs the green-chest.<br>Monkey throws the green-chest off the ladder onto the floor.<br>Monkey jumps off the ladder onto the floor.<br>Monkey walks to t2-2.<br>Monkey grabs the red-key.<br>Monkey walks to t8-8 holding the red-key.<br>Monkey opens the green-chest with the red-key revealing the blue-key.<br>Monkey drops the red-key.<br>Monkey climbs onto the green-chest.<br>Monkey grabs the blue-key.<br>Monkey jumps off the green-chest onto the floor.<br>Monkey walks to t7-7 holding the blue-key.<br>Monkey opens the blue-chest with the blue-key revealing the bananas.<br>Monkey drops the blue-key.<br>Monkey climbs onto the blue-chest.<br>Monkey grabs the bananas.<br>Monkey eats the bananas.<br><br><br><b>The Patient Treatment Expert System.</b> Date: Sat Oct 15 16:21:43 MSK 2016<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br>Mild fever diagnosed<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br><br><br><b>The Patient Treatment Expert System.</b> Date: Sat Oct 15 16:22:14 MSK 2016<br><br><span style='color:red'>High fever diagnosed</span><br><br>Allergy diagnosed from spots and lack of measles<br><br>Allergy shot prescribed<br><br><br><br><b>The Patient Treatment Expert System.</b> Date: Sat Oct 15 16:22:47 MSK 2016<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br><span style='color:red'>High fever diagnosed</span><br><br>Measles diagnosed<br><br>Penicillin prescribed<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br><br><br><b>The Patient Treatment Expert System.</b> Date: Sat Oct 15 16:24:44 MSK 2016<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br><span style='color:red'>High fever diagnosed</span><br><br>Measles diagnosed<br><br>Penicillin prescribed<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br>"))
 
 ([Examples_Class160001] of  RuleSet
 
@@ -446,7 +450,7 @@
 		[Examples_Class10037]
 		[Examples_Class10034]
 		[Examples_Class10027])
-	(mode run)
+	(mode step)
 	(rule-sets [Examples_Class15])
 	(steps 1)
 	(title "Mab Run"))
@@ -517,7 +521,7 @@
 
 ([Examples_Class30006] of  Rule
 
-	(lhs "(Visit name ?n date ?d)\n?p (Patient)\n?d (Disease)\n(not Disease)")
+	(lhs "(Visit name ?n date ?d)\n?p (Patient)\n?d (Disease)")
 	(rhs "(let [pins (ru.rules/mk-instance (fact-id ?p))\n      dins (ru.rules/mk-instance (fact-id ?d))\n      ins (ru.rules/mk-instance \n	\"History2\"\n	{\"name\" ?n\n	 \"date\" ?d\n	 \"patient-data\" pins\n	 \"disease\" dins}\n	0)]\n  (ru.rules/assert-instances [ins])\n  (.show protege.core/*prj* ins))")
 	(salience -3)
 	(title "WriteHistory2"))

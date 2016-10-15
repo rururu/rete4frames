@@ -1,4 +1,4 @@
-; Sat Oct 15 15:08:37 MSK 2016
+; Sat Oct 15 16:28:14 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,13 +20,13 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Examples_ProjectKB_Class20384]
-		[Examples_ProjectKB_Class20385]
-		[Examples_ProjectKB_Class20386]
-		[Examples_ProjectKB_Class20387]
-		[Examples_ProjectKB_Class20388]
-		[Examples_ProjectKB_Class20389]
-		[Examples_ProjectKB_Class20390]))
+		[Examples_ProjectKB_Class20398]
+		[Examples_ProjectKB_Class20399]
+		[Examples_ProjectKB_Class20400]
+		[Examples_ProjectKB_Class20401]
+		[Examples_ProjectKB_Class20402]
+		[Examples_ProjectKB_Class20403]
+		[Examples_ProjectKB_Class20404]))
 
 ([CLSES_TAB] of  Widget
 
@@ -149,37 +149,37 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
 
-([Examples_ProjectKB_Class20384] of  String
+([Examples_ProjectKB_Class20398] of  String
 
 	(name "Thing")
 	(string_value "{Thing+}name{+location+}location{+weight+}weight{+on-top-of+}on-top-of"))
 
-([Examples_ProjectKB_Class20385] of  String
+([Examples_ProjectKB_Class20399] of  String
 
 	(name "Monkey")
 	(string_value "{Monkey+location+}location{+on-top-of+}on-top-of{+holding++}holding"))
 
-([Examples_ProjectKB_Class20386] of  String
+([Examples_ProjectKB_Class20400] of  String
 
 	(name "Chest")
 	(string_value "{Chest+}name{+contents+}contents{+unlocked-by+}unlocked-by"))
 
-([Examples_ProjectKB_Class20387] of  String
+([Examples_ProjectKB_Class20401] of  String
 
 	(name "Stage")
 	(string_value "value"))
 
-([Examples_ProjectKB_Class20388] of  String
+([Examples_ProjectKB_Class20402] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([Examples_ProjectKB_Class20389] of  String
+([Examples_ProjectKB_Class20403] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
 
-([Examples_ProjectKB_Class20390] of  String
+([Examples_ProjectKB_Class20404] of  String
 
 	(name "Goal")
 	(string_value "{Goal+}action{+arg1+}argument1{+arg2+}argument2"))
@@ -1135,28 +1135,28 @@
 	(name "instances_file_name")
 	(string_value "Examples.pins"))
 
-([KB_282979_Class380] of  Map
+([KB_221892_Class380] of  Map
 
 	(entries
-		[KB_282979_Class381]
-		[KB_282979_Class382]
-		[KB_282979_Class383]))
+		[KB_221892_Class381]
+		[KB_221892_Class382]
+		[KB_221892_Class383]))
 
-([KB_282979_Class381] of  Map_Entry
+([KB_221892_Class381] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_282979_Class382] of  Map_Entry
+([KB_221892_Class382] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_282979_Class383] of  Map_Entry
+([KB_221892_Class383] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
