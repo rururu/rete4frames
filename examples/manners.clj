@@ -97,6 +97,7 @@
   (Last seat ?l_seat)
   (Seating seat2 ?l_seat)
   =>
+  (problem-solved)
   (modify ?ctx state print_results)
   (println "Yes, we are done!!"))
 
@@ -119,7 +120,7 @@
   (println (str ?n " " ?s)))
 
 (Mann-All-Done
-  0
+  -1
   (context state print_results)
   =>
   (println "Halt!"))

@@ -179,18 +179,21 @@ s)
 ([mp dep]
   (if (< dep 0)
     mp
-    (if-let [clz (cls (:DIRTYP mp))]
-      (reduce-kv #(mti %1 %2 %3 dep) 
-	(crin (:DIRTYP mp)) 
+    (if-let [clz (cls (str (:DIRTYP mp)))]
+      (reduce-kv #(mti %1 (str %2) %3 (type %3) dep) 
+	(crin (str (:DIRTYP mp)))
 	(dissoc mp :DIRTYP :DEPTH)))))
-([ins slt vmis dep]
+([ins slt vmis typ dep]
   (cond
     (vector? vmis) (ssvs ins slt (map #(mti % (dec dep)) vmis))
     (map? vmis) (ssv ins slt (mti vmis (dec dep)))
     (symbol? vmis) (ssv ins slt (name vmis))
-    (= (type vmis) java.lang.Long) (ssv ins slt (int vmis))
-    (= (type vmis) java.lang.Double) (ssv ins slt (float vmis))
-    true (ssv ins slt vmis))
+    (= typ java.lang.Long) (ssv ins slt (int vmis))
+    (= typ java.lang.Double) (ssv ins slt (float vmis))
+    (or (string? vmis)
+         (= typ java.lang.Boolean)
+         (instance? Instance vmis))
+	(ssv ins slt vmis))
   ins))
 
 (defn get-itm [itm path]

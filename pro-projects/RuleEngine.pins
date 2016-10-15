@@ -1,4 +1,4 @@
-; Sat Sep 24 17:57:38 MSK 2016
+; Sat Oct 15 15:16:07 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -10,7 +10,7 @@
 
 ([RETE_Class4] of  CloFunction
 
-	(source "([title]\n  (when-let [ins (p/fifos \"Run\" \"title\" title)]\n    (run-engine title\n	(p/svs ins \"rule-sets\")\n	(p/svs ins \"fact-classes\")\n	(p/svs ins \"facts\")\n	(p/sv   ins \"mode\"))))\n([hm inst]\n  (let [mp (into {} hm)\n         tit (mp \"title\")\n         rss (mp \"rule-sets\")\n         fcs (mp \"fact-classes\")\n         ffs (mp \"facts\")\n         mod (mp \"mode\")]\n    (run-engine tit rss fcs ffs mod)))\n([tit rss fcs ffs mod]\n  (println [:RUN tit])\n    (let [ffc (facts-from-classes fcs)\n           fts (concat ffc ffs)\n           fts (map mk-frame fts)\n           tps (mapcat #(p/svs % \"templates\") rss)\n           tps (mk-templates tps)\n           rls (mapcat #(p/svs % \"rules\") rss)\n           rls (map #(mk-rule % mod) rls)\n           rls (map rete/trans-rule rls)]\n       (println (str \"Mode: \" mod))\n       (println (str \"Templates: \" (count tps)))\n       (println (str \"Rules: \" (count rls)))\n       (println (str \"Facts: \" (count fts)))\n       (rete/run-with mod tps rls fts)))")
+	(source "([title]\n  (when-let [ins (p/fifos \"Run\" \"title\" title)]\n    (run-engine title\n	(p/svs ins \"rule-sets\")\n	(p/svs ins \"fact-classes\")\n	(p/svs ins \"facts\")\n	(p/sv   ins \"mode\"))))\n([hm inst]\n  (let [mp (into {} hm)\n         tit (mp \"title\")\n         rss (mp \"rule-sets\")\n         fcs (mp \"fact-classes\")\n         ffs (mp \"facts\")\n         mod (mp \"mode\")]\n    (run-engine tit rss fcs ffs mod)))\n([tit rss fcs ffs mod]\n  (println [:RUN tit])\n  (let [ffc (facts-from-classes fcs)\n         fts (concat ffc ffs)\n         fts (map mk-frame fts)\n         tps (mapcat #(p/svs % \"templates\") rss)\n         tps (mk-templates tps)\n         rls (mapcat #(p/svs % \"rules\") rss)\n         rls (map #(mk-rule % mod) rls)\n         rls (map rete/trans-rule rls)]\n     (println (str \"Mode: \" mod))\n     (println (str \"Templates: \" (count tps)))\n     (println (str \"Rules: \" (count rls)))\n     (println (str \"Facts: \" (count fts)))\n     (def RUN true)\n     (rete/run-with mod tps rls fts)))")
 	(title "run-engine"))
 
 ([RuleEngine_Class0] of  CloFunction
@@ -35,13 +35,13 @@
 
 ([RuleEngine_Class120000] of  CloFunction
 
-	(source "(let [funarg (@rete/IDFACT fid)]\n  (if (not= funarg :deleted)\n    (let [[typ mp] (rete/to-typmap funarg)]\n      [typ mp fid])))")
+	(source "(if-let [funarg (@rete/IDFACT fid)]\n  (rete/to-typmap funarg))")
 	(title "typmap-by-id [fid]"))
 
 ([RuleEngine_Class120001] of  CloFunction
 
-	(source "([]\n (filter #(not= (second %) nil)\n          (for [i (range @rete/FCNT)](typmap-by-id i))))\n([typ]\n (filter #(= (first %) typ) (typmapfids)))")
-	(title "typmapfids"))
+	(source "([]\n (filter #(not= (second %) nil)\n          (for [i (range @rete/FCNT)](typmap-by-id i))))\n([typ]\n (filter #(= (first %) typ) (typmaps)))")
+	(title "typmaps"))
 
 ([RuleEngine_Class130000] of  CloFunction
 
@@ -98,10 +98,20 @@
 	(source ";; print fact by number to REPL\n(let [all (rete/fact-list)\n      fact (first (filter #(= (first %) n) all))]\n  (if fact\n    (let [[[n typ] & rp] (partition-all 2 fact)]\n      (p/ctpl (str \"Fact\" n \" \" typ))\n      (doseq [sv rp]\n        (p/ctpl (str \"  \" (first sv) \" \" (second sv))) ) )))")
 	(title "f [n]"))
 
+([RuleEngine_Class200000] of  CloFunction
+
+	(source "([fid]\n  (mk-instance fid 0))\n([fid dep]\n  (if-let [[typ mp] (typmap-by-id fid)]\n    (mk-instance typ mp dep)))\n([typ mp dep]\n  (p/mti (assoc mp :DIRTYP typ :DEPTH dep)))")
+	(title "mk-instance"))
+
 ([RuleEngine_Class200002] of  CloFunction
 
-	(source "(let [mp (into {} hm)\n        sts (mp \"steps\")]\n  (println [:STEPS sts])\n  (rete/step sts))")
+	(source "(let [mp (into {} hm)\n        sts (mp \"steps\")]\n  (if (not RUN)\n    (run-engine hm inst))\n  (if (and rete/TRACE (not rete/TLONG))\n    (println))\n  (println [:STEPS sts])\n  (rete/step sts))")
 	(title "step-engine [hm inst]"))
+
+([RuleEngine_Class210000] of  CloVar
+
+	(source "nil")
+	(title "RUN"))
 
 ([RuleEngine_Class30000] of  CloProgram
 
@@ -130,9 +140,12 @@
 		[RuleEngine_Class160000]
 		[RuleEngine_Class180000]
 		[RuleEngine_Class190000]
-		[RuleEngine_Class200002])
+		[RuleEngine_Class200002]
+		[RuleEngine_Class200000])
 	(cloNamespace [RuleEngine_Class40000])
-	(cloVars [RuleEngine_Class180001])
+	(cloVars
+		[RuleEngine_Class180001]
+		[RuleEngine_Class210000])
 	(title "Rule Engine"))
 
 ([RuleEngine_Class40000] of  CloNamespace

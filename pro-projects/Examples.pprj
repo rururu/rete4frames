@@ -1,4 +1,4 @@
-; Sat Sep 24 22:01:25 MSK 2016
+; Sat Oct 15 15:08:37 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,13 +20,13 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[Examples_ProjectKB_Class20401]
-		[Examples_ProjectKB_Class20402]
-		[Examples_ProjectKB_Class20403]
-		[Examples_ProjectKB_Class20404]
-		[Examples_ProjectKB_Class20405]
-		[Examples_ProjectKB_Class20406]
-		[Examples_ProjectKB_Class20407]))
+		[Examples_ProjectKB_Class20384]
+		[Examples_ProjectKB_Class20385]
+		[Examples_ProjectKB_Class20386]
+		[Examples_ProjectKB_Class20387]
+		[Examples_ProjectKB_Class20388]
+		[Examples_ProjectKB_Class20389]
+		[Examples_ProjectKB_Class20390]))
 
 ([CLSES_TAB] of  Widget
 
@@ -149,52 +149,37 @@
 	(boolean_value FALSE)
 	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
 
-([Examples_ProjectKB_Class20384] of  Boolean
-
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
-
-([Examples_ProjectKB_Class20385] of  Boolean
-
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
-
-([Examples_ProjectKB_Class20386] of  Boolean
-
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
-
-([Examples_ProjectKB_Class20401] of  String
+([Examples_ProjectKB_Class20384] of  String
 
 	(name "Thing")
 	(string_value "{Thing+}name{+location+}location{+weight+}weight{+on-top-of+}on-top-of"))
 
-([Examples_ProjectKB_Class20402] of  String
+([Examples_ProjectKB_Class20385] of  String
 
 	(name "Monkey")
 	(string_value "{Monkey+location+}location{+on-top-of+}on-top-of{+holding++}holding"))
 
-([Examples_ProjectKB_Class20403] of  String
+([Examples_ProjectKB_Class20386] of  String
 
 	(name "Chest")
 	(string_value "{Chest+}name{+contents+}contents{+unlocked-by+}unlocked-by"))
 
-([Examples_ProjectKB_Class20404] of  String
+([Examples_ProjectKB_Class20387] of  String
 
 	(name "Stage")
 	(string_value "value"))
 
-([Examples_ProjectKB_Class20405] of  String
+([Examples_ProjectKB_Class20388] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([Examples_ProjectKB_Class20406] of  String
+([Examples_ProjectKB_Class20389] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
 
-([Examples_ProjectKB_Class20407] of  String
+([Examples_ProjectKB_Class20390] of  String
 
 	(name "Goal")
 	(string_value "{Goal+}action{+arg1+}argument1{+arg2+}argument2"))
@@ -296,6 +281,420 @@
 
 ([Examples_ProjectKB_Class20460] of  Property_List
 )
+
+([Examples_ProjectKB_Class30398] of  Widget
+
+	(is_hidden FALSE)
+	(name "History2")
+	(property_list [Examples_ProjectKB_Class30399])
+	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
+
+([Examples_ProjectKB_Class30399] of  Property_List
+
+	(properties
+		[Examples_ProjectKB_Class30400]
+		[Examples_ProjectKB_Class30401]
+		[Examples_ProjectKB_Class30405]
+		[Examples_ProjectKB_Class30407]
+		[Examples_ProjectKB_Class30409]))
+
+([Examples_ProjectKB_Class30400] of  Property_List
+
+	(name "layout properties"))
+
+([Examples_ProjectKB_Class30401] of  Widget
+
+	(height 460)
+	(is_hidden FALSE)
+	(label "Patient-data")
+	(name "patient-data")
+	(property_list [Examples_ProjectKB_Class30402])
+	(widget_class_name "edu.stanford.smi.protegex.widget.contains.ContainsWidget")
+	(width 340)
+	(x 0)
+	(y 120))
+
+([Examples_ProjectKB_Class30402] of  Property_List
+
+	(properties
+		[Examples_ProjectKB_Class30413]
+		[Examples_ProjectKB_Class30414]
+		[Examples_ProjectKB_Class30415]
+		[Examples_ProjectKB_Class30416]
+		[Examples_ProjectKB_Class30417]
+		[Examples_ProjectKB_Class30418]
+		[Examples_ProjectKB_Class30419]
+		[Examples_ProjectKB_Class30420]
+		[Examples_ProjectKB_Class30421]
+		[Examples_ProjectKB_Class30422]
+		[Examples_ProjectKB_Class30423]
+		[Examples_ProjectKB_Class30424]
+		[Examples_ProjectKB_Class30425]
+		[Examples_ProjectKB_Class30426]
+		[Examples_ProjectKB_Class30427]
+		[Examples_ProjectKB_Class30428]
+		[Examples_ProjectKB_Class30429]
+		[Examples_ProjectKB_Class30430]
+		[Examples_ProjectKB_Class30431]
+		[Examples_ProjectKB_Class30432]
+		[Examples_ProjectKB_Class30433]
+		[Examples_ProjectKB_Class30434]
+		[Examples_ProjectKB_Class30435]
+		[Examples_ProjectKB_Class30436]
+		[Examples_ProjectKB_Class30437]
+		[Examples_ProjectKB_Class30438]
+		[Examples_ProjectKB_Class30439]
+		[Examples_ProjectKB_Class30440]))
+
+([Examples_ProjectKB_Class30405] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "name")
+	(property_list [Examples_ProjectKB_Class30406])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 200)
+	(x 0)
+	(y 60))
+
+([Examples_ProjectKB_Class30406] of  Property_List
+)
+
+([Examples_ProjectKB_Class30407] of  Widget
+
+	(height 60)
+	(is_hidden FALSE)
+	(name "date")
+	(property_list [Examples_ProjectKB_Class30408])
+	(widget_class_name "edu.stanford.smi.protege.widget.TextFieldWidget")
+	(width 280)
+	(x 0)
+	(y 0))
+
+([Examples_ProjectKB_Class30408] of  Property_List
+)
+
+([Examples_ProjectKB_Class30409] of  Widget
+
+	(height 130)
+	(is_hidden FALSE)
+	(label "Disease")
+	(name "disease")
+	(property_list [Examples_ProjectKB_Class30410])
+	(widget_class_name "edu.stanford.smi.protegex.widget.contains.ContainsWidget")
+	(width 340)
+	(x 0)
+	(y 580))
+
+([Examples_ProjectKB_Class30410] of  Property_List
+
+	(properties
+		[Examples_ProjectKB_Class30441]
+		[Examples_ProjectKB_Class30442]
+		[Examples_ProjectKB_Class30443]
+		[Examples_ProjectKB_Class30444]
+		[Examples_ProjectKB_Class30445]
+		[Examples_ProjectKB_Class30446]
+		[Examples_ProjectKB_Class30447]
+		[Examples_ProjectKB_Class30448]
+		[Examples_ProjectKB_Class30449]
+		[Examples_ProjectKB_Class30450]
+		[Examples_ProjectKB_Class30451]
+		[Examples_ProjectKB_Class30452]
+		[Examples_ProjectKB_Class30453]
+		[Examples_ProjectKB_Class30454]
+		[Examples_ProjectKB_Class30455]
+		[Examples_ProjectKB_Class30456]
+		[Examples_ProjectKB_Class30457]
+		[Examples_ProjectKB_Class30458]
+		[Examples_ProjectKB_Class30459]
+		[Examples_ProjectKB_Class30460]
+		[Examples_ProjectKB_Class30461]
+		[Examples_ProjectKB_Class30462]
+		[Examples_ProjectKB_Class30463]
+		[Examples_ProjectKB_Class30464]
+		[Examples_ProjectKB_Class30465]
+		[Examples_ProjectKB_Class30466]
+		[Examples_ProjectKB_Class30467]
+		[Examples_ProjectKB_Class30468]))
+
+([Examples_ProjectKB_Class30413] of  String
+
+	(name "tooltip_text"))
+
+([Examples_ProjectKB_Class30414] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Insert:At:Current:Selection"))
+
+([Examples_ProjectKB_Class30415] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Select:New:Insertions"))
+
+([Examples_ProjectKB_Class30416] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Create:Form:For:New:Instances"))
+
+([Examples_ProjectKB_Class30417] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Subwidget:Selection:Enabled"))
+
+([Examples_ProjectKB_Class30418] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Summary:Panel"))
+
+([Examples_ProjectKB_Class30419] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Number:Of:Subordinates"))
+
+([Examples_ProjectKB_Class30420] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Subordinate:Browser:Keys"))
+
+([Examples_ProjectKB_Class30421] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Use:Separators:Between:Subwidgets"))
+
+([Examples_ProjectKB_Class30422] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Comtain:In:Vertical:Direction"))
+
+([Examples_ProjectKB_Class30423] of  Integer
+
+	(integer_value 10)
+	(name ":Size:Of:Space:Between:Subwidgets"))
+
+([Examples_ProjectKB_Class30424] of  Integer
+
+	(integer_value 1)
+	(name ":Prototype:Depth"))
+
+([Examples_ProjectKB_Class30425] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:Create:Instance:Button"))
+
+([Examples_ProjectKB_Class30426] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:Add:Instance:Button"))
+
+([Examples_ProjectKB_Class30427] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:View:Instance:Button"))
+
+([Examples_ProjectKB_Class30428] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:Remove:Instance:Button"))
+
+([Examples_ProjectKB_Class30429] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Delete:Instance:Button"))
+
+([Examples_ProjectKB_Class30430] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Prototype:Button"))
+
+([Examples_ProjectKB_Class30431] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Move:Instance:Buttons"))
+
+([Examples_ProjectKB_Class30432] of  String
+
+	(name ":Create:Instance:Button:Tooltip")
+	(string_value "Create a new instance"))
+
+([Examples_ProjectKB_Class30433] of  String
+
+	(name ":Add:Instance:Button:Tooltip")
+	(string_value "Select an already existing instance"))
+
+([Examples_ProjectKB_Class30434] of  String
+
+	(name ":View:Instance:Button:Tooltip")
+	(string_value "View the selected instance"))
+
+([Examples_ProjectKB_Class30435] of  String
+
+	(name ":Remove:Instance:Button:Tooltip")
+	(string_value "Remove the selected instance(s)"))
+
+([Examples_ProjectKB_Class30436] of  String
+
+	(name ":Delete:Instance:Button:Tooltip")
+	(string_value "Delete the selected instance(s) from the knowledge base"))
+
+([Examples_ProjectKB_Class30437] of  String
+
+	(name ":Prototype:Button:Tooltip")
+	(string_value "Create a new instance which is a duplicate of the selected instance"))
+
+([Examples_ProjectKB_Class30438] of  String
+
+	(name ":Move:Instance:Buttons:Tooltip")
+	(string_value "Move the selected instance"))
+
+([Examples_ProjectKB_Class30439] of  String
+
+	(name ":Create:Instance:Dialog:Title")
+	(string_value "Create a new instance"))
+
+([Examples_ProjectKB_Class30440] of  String
+
+	(name ":Add:Instance:Dialog:Title")
+	(string_value "Select an already existing instance"))
+
+([Examples_ProjectKB_Class30441] of  String
+
+	(name "tooltip_text"))
+
+([Examples_ProjectKB_Class30442] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Insert:At:Current:Selection"))
+
+([Examples_ProjectKB_Class30443] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Select:New:Insertions"))
+
+([Examples_ProjectKB_Class30444] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Create:Form:For:New:Instances"))
+
+([Examples_ProjectKB_Class30445] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Subwidget:Selection:Enabled"))
+
+([Examples_ProjectKB_Class30446] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Summary:Panel"))
+
+([Examples_ProjectKB_Class30447] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Number:Of:Subordinates"))
+
+([Examples_ProjectKB_Class30448] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Subordinate:Browser:Keys"))
+
+([Examples_ProjectKB_Class30449] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Use:Separators:Between:Subwidgets"))
+
+([Examples_ProjectKB_Class30450] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Comtain:In:Vertical:Direction"))
+
+([Examples_ProjectKB_Class30451] of  Integer
+
+	(integer_value 10)
+	(name ":Size:Of:Space:Between:Subwidgets"))
+
+([Examples_ProjectKB_Class30452] of  Integer
+
+	(integer_value 1)
+	(name ":Prototype:Depth"))
+
+([Examples_ProjectKB_Class30453] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:Create:Instance:Button"))
+
+([Examples_ProjectKB_Class30454] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:Add:Instance:Button"))
+
+([Examples_ProjectKB_Class30455] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:View:Instance:Button"))
+
+([Examples_ProjectKB_Class30456] of  Boolean
+
+	(boolean_value TRUE)
+	(name ":Display:Remove:Instance:Button"))
+
+([Examples_ProjectKB_Class30457] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Delete:Instance:Button"))
+
+([Examples_ProjectKB_Class30458] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Prototype:Button"))
+
+([Examples_ProjectKB_Class30459] of  Boolean
+
+	(boolean_value FALSE)
+	(name ":Display:Move:Instance:Buttons"))
+
+([Examples_ProjectKB_Class30460] of  String
+
+	(name ":Create:Instance:Button:Tooltip")
+	(string_value "Create a new instance"))
+
+([Examples_ProjectKB_Class30461] of  String
+
+	(name ":Add:Instance:Button:Tooltip")
+	(string_value "Select an already existing instance"))
+
+([Examples_ProjectKB_Class30462] of  String
+
+	(name ":View:Instance:Button:Tooltip")
+	(string_value "View the selected instance"))
+
+([Examples_ProjectKB_Class30463] of  String
+
+	(name ":Remove:Instance:Button:Tooltip")
+	(string_value "Remove the selected instance(s)"))
+
+([Examples_ProjectKB_Class30464] of  String
+
+	(name ":Delete:Instance:Button:Tooltip")
+	(string_value "Delete the selected instance(s) from the knowledge base"))
+
+([Examples_ProjectKB_Class30465] of  String
+
+	(name ":Prototype:Button:Tooltip")
+	(string_value "Create a new instance which is a duplicate of the selected instance"))
+
+([Examples_ProjectKB_Class30466] of  String
+
+	(name ":Move:Instance:Buttons:Tooltip")
+	(string_value "Move the selected instance"))
+
+([Examples_ProjectKB_Class30467] of  String
+
+	(name ":Create:Instance:Dialog:Title")
+	(string_value "Create a new instance"))
+
+([Examples_ProjectKB_Class30468] of  String
+
+	(name ":Add:Instance:Dialog:Title")
+	(string_value "Select an already existing instance"))
 
 ([Examples_ProjectKB_Class347] of  Widget
 
@@ -736,28 +1135,28 @@
 	(name "instances_file_name")
 	(string_value "Examples.pins"))
 
-([KB_267006_Class380] of  Map
+([KB_282979_Class380] of  Map
 
 	(entries
-		[KB_267006_Class381]
-		[KB_267006_Class382]
-		[KB_267006_Class383]))
+		[KB_282979_Class381]
+		[KB_282979_Class382]
+		[KB_282979_Class383]))
 
-([KB_267006_Class381] of  Map_Entry
+([KB_282979_Class381] of  Map_Entry
 
 	(key "suppress_instance_counting")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_267006_Class382] of  Map_Entry
+([KB_282979_Class382] of  Map_Entry
 
 	(key "add_name_on_instance_form")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([KB_267006_Class383] of  Map_Entry
+([KB_282979_Class383] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
@@ -856,7 +1255,8 @@
 		[Examples_ProjectKB_Class416]
 		[Examples_ProjectKB_Class401]
 		[Examples_ProjectKB_Class454]
-		[STANDARD_FACET_FORM_WIDGET])
+		[STANDARD_FACET_FORM_WIDGET]
+		[Examples_ProjectKB_Class30398])
 	(default_cls_metaclass ":STANDARD-CLASS")
 	(default_facet_metaclass ":STANDARD-FACET")
 	(default_instance_widget_class_name "edu.stanford.smi.protege.widget.FormWidget")

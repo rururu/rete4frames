@@ -637,12 +637,12 @@
    ?tsk (Analyse task P query age params ?pp result -1)
    =>
    (let [[min max] ?pp
-         pats (facts-with-slot-value
+         pts (facts-with-slot-value
                'PersonalData
                'age
                #(and (number? %1) (<= (first %2) %1 (second %2)))
                ?pp)
-         ?srt (sort-by #(slot-value 'name %) pats)]
+         ?srt (sort-by #(slot-value 'name %) pts)]
      (modify ?tsk result ?srt)
      (println (str "\nPatients from " min " to " max " years old:\n"))
      (doseq [p ?srt]
@@ -653,8 +653,8 @@
    ?tsk (Analyse task P query race params ?pp result -1)
    =>
    (let [[r] ?pp
-         pats (facts-with-slot-value 'PersonalData 'race = r)
-         ?srt (sort-by #(slot-value 'name %) pats)]
+         pts (facts-with-slot-value 'PersonalData 'race = r)
+         ?srt (sort-by #(slot-value 'name %) pts)]
      (modify ?tsk result ?srt)
      (println (str "\nPatients of race" r ":\n"))
      (doseq [p ?srt]

@@ -1,4 +1,4 @@
-; Sat Sep 24 17:57:38 MSK 2016
+; Sat Oct 15 15:16:07 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -77,7 +77,7 @@
 		(create-accessor read-write))
 	(single-slot mode
 		(type SYMBOL)
-		(allowed-values run trace step)
+		(allowed-values run trace trace-long step)
 		(default run)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))
@@ -179,7 +179,7 @@
 		(create-accessor read-write))
 	(single-slot mode
 		(type SYMBOL)
-		(allowed-values run trace step)
+		(allowed-values run trace trace-long step)
 		(default run)
 ;+		(cardinality 0 1)
 		(create-accessor read-write)))

@@ -7,6 +7,7 @@
   javax.swing.JOptionPane))
 
 (def LOGS (atom {}))
+(def RUN nil)
 (defn mk-templates [clss]
   (letfn [(mk-tpl [cls]
 	(cons (symbol (.getName cls))
@@ -66,19 +67,20 @@
     (run-engine tit rss fcs ffs mod)))
 ([tit rss fcs ffs mod]
   (println [:RUN tit])
-    (let [ffc (facts-from-classes fcs)
-           fts (concat ffc ffs)
-           fts (map mk-frame fts)
-           tps (mapcat #(p/svs % "templates") rss)
-           tps (mk-templates tps)
-           rls (mapcat #(p/svs % "rules") rss)
-           rls (map #(mk-rule % mod) rls)
-           rls (map rete/trans-rule rls)]
-       (println (str "Mode: " mod))
-       (println (str "Templates: " (count tps)))
-       (println (str "Rules: " (count rls)))
-       (println (str "Facts: " (count fts)))
-       (rete/run-with mod tps rls fts))))
+  (let [ffc (facts-from-classes fcs)
+         fts (concat ffc ffs)
+         fts (map mk-frame fts)
+         tps (mapcat #(p/svs % "templates") rss)
+         tps (mk-templates tps)
+         rls (mapcat #(p/svs % "rules") rss)
+         rls (map #(mk-rule % mod) rls)
+         rls (map rete/trans-rule rls)]
+     (println (str "Mode: " mod))
+     (println (str "Templates: " (count tps)))
+     (println (str "Rules: " (count rls)))
+     (println (str "Facts: " (count fts)))
+     (def RUN true)
+     (rete/run-with mod tps rls fts))))
 
 (defn assert-instances [inss]
   (doseq [ins inss]
@@ -171,17 +173,15 @@
     (count fl))))
 
 (defn typmap-by-id [fid]
-  (let [funarg (@rete/IDFACT fid)]
-  (if (not= funarg :deleted)
-    (let [[typ mp] (rete/to-typmap funarg)]
-      [typ mp fid]))))
+  (if-let [funarg (@rete/IDFACT fid)]
+  (rete/to-typmap funarg)))
 
-(defn typmapfids
+(defn typmaps
   ([]
  (filter #(not= (second %) nil)
           (for [i (range @rete/FCNT)](typmap-by-id i))))
 ([typ]
- (filter #(= (first %) typ) (typmapfids))))
+ (filter #(= (first %) typ) (typmaps))))
 
 (defn fire-all-rules [hm inst]
   (rete/fire))
@@ -226,6 +226,19 @@
 (defn step-engine [hm inst]
   (let [mp (into {} hm)
         sts (mp "steps")]
+  (if (not RUN)
+    (run-engine hm inst))
+  (if (and rete/TRACE (not rete/TLONG))
+    (println))
   (println [:STEPS sts])
   (rete/step sts)))
+
+(defn mk-instance
+  ([fid]
+  (mk-instance fid 0))
+([fid dep]
+  (if-let [[typ mp] (typmap-by-id fid)]
+    (mk-instance typ mp dep)))
+([typ mp dep]
+  (p/mti (assoc mp :DIRTYP typ :DEPTH dep))))
 

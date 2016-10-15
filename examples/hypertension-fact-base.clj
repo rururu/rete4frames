@@ -10,6 +10,7 @@
 (PersonalData age 58 person-id 2 race black name "Sam")
 (PersonalData age ? person-id 0 race ? name "")
 (PersonalData age 63 person-id 3 race nonblack name "Tom")
+(PersonalData age :? person-id 0 race :? name "")
 (FactStore path "examples/hypertension-fact-base.clj")
 (CoexistingDiseases person-id 2 chronic-kidney-disease true diabetes false)
 (CoexistingDiseases person-id 3 chronic-kidney-disease false diabetes true)

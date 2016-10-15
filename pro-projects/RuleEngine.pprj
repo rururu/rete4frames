@@ -1,4 +1,4 @@
-; Sat Sep 24 17:57:38 MSK 2016
+; Sat Oct 15 15:16:07 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -20,9 +20,9 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[RuleEngine_ProjectKB_Class60215]
-		[RuleEngine_ProjectKB_Class60216]
-		[RuleEngine_ProjectKB_Class60217]))
+		[RuleEngine_ProjectKB_Class215]
+		[RuleEngine_ProjectKB_Class216]
+		[RuleEngine_ProjectKB_Class217]))
 
 ([CLSES_TAB] of  Widget
 
@@ -65,34 +65,6 @@
 
 	(is_hidden FALSE)
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
-
-([KB_040563_Class207] of  Map
-
-	(entries
-		[KB_040563_Class208]
-		[KB_040563_Class209]
-		[KB_040563_Class210]))
-
-([KB_040563_Class208] of  Map_Entry
-
-	(key "suppress_instance_counting")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_040563_Class209] of  Map_Entry
-
-	(key "add_name_on_instance_form")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([KB_040563_Class210] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
 
 ([KB_622506_Class0] of  String
 
@@ -190,6 +162,34 @@
 
 	(name "instances_file_name")
 	(string_value "RuleEngine.pins"))
+
+([KB_681706_Class209] of  Map
+
+	(entries
+		[KB_681706_Class210]
+		[KB_681706_Class211]
+		[KB_681706_Class212]))
+
+([KB_681706_Class210] of  Map_Entry
+
+	(key "suppress_instance_counting")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_681706_Class211] of  Map_Entry
+
+	(key "add_name_on_instance_form")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([KB_681706_Class212] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
 
 ([LAYOUT_PROPERTIES] of  Property_List
 
@@ -565,20 +565,6 @@
 ([RuleEngine_ProjectKB_Class10205] of  Property_List
 )
 
-([RuleEngine_ProjectKB_Class10211] of  Widget
-
-	(is_hidden TRUE)
-	(property_list [RuleEngine_ProjectKB_Class10212])
-	(widget_class_name "edu.stanford.smi.protegex.queries_tab.QueriesTab"))
-
-([RuleEngine_ProjectKB_Class10212] of  Property_List
-)
-
-([RuleEngine_ProjectKB_Class10213] of  Boolean
-
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
-
 ([RuleEngine_ProjectKB_Class10214] of  Widget
 
 	(height 60)
@@ -707,6 +693,30 @@
 
 ([RuleEngine_ProjectKB_Class211] of  Property_List
 )
+
+([RuleEngine_ProjectKB_Class213] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [RuleEngine_ProjectKB_Class214])
+	(widget_class_name "edu.stanford.smi.protegex.queries_tab.QueriesTab"))
+
+([RuleEngine_ProjectKB_Class214] of  Property_List
+)
+
+([RuleEngine_ProjectKB_Class215] of  String
+
+	(name "Rule")
+	(string_value "title{+}salience"))
+
+([RuleEngine_ProjectKB_Class216] of  String
+
+	(name "Run")
+	(string_value "title"))
+
+([RuleEngine_ProjectKB_Class217] of  String
+
+	(name "RuleSet")
+	(string_value "title"))
 
 ([RuleEngine_ProjectKB_Class219] of  Widget
 
@@ -890,11 +900,6 @@
 ([RuleEngine_ProjectKB_Class40223] of  Property_List
 )
 
-([RuleEngine_ProjectKB_Class50214] of  Boolean
-
-	(boolean_value FALSE)
-	(name "ButtonDisplayed-Стереть Выделенный Экземпляр"))
-
 ([RuleEngine_ProjectKB_Class50215] of  String
 
 	(name "tooltip_text"))
@@ -952,21 +957,6 @@
 
 	(boolean_value TRUE)
 	(name "readOnly_configured"))
-
-([RuleEngine_ProjectKB_Class60215] of  String
-
-	(name "Rule")
-	(string_value "title{+}salience"))
-
-([RuleEngine_ProjectKB_Class60216] of  String
-
-	(name "Run")
-	(string_value "title"))
-
-([RuleEngine_ProjectKB_Class60217] of  String
-
-	(name "RuleSet")
-	(string_value "title"))
 
 ([RuleEngine_ProjectKB_Class60226] of  Boolean
 

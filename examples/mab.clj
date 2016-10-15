@@ -329,7 +329,8 @@
     =>
     (println (str "Monkey eats the " ?name "." ))
     (modify ?monkey holding blank)
-    (retract ?goal ?thing)))
+    (retract ?goal ?thing)
+    (problem-solved)))
 
 (functions)
 

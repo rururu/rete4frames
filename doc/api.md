@@ -178,7 +178,12 @@ Examples:
 (facts-with-slot-value 'BloodPressure 'systolic > 140)
 (facts-with-slot-value 'BloodPressure 'systolic > 140 (facts-with-slot-value 'BloodPressure 'diastolic > 90))
 ```
-
+### 22. Function frame-by-id ###
+```clj
+(frame-by-id <fact-id>)
+```
+Returns a fact,
+- fact-id - identifier (integer-number) of a fact as frame.
 
 While embedding Rete for Frames into your code you can use other functions. See [source code] (https://github.com/rururu/rete4frames/blob/master/src/rete/core.clj).
 

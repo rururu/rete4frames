@@ -1,4 +1,4 @@
-; Sat Sep 24 22:03:00 MSK 2016
+; Fri Oct 14 17:30:31 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -170,7 +170,7 @@
 
 ([Clojure_Class260000] of  CloFunction
 
-	(source ";; map to instance\n;; mp - itm\n([mp]\n  (if (and (map? mp) (>= (:DEPTH mp) 0))\n    (mti mp (:DEPTH mp))))\n([mp dep]\n  (if (< dep 0)\n    mp\n    (if-let [clz (cls (:DIRTYP mp))]\n      (reduce-kv #(mti %1 %2 %3 dep) \n	(crin (:DIRTYP mp)) \n	(dissoc mp :DIRTYP :DEPTH)))))\n([ins slt vmis dep]\n  (cond\n    (vector? vmis) (ssvs ins slt (map #(mti % (dec dep)) vmis))\n    (map? vmis) (ssv ins slt (mti vmis (dec dep)))\n    (symbol? vmis) (ssv ins slt (name vmis))\n    (= (type vmis) java.lang.Long) (ssv ins slt (int vmis))\n    (= (type vmis) java.lang.Double) (ssv ins slt (float vmis))\n    true (ssv ins slt vmis))\n  ins)")
+	(source ";; map to instance\n;; mp - itm\n([mp]\n  (if (and (map? mp) (>= (:DEPTH mp) 0))\n    (mti mp (:DEPTH mp))))\n([mp dep]\n  (if (< dep 0)\n    mp\n    (if-let [clz (cls (str (:DIRTYP mp)))]\n      (reduce-kv #(mti %1 (str %2) %3 (type %3) dep) \n	(crin (str (:DIRTYP mp)))\n	(dissoc mp :DIRTYP :DEPTH)))))\n([ins slt vmis typ dep]\n  (cond\n    (vector? vmis) (ssvs ins slt (map #(mti % (dec dep)) vmis))\n    (map? vmis) (ssv ins slt (mti vmis (dec dep)))\n    (symbol? vmis) (ssv ins slt (name vmis))\n    (= typ java.lang.Long) (ssv ins slt (int vmis))\n    (= typ java.lang.Double) (ssv ins slt (float vmis))\n    (or (string? vmis)\n         (= typ java.lang.Boolean)\n         (instance? Instance vmis))\n	(ssv ins slt vmis))\n  ins)")
 	(title "mti"))
 
 ([Clojure_Class270000] of  CloFunction

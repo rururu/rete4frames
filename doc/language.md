@@ -81,6 +81,7 @@ Conditions
 ----
 The condition is a bare pattern or a pattern with a test.
 The negative condition is a condition preceding with the symbol "not".
+Negative conditions must be after all positive conditions.
 If some condition contains a test the test is a last element of the list.
 The test is a predicate call or a list of tests or a vector of tests.
 The predicate is any Clojure function that returns true or false values, and also nil and not nil values that can be considered as true and false.
@@ -111,12 +112,15 @@ Example of the negative conditions:
 
 Function Body
 ----
-The function body is an ordinary clojure function body which may contain, apart from everything else, the function call "asser", "retratct" and "modify". It will be added with parameters list and compiled into a function object during creation of beta network. When the rule "fires" this function evaluated with values for variables obtained during pattern-matching of conditional part.
+The function body is an ordinary clojure function body which may contain, apart from everything else, the function call "asser", "retratct" and "modify", "modify", "fact-id" and "problem-solved". It will be added with parameters list and compiled into a function object during creation of beta network. When the rule "fires" this function evaluated with values for variables obtained during pattern-matching of conditional part.
 The function "asser" has arguments representing a pattern of new fact that will be put into the working memory during its execution.
+
 The function "retract" has arguments representing  fact variables from the left hand side of the rule.
 Facts, associated with these variables, will be removed from the working memory during its execution.
-The function "modify" has a first argument representing  a fact variable from the left hand side of the rule. Rest arguments are slots and their new values.
+The function "modify" has a first argument representing a fact variable from the left hand side of the rule. Rest arguments are slots and their new values.
 Fact, associated with this variable, will be updated in the working memory with new values of slots during its execution.
+The function "fact-id" has one argument that must be condition variable. This function returns a number of a fact that have been matched with corresponding condition during the rule activation. The function "fact-id" has one argument that must be a condition variable. This function returns an identifier (integer number) of a fact, which has been matched with corresponding condition during the rule activation. Then it can be used to get the fact itself using API function "frame-by-id".
+The function "problem-solved" has no arguments and can be used to clear all remaining activations from the conflict set, when it become clear that, they no needed anymore.
 
 Remark: Because Clojure functions can not have more than 20 parametrs, you can split rules with more then 20 variables in the right hand side on several rules with the same left hand side. See [zebra.clj] (https://github.com/rururu/rete4frames/blob/master/examples/zebra.clj) example.
 

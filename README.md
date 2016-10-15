@@ -7,17 +7,17 @@ Manners Benchmark Table
 ----
 
 <table>
-<tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames v 5.2.4 (msec)</td></tr>
-<tr><td>manners8</td><td>1.4</td><td>62</td><td>x 44</td></tr>
-<tr><td>manners16</td><td>18</td><td>183</td><td>x 10</td></tr>
-<tr><td>manners32</td><td>259</td><td>920</td><td>x 3.6</td></tr>
-<tr><td>manners64</td><td>8664</td><td>5869</td><td>x 0.68</td></tr>
-<tr><td>manners128</td><td>316599</td><td>55391</td><td>x 0.17</td></tr>
+<tr><td>Test</td><td>CLIPS v 6.24 (msec)</td><td>rete4frames v 5.3.0 (msec)</td></tr>
+<tr><td>manners8</td><td>1.316599</td><td>82</td><td>x 61</td></tr>
+<tr><td>manners16</td><td>18</td><td>247</td><td>x 14</td></tr>
+<tr><td>manners32</td><td>272</td><td>1427</td><td>x 5</td></tr>
+<tr><td>manners64</td><td>8939</td><td>9877</td><td>x 1.1</td></tr>
+<tr><td>manners128</td><td>324396</td><td>89408</td><td>x 0.28</td></tr>
 </table>
 
-Test results obtained on the same hardware and OS (Linux Mint 17, Qiana) 2 february 2016.
-As can be seen from the results, rete4frames initially far behind and then starts to catch up CLIPS v 6.24.
-On the most difficult test rete4frames almost 6 times faster than CLIPS v 6.24.
+Test results obtained on the same hardware and OS 7 october 2016.
+As can be seen from the results, rete4frames initially far behind and then starts to catch up CLIPS.
+On the most difficult test rete4frames more than 3 times faster than CLIPS.
 
 [Leiningen](https://github.com/technomancy/leiningen) dependency information:
 
