@@ -11,6 +11,7 @@ Run the application.
 - mode (string):
 - "run"  - run the application synchronously, that is assert first fact and fire rules then assert second fact and fire rules and so on.
 - "trace" - same with a tracing of creation of the rete network and tracing of firing rules and assertion and retraction of facts.
+- "trace-long" - same verbose.
 - "step"  - same as "trace" with a stop after firing one rule. Further execution can be continued by calling functions (fire N) or (fire) where N - a number of steps (firings of one rule). If N is ommited then fire till the very end.
 
 In the modes with the tracing in a root directory are created three files:
@@ -88,7 +89,7 @@ Assert a fact into the working memory.
 
 ### 11. Function retract-fact ###
 ```clj
-(retract-fact <fact-id>
+(retract-fact <fact-id>)
 ```
 Retract a fact from the working memory.
 - fact-id (integer) - index of the fact in the working memory.

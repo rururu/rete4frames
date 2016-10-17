@@ -86,12 +86,12 @@
      10
      (phase value expand-any)
      (possible row ?r column ?c value any group ?g id ?id)
-     (not possible value any id ?id2
-          (< ?id2 ?id))
      (size value ?s)
      ?f (iterate-rc row ?r column ?c index ?v)
      (size-value size ?as value ?v
                  (<= ?as ?s))
+     (not possible value any id ?id2
+          (< ?id2 ?id))
      (not possible row ?r column ?c value ?v)
      =>
      (asser possible row ?r column ?c value ?v group ?g id ?id)
@@ -413,7 +413,7 @@
      =>
      (asser impossible id ?id value ?v rank ?p reason "Locked Candidate Multiple Lines"))
 
-   (naked-pairs-row-1
+   (naked-pairs-row
      0
      (phase value match)
      (rank value ?p process yes)
@@ -424,38 +424,18 @@
      (possible value ?v1 row ?r column ?c2
                (not= ?c2 ?c1))
      (possible value ?v2 row ?r column ?c2)
-     (possible value ?v1 row ?r column ?c3 id ?id
-               ((not= ?c3 ?c2) (not= ?c3 ?c1)))
-     (not possible value ?v3 row ?r column ?c1
-          ((not= ?v3 ?v2) (not= ?v3 ?v1)))
-     (not possible value ?v4 row ?r column ?c2
+     (possible value ?v row ?r column ?c3 id ?id
+		([(= ?v ?v1) (= ?v ?v2)]
+		 (not= ?c3 ?c2) (not= ?c3 ?c1)))
+     (not possible value ?v4 row ?r column ?c1
           ((not= ?v4 ?v2) (not= ?v4 ?v1)))
-     (not impossible id ?id value ?v1 rank ?p)
+     (not possible value ?v5 row ?r column ?c2
+          ((not= ?v5 ?v2) (not= ?v5 ?v1)))
+     (not impossible id ?id value ?v rank ?p)
      =>
-     (asser impossible id ?id value ?v1 rank ?p reason "Naked Pairs"))
+     (asser impossible id ?id value ?v rank ?p reason "Naked Pairs"))
 
-   (naked-pairs-row-2
-     0
-     (phase value match)
-     (rank value ?p process yes)
-     (technique name Naked-Pairs rank ?p)
-     (possible value ?v1 row ?r column ?c1)
-     (possible value ?v2 row ?r column ?c1
-               (not= ?v2 ?v1))
-     (possible value ?v1 row ?r column ?c2
-               (not= ?c2 ?c1))
-     (possible value ?v2 row ?r column ?c2)
-     (possible value ?v2 row ?r column ?c3 id ?id
-               ((not= ?c3 ?c2) (not= ?c3 ?c1)))
-     (not possible value ?v3 row ?r column ?c1
-          ((not= ?v3 ?v2) (not= ?v3 ?v1)))
-     (not possible value ?v4 row ?r column ?c2
-          ((not= ?v4 ?v2) (not= ?v4 ?v1)))
-     (not impossible id ?id value ?v2 rank ?p)
-     =>
-     (asser impossible id ?id value ?v2 rank ?p reason "Naked Pairs"))
-
-   (naked-pairs-column-1
+   (naked-pairs-column
      0
      (phase value match)
      (rank value ?p process yes)
@@ -466,38 +446,18 @@
      (possible value ?v1 row ?r2 column ?c
                (not= ?r2 ?r1))
      (possible value ?v2 row ?r2 column ?c)
-     (possible value ?v1 row ?r3 column ?c id ?id
-               ((not= ?r3 ?r2) (not= ?r3 ?r1)))
-     (not possible value ?v3 row ?r1 column ?c
-          ((not= ?v3 ?v2) (not= ?v3 ?v1)))
-     (not possible value ?v4 row ?r2 column ?c
+     (possible value ?v row ?r3 column ?c id ?id
+		([(= ?v ?v1) (= ?v ?v2)]
+		 (not= ?r3 ?r2) (not= ?r3 ?r1)))
+     (not possible value ?v4 row ?r1 column ?c
           ((not= ?v4 ?v2) (not= ?v4 ?v1)))
-     (not impossible id ?id value ?v1 rank ?p)
+     (not possible value ?v5 row ?r2 column ?c
+          ((not= ?v5 ?v2) (not= ?v5 ?v1)))
+     (not impossible id ?id value ?v rank ?p)
      =>
-     (asser impossible id ?id value ?v1 rank ?p reason "Naked Pairs"))
+     (asser impossible id ?id value ?v rank ?p reason "Naked Pairs"))
 
-   (naked-pairs-column-2
-     0
-     (phase value match)
-     (rank value ?p process yes)
-     (technique name Naked-Pairs rank ?p)
-     (possible value ?v1 row ?r1 column ?c)
-     (possible value ?v2 row ?r1 column ?c
-               (not= ?v2 ?v1))
-     (possible value ?v1 row ?r2 column ?c
-               (not= ?r2 ?r1))
-     (possible value ?v2 row ?r2 column ?c)
-     (possible value ?v2 row ?r3 column ?c id ?id
-               ((not= ?r3 ?r2) (not= ?r3 ?r1)))
-     (not possible value ?v3 row ?r1 column ?c
-          ((not= ?v3 ?v2) (not= ?v3 ?v1)))
-     (not possible value ?v4 row ?r2 column ?c
-          ((not= ?v4 ?v2) (not= ?v4 ?v1)))
-     (not impossible id ?id value ?v2 rank ?p)
-     =>
-     (asser impossible id ?id value ?v2 rank ?p reason "Naked Pairs"))
-
-   (naked-pairs-group-1
+   (naked-pairs-group
      0
      (phase value match)
      (rank value ?p process yes)
@@ -508,36 +468,16 @@
      (possible value ?v1 group ?g id ?id2
                (not= ?id2 ?id1))
      (possible value ?v2 id ?id2)
-     (possible value ?v1 group ?g id ?id
-               ((not= ?id ?id2) (not= ?id ?id1)))
-     (not possible value ?v3 id ?id1
-          ((not= ?v3 ?v2) (not= ?v3 ?v1)))
-     (not possible value ?v4 id ?id2
+     (possible value ?v group ?g id ?id
+		([(= ?v ?v1) (= ?v ?v2)]
+		 (not= ?id ?id2) (not= ?id ?id1)))
+     (not possible value ?v4 id ?id1
           ((not= ?v4 ?v2) (not= ?v4 ?v1)))
-     (not impossible id ?id value ?v1 rank ?p)
+     (not possible value ?v5 id ?id2
+          ((not= ?v5 ?v2) (not= ?v5 ?v1)))
+     (not impossible id ?id value ?v rank ?p)
      =>
-     (asser impossible id ?id value ?v1 rank ?p reason "Naked Pairs"))
-
-   (naked-pairs-group-2
-     0
-     (phase value match)
-     (rank value ?p process yes)
-     (technique name Naked-Pairs rank ?p)
-     (possible value ?v1 group ?g id ?id1)
-     (possible value ?v2 id ?id1
-               (not= ?v2 ?v1))
-     (possible value ?v1 group ?g id ?id2
-               (not= ?id2 ?id1))
-     (possible value ?v2 id ?id2)
-     (possible value ?v2 group ?g id ?id
-               ((not= ?id ?id2) (not= ?id ?id1)))
-     (not possible value ?v3 id ?id1
-          ((not= ?v3 ?v2) (not= ?v3 ?v1)))
-     (not possible value ?v4 id ?id2
-          ((not= ?v4 ?v2) (not= ?v4 ?v1)))
-     (not impossible id ?id value ?v2 rank ?p)
-     =>
-     (asser impossible id ?id value ?v2 rank ?p reason "Naked Pairs"))
+     (asser impossible id ?id value ?v rank ?p reason "Naked Pairs"))
 
    (hidden-pairs-row
      0
@@ -614,7 +554,8 @@
                (not= ?r2 ?r1))
      (possible value ?v row ?r2 column ?c2)
      (possible value ?v row ?r3 column ?c5 id ?id
-               [(= ?c5 ?c1) (= ?c5 ?c2)])
+		([(= ?c5 ?c1) (= ?c5 ?c2)]
+		 (not= ?r3 ?r1) (not= ?r3 ?r2)))
      (not possible value ?v row ?r1 column ?c3
           ((not= ?c3 ?c1) (not= ?c3 ?c2)))
      (not possible value ?v row ?r2 column ?c4
@@ -851,15 +792,15 @@
      (possible value ?y id ?id1
                (not= ?y ?x))
      (possible value ?x row ?r2 column ?c2 group ?g2 id ?id2
-               ((not= ?id2 ?id1)
-                [(= ?r1 ?r2) (= ?c1 ?c2) (= ?g1 ?g2)]))
+               (not= ?id2 ?id1))
      (possible value ?z id ?id2
-               (not= ?z ?x))
+               ((not= ?z ?x)
+                [(= ?r1 ?r2) (= ?c1 ?c2) (= ?g1 ?g2)]))
      (possible value ?y row ?r3 column ?c3 group ?g3 id ?id3
-               ((not= ?id3 ?id2) (not= ?id3 ?id1)
-                [(= ?r1 ?r3) (= ?c1 ?c3) (= ?g1 ?g3)]))
+               ((not= ?id3 ?id2) (not= ?id3 ?id1)))
      (possible value ?z id ?id3
-               (not= ?z ?y))
+               ((not= ?z ?y)
+                [(= ?r1 ?r3) (= ?c1 ?c3) (= ?g1 ?g3)]))
      (possible value ?z row ?r4 column ?c4 group ?g4 id ?id
                ((not= ?id ?id3) (not= ?id ?id2) (not= ?id ?id1)
                 [(= ?r2 ?r4) (= ?c2 ?c4) (= ?g2 ?g4)]
@@ -1453,8 +1394,8 @@
      (phase value ?p
             [(= ?p initial-output) (= ?p final-output)])
      (print-position a1 ?r a2 ?c)
-     (not position-printed a1 ?r a2 ?c)
      (size value ?s)
+     (not position-printed a1 ?r a2 ?c)
      =>
      (asser position-printed a1 ?r a2 ?c)
      (println (str "   ROW: " ?r " COLUMN: " ?c " VALUE: *" )))

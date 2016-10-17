@@ -355,9 +355,9 @@
 (defn try-func-add-fid [func fid ctx vrs bi]
   ;;(println [:TRY-FUNC-ADD-FID func fid ctx vrs bi])
   (if (or (nil? func) (apply func (var-vals ctx vrs)))
-    (let [fids (get @BIDS fid)]
-      (if (not (some #{bi} fids))
-        (vreset! BIDS (assoc @BIDS fid (cons bi fids))))
+    (let [bids (get @BIDS fid)]
+      (if (not (some #{bi} bids))
+        (vreset! BIDS (assoc @BIDS fid (cons bi bids))))
       ctx)))
 
 (defn match-fact-to-pattern [ffuar pfuar]
@@ -545,9 +545,8 @@
       (tree-rem funarg FMEM)
       funarg)))
 
-(defn retract-fact [fid beta-flag]
-  "Retract fact for given fact-id by removing it from alpha, beta and fact memory,
-   and also by removing from conflict set activations, containing this fact-id."
+(defn retract-fact [fid]
+  "Retract fact for given fact-id by removing it from alpha, beta and fact memory."
   ;;(println [:RETRACT-FACT fid])
   (if-let [funarg (remove-fmem fid)]
     (let [ais (a-indices funarg)
@@ -587,7 +586,7 @@
 (defn modify-fact [fid mmp]
   "Modify fact for given fact-id by retracting it and asserting, modified frame"
   ;;(println [:MODIFY-FACT fid mmp])
-  (if-let [funarg (retract-fact fid false)]
+  (if-let [funarg (retract-fact fid)]
     (let [[typ mp] (to-typmap funarg)
           mp2 (merge mp mmp)
           ais (ais-for-funarg (to-funarg typ mp2))]
@@ -675,7 +674,7 @@
   ;;(println [:RETRACT fids indices])
   (let [fids (reverse fids)]
     (doseq [idx indices]
-      (retract-fact (nth fids idx) true))))
+      (retract-fact (nth fids idx)))))
 
 (defn modify [fids idx & svals]
   "Function for the fact modification that can be used in the right hand side of the rule.
