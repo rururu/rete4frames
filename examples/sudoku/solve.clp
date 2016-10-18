@@ -1127,9 +1127,9 @@
 
    (possible (row ?r) (column ?c2&~?c1) (group ?g2) (id ?id2) (value ?v))
 
-   (not (possible (row ?r) (column ?c3&~?c2&~?c1) (value ?v)))
-
    (color-pair ?color1 ?color2)
+
+   (not (possible (row ?r) (column ?c3&~?c2&~?c1) (value ?v)))
 
    ;; Don't use a color previously used for this value.
 
@@ -1177,9 +1177,9 @@
 
    (possible (row ?r2&~?r1) (column ?c) (group ?g2) (id ?id2) (value ?v))
 
-   (not (possible (row ?r3&~?r2&~?r1) (column ?c) (value ?v)))
-
    (color-pair ?color1 ?color2)
+
+   (not (possible (row ?r3&~?r2&~?r1) (column ?c) (value ?v)))
 
    ;; Don't use a color previously used for this value.
 
@@ -1225,11 +1225,11 @@
 
    (possible (row ?r) (column ?c2&~?c1) (group ?g) (id ?id) (value ?v))
 
+   (color-pair ?color1 ?color2)
+
    (not (position-value-color (row ?r) (column ?c2) (value ?v)))
 
    (not (possible (row ?r) (column ?c3&~?c2&~?c1) (value ?v)))
-
-   (color-pair ?color1 ?color2)
 
    =>
 
@@ -1257,11 +1257,11 @@
 
    (possible (row ?r2&~?r1) (column ?c) (group ?g) (id ?id) (value ?v))
 
+   (color-pair ?color1 ?color2)
+
    (not (position-value-color (row ?r2) (column ?c) (value ?v)))
 
    (not (possible (row ?r3&~?r2&~?r1) (column ?c) (value ?v)))
-
-   (color-pair ?color1 ?color2)
 
    =>
 
@@ -1289,11 +1289,11 @@
 
    (possible (column ?c2) (row ?r2) (group ?g) (id ?id2&~?id1) (value ?v))
 
+   (color-pair ?color1 ?color2)
+
    (not (position-value-color (column ?c2) (row ?r2) (value ?v)))
 
    (not (possible (group ?g) (id ?id3&~?id2&~?id1) (value ?v)))
-
-   (color-pair ?color1 ?color2)
 
    =>
 
@@ -1782,25 +1782,25 @@
 
    (possible (value ?v2&~?v1) (group ?g1) (row ?r1) (column ?c1))
 
-   (not (possible (value ~?v2&~?v1) (row ?r1) (column ?c1)))
-
    (possible (value ?v1) (group ?g1) (row ?r1) (column ?c2&~?c1))
 
    (possible (value ?v2) (group ?g1) (row ?r1) (column ?c2))
 
-   (not (possible (value ~?v2&~?v1) (row ?r1) (column ?c2)))
-
    (possible (value ?v1) (group ?g2&~?g1) (row ?r2) (column ?c1))
 
    (possible (value ?v2) (group ?g2) (row ?r2) (column ?c1))
-
-   (not (possible (value ~?v2&~?v1) (group ?g2) (row ?r2) (column ?c1)))
 
    (possible (value ?v1) (id ?id1) (group ?g2) (row ?r2) (column ?c2))
 
    (possible (value ?v2) (id ?id2) (group ?g2) (row ?r2) (column ?c2))
 
    (possible (value ~?v2&~?v1) (group ?g2) (row ?r2) (column ?c2))
+
+   (not (possible (value ~?v2&~?v1) (row ?r1) (column ?c1)))
+
+   (not (possible (value ~?v2&~?v1) (row ?r1) (column ?c2)))
+
+   (not (possible (value ~?v2&~?v1) (group ?g2) (row ?r2) (column ?c1)))
 
    (not (impossible (id ?id1) (value ?v1) (rank ?p)))
 
@@ -1824,25 +1824,25 @@
 
    (possible (value ?v2&~?v1) (group ?g1) (row ?r1) (column ?c1))
 
-   (not (possible (value ~?v2&~?v1) (row ?r1) (column ?c1)))
-
    (possible (value ?v1) (group ?g1) (row ?r2&~?r1) (column ?c1))
 
    (possible (value ?v2) (group ?g1) (row ?r2) (column ?c1))
 
-   (not (possible (value ~?v2&~?v1) (row ?r2) (column ?c1)))
-
    (possible (value ?v1) (group ?g2&~?g1) (row ?r1) (column ?c2))
 
    (possible (value ?v2) (group ?g2) (row ?r1) (column ?c2))
-
-   (not (possible (value ~?v2&~?v1) (group ?g2) (row ?r1) (column ?c2)))
 
    (possible (value ?v1) (id ?id1) (group ?g2) (row ?r2) (column ?c2))
 
    (possible (value ?v2) (id ?id2) (group ?g2) (row ?r2) (column ?c2))
 
    (possible (value ~?v2&~?v1) (group ?g2) (row ?r2) (column ?c2))
+
+   (not (possible (value ~?v2&~?v1) (row ?r1) (column ?c1)))
+
+   (not (possible (value ~?v2&~?v1) (row ?r2) (column ?c1)))
+
+   (not (possible (value ~?v2&~?v1) (group ?g2) (row ?r1) (column ?c2)))
 
    (not (impossible (id ?id1) (value ?v1) (rank ?p)))
 

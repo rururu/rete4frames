@@ -2,6 +2,6 @@
 (load "sudoku.clp")
 (load "solve.clp")
 (load "output-frills.clp")
-(load "puzzles//grid3x3-p17.clp")
+(load "grid3x3-p17.clp")
 (reset)
 (run)

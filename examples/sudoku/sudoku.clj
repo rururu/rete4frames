@@ -820,7 +820,10 @@
      (phase value match)
      (rank value ?p process yes)
      (technique name ?n rank ?p
-                [(= ?n Duplicate-Color) (= ?n Color-Conjugate-Pair) (= ?n Multi-Color-Type-1) (= ?n Multi-Color-Type-2)])
+                [(= ?n Duplicate-Color) 
+                 (= ?n Color-Conjugate-Pair) 
+                 (= ?n Multi-Color-Type-1) 
+                 (= ?n Multi-Color-Type-2)])
      (not color-pair c1 ?c1)
      =>
      (asser color-pair c1 green c2 magenta)
@@ -841,7 +844,10 @@
      (phase value match)
      (rank value ?p process yes)
      (technique name ?n rank ?p
-                [(= ?n Duplicate-Color) (= ?n Color-Conjugate-Pair) (= ?n Multi-Color-Type-1) (= ?n Multi-Color-Type-2)])
+                [(= ?n Duplicate-Color) 
+                 (= ?n Color-Conjugate-Pair) 
+                 (= ?n Multi-Color-Type-1) 
+                 (= ?n Multi-Color-Type-2)])
      (possible row ?r column ?c1 group ?g1 id ?id1 value ?v)
      (possible row ?r column ?c2 group ?g2 id ?id2 value ?v
                (not= ?c2 ?c1))
@@ -873,7 +879,10 @@
      (phase value match)
      (rank value ?p process yes)
      (technique name ?n rank ?p
-                [(= ?n Duplicate-Color) (= ?n Color-Conjugate-Pair) (= ?n Multi-Color-Type-1) (= ?n Multi-Color-Type-2)])
+                [(= ?n Duplicate-Color) 
+                 (= ?n Color-Conjugate-Pair) 
+                 (= ?n Multi-Color-Type-1) 
+                 (= ?n Multi-Color-Type-2)])
      (possible row ?r1 column ?c group ?g1 id ?id1 value ?v)
      (possible row ?r2 column ?c group ?g2 id ?id2 value ?v
                (not= ?r2 ?r1))
@@ -905,7 +914,10 @@
      (phase value match)
      (rank value ?p process yes)
      (technique name ?n rank ?p
-                [(= ?n Duplicate-Color) (= ?n Color-Conjugate-Pair) (= ?n Multi-Color-Type-1) (= ?n Multi-Color-Type-2)])
+                [(= ?n Duplicate-Color) 
+                 (= ?n Color-Conjugate-Pair) 
+                 (= ?n Multi-Color-Type-1) 
+                 (= ?n Multi-Color-Type-2)])
      (position-value-color row ?r column ?c1 value ?v color ?color1)
      (possible row ?r column ?c2 group ?g id ?id value ?v
                (not= ?c2 ?c1))
@@ -927,7 +939,10 @@
      (phase value match)
      (rank value ?p process yes)
      (technique name ?n rank ?p
-                [(= ?n Duplicate-Color) (= ?n Color-Conjugate-Pair) (= ?n Multi-Color-Type-1) (= ?n Multi-Color-Type-2)])
+                [(= ?n Duplicate-Color) 
+                 (= ?n Color-Conjugate-Pair) 
+                 (= ?n Multi-Color-Type-1) 
+                 (= ?n Multi-Color-Type-2)])
      (position-value-color row ?r1 column ?c value ?v color ?color1)
      (possible row ?r2 column ?c group ?g id ?id value ?v
                (not= ?r2 ?r1))
@@ -949,11 +964,14 @@
      (phase value match)
      (rank value ?p process yes)
      (technique name ?n rank ?p
-                [(= ?n Duplicate-Color) (= ?n Color-Conjugate-Pair) (= ?n Multi-Color-Type-1) (= ?n Multi-Color-Type-2)])
-     (color-pair c1 ?color1 c2 ?color2)
+                [(= ?n Duplicate-Color) 
+                 (= ?n Color-Conjugate-Pair) 
+                 (= ?n Multi-Color-Type-1) 
+                 (= ?n Multi-Color-Type-2)])
      (position-value-color column ?c1 row ?r1 group ?g id ?id1 value ?v color ?color1)
      (possible column ?c2 row ?r2 group ?g id ?id2 value ?v
                (not= ?id2 ?id1))
+     (color-pair c1 ?color1 c2 ?color2)
      (not position-value-color column ?c2 row ?r2 value ?v)
      (not possible group ?g id ?id3 value ?v
           ((not= ?id3 ?id2) (not= ?id3 ?id1)))
@@ -1244,7 +1262,7 @@
             value ?v2))
 
    (forced-chain-convergence
-     1
+     0
      (phase value match)
      (rank value ?p process yes)
      (technique name Forced-Chain-Convergence rank ?p)
@@ -1285,8 +1303,6 @@
             start-value ?v2
             row ?r1
             column ?c1
-            group ?gx
-            id ?idx
             value ?v2
             (not= ?v2 ?v1))
      (chain start-row ?r1

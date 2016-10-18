@@ -11,13 +11,13 @@ Manners Benchmark Table
 <tr><td>manners8</td><td>1.316599</td><td>82</td><td>x 61</td></tr>
 <tr><td>manners16</td><td>18</td><td>247</td><td>x 14</td></tr>
 <tr><td>manners32</td><td>272</td><td>1427</td><td>x 5</td></tr>
-<tr><td>manners64</td><td>8939</td><td>9877</td><td>x 1.1</td></tr>
-<tr><td>manners128</td><td>324396</td><td>89408</td><td>x 0.28</td></tr>
+<tr><td>manners64</td><td>8939</td><td>9635</td><td>x 1.1</td></tr>
+<tr><td>manners128</td><td>324396</td><td>88690</td><td>x 0.27</td></tr>
 </table>
 
 Test results obtained on the same hardware and OS 7 october 2016.
 As can be seen from the results, rete4frames initially far behind and then starts to catch up CLIPS.
-On the most difficult test rete4frames more than 3 times faster than CLIPS.
+On the most difficult test rete4frames almost 4 times faster than CLIPS.
 
 [Leiningen](https://github.com/technomancy/leiningen) dependency information:
 

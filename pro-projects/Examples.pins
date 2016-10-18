@@ -1,4 +1,4 @@
-; Sat Oct 15 16:28:14 MSK 2016
+; Tue Oct 18 22:42:10 MSK 2016
 ; 
 ;+ (version "3.5")
 ;+ (build "Build 663")
@@ -379,10 +379,6 @@
 	(rhs "(ru.rules/display (str \"Monkey throws the \" ?chest \" off the \" ?on \" onto the floor.\" ))\n(modify ?monkey holding blank)\n(modify ?thing location ?place \n	on-top-of floor)")
 	(salience 0)
 	(title "Put-chest-on-floor"))
-
-([Examples_Class160000] of  Display
-
-	(source "<html>Monkey jumps off the green-couch onto the floor.<br>Monkey walks to t2-2.<br>Monkey climbs onto the red-couch.<br>Monkey climbs onto the big-pillow.<br>Monkey grabs the red-chest.<br>Monkey throws the red-chest off the big-pillow onto the floor.<br>Monkey jumps off the big-pillow onto the floor.<br>Monkey walks to t1-3.<br>Monkey grabs the red-key.<br>Monkey walks to t2-2 holding the red-key.<br>Monkey opens the red-chest with the red-key revealing the ladder.<br>Monkey drops the red-key.<br>Monkey climbs onto the red-chest.<br>Monkey grabs the ladder.<br>Monkey jumps off the red-chest onto the floor.<br>Monkey walks to t7-7 holding the ladder.<br>Monkey drops the ladder.<br>Monkey climbs onto the ladder.<br>Monkey grabs the blue-chest.<br>Monkey throws the blue-chest off the ladder onto the floor.<br>Monkey jumps off the ladder onto the floor.<br>Monkey grabs the ladder.<br>Monkey walks to t8-8 holding the ladder.<br>Monkey drops the ladder.<br>Monkey climbs onto the ladder.<br>Monkey grabs the green-chest.<br>Monkey throws the green-chest off the ladder onto the floor.<br>Monkey jumps off the ladder onto the floor.<br>Monkey walks to t2-2.<br>Monkey grabs the red-key.<br>Monkey walks to t8-8 holding the red-key.<br>Monkey opens the green-chest with the red-key revealing the blue-key.<br>Monkey drops the red-key.<br>Monkey climbs onto the green-chest.<br>Monkey grabs the blue-key.<br>Monkey jumps off the green-chest onto the floor.<br>Monkey walks to t7-7 holding the blue-key.<br>Monkey opens the blue-chest with the blue-key revealing the bananas.<br>Monkey drops the blue-key.<br>Monkey climbs onto the blue-chest.<br>Monkey grabs the bananas.<br>Monkey eats the bananas.<br><br><br><b>The Patient Treatment Expert System.</b> Date: Sat Oct 15 16:21:43 MSK 2016<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br>Mild fever diagnosed<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br><br><br><b>The Patient Treatment Expert System.</b> Date: Sat Oct 15 16:22:14 MSK 2016<br><br><span style='color:red'>High fever diagnosed</span><br><br>Allergy diagnosed from spots and lack of measles<br><br>Allergy shot prescribed<br><br><br><br><b>The Patient Treatment Expert System.</b> Date: Sat Oct 15 16:22:47 MSK 2016<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br><span style='color:red'>High fever diagnosed</span><br><br>Measles diagnosed<br><br>Penicillin prescribed<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br><br><br><b>The Patient Treatment Expert System.</b> Date: Sat Oct 15 16:24:44 MSK 2016<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br><span style='color:red'>High fever diagnosed</span><br><br>Measles diagnosed<br><br>Penicillin prescribed<br><br>Allergy diagnosed from rash<br><br>Allergy shot prescribed<br><br>"))
 
 ([Examples_Class160001] of  RuleSet
 
