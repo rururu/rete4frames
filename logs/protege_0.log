@@ -438,3 +438,6 @@
 2016.10.18 22:41:14.566 MSK INFO: *** SYSTEM START ***
 2016.10.18 22:41:15.363 MSK WARNING: missing bundle: protege_text -- BundleHelper.<init>()
 2016.10.18 22:41:16.036 MSK INFO: Load time for file:/Users/ru/clojure/rete4frames/pro-projects/Examples.pprj = 0 sec (project) + 0 sec (ui) -- ProjectManager$3.run()
+2016.10.18 22:46:24.385 MSK INFO: *** SYSTEM START ***
+2016.10.18 22:47:16.127 MSK INFO: *** SYSTEM START ***
+2016.10.18 22:47:55.285 MSK INFO: *** SYSTEM START ***
