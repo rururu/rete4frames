@@ -72,28 +72,6 @@ Yet another example: "Real" air traffic control system - client-server ClojureSc
 
 And one more: es-boat - a prototype of an expert system for coastal navigation. It uses [Protege-3.5 ontology editor] (http://protege.stanford.edu/) as a knowledge representation system and server-side GUI, [OpenStreetMap] (https://wiki.openstreetmap.org/wiki/API) API, Leaflet JavaScript library, [Cesium] (https://cesiumjs.org/) WebGL virtual globe and map engine, [GeoNames] (http://www.geonames.org/) geographical database and Wikipedia. Link to this prpject: https://github.com/rururu/es-boat
 
-Integrated Development Environment
-----
-
-IDE based on [Protege-3.5 ontology editor] (http://protege.stanford.edu):
-
-Simple start IDE:
-```clj
-$ cd <..>/rete4frames
-$ lein run
-```
-Start IDE for developers
-```clj
-$ cd <..>/rete4frames
-$ lein repl
-...
-rete.protege=> (-main)
-```
-
-![screenshot](screenshot.jpg)
-
-3.30 minute IDE [screencast] (https://www.youtube.com/watch?v=2Q9Y_jUDF8U).
-
 How to include Rete for Frames into your Java programs see example [Eclipse project] (https://github.com/rururu/rete4frames/blob/master/Rete4framesEclipseTest/).
 
 For further information see [Documentation] (https://github.com/rururu/rete4frames/blob/master/doc/intro.md)

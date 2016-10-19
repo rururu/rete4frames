@@ -16,7 +16,7 @@
   <scm>
     <connection>scm:git:git://github.com/rururu/rete4frames.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/rururu/rete4frames.git</developerConnection>
-    <tag>5b92b54606d54dd125f65b6af7278c97d9b6a0e5
+    <tag>d2416b958e9855942484915d1aac572bd60a8438
 </tag>
     <url>https://github.com/rururu/rete4frames</url>
   </scm>
@@ -58,57 +58,12 @@
         <enabled>true</enabled>
       </releases>
     </repository>
-    <repository>
-      <id>local</id>
-      <url>file:/Users/ru/clojure/rete4frames/repo/</url>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </repository>
   </repositories>
   <dependencies>
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>clojure</artifactId>
       <version>1.8.0</version>
-    </dependency>
-    <dependency>
-      <groupId>protege</groupId>
-      <artifactId>protege</artifactId>
-      <version>3.5.0</version>
-    </dependency>
-    <dependency>
-      <groupId>protege</groupId>
-      <artifactId>standard-extensions</artifactId>
-      <version>3.5.0</version>
-    </dependency>
-    <dependency>
-      <groupId>protege</groupId>
-      <artifactId>looks</artifactId>
-      <version>3.5.0</version>
-    </dependency>
-    <dependency>
-      <groupId>protege</groupId>
-      <artifactId>unicode_panel</artifactId>
-      <version>3.5.0</version>
-    </dependency>
-    <dependency>
-      <groupId>protege</groupId>
-      <artifactId>JGo</artifactId>
-      <version>3.5.0</version>
-    </dependency>
-    <dependency>
-      <groupId>protege</groupId>
-      <artifactId>JGoLayout</artifactId>
-      <version>3.5.0</version>
-    </dependency>
-    <dependency>
-      <groupId>protege</groupId>
-      <artifactId>ClojureTab</artifactId>
-      <version>1.5.0</version>
     </dependency>
   </dependencies>
 </project>
