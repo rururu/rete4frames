@@ -74,6 +74,11 @@ And one more: es-boat - a prototype of an expert system for coastal navigation. 
 
 How to include Rete for Frames into your Java programs see example [Eclipse project] (https://github.com/rururu/rete4frames/blob/master/Rete4framesEclipseTest/).
 
+Integrated Development Environment
+----
+
+IDE based on [Protege-3.5 ontology editor] (http://protege.stanford.edu/) is in a separate repository [r4f-pro] (https://github.com/rururu/r4f-pro).
+
 For further information see [Documentation] (https://github.com/rururu/rete4frames/blob/master/doc/intro.md)
 
 To get this functionality in ClojureScript see [cljs-rete4f] (https://github.com/rururu/cljs-rete4f)
