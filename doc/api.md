@@ -63,7 +63,7 @@ Switches on/off tracing.
 ```
 Fires rules 1 time (N times if supplied).
 
-### 8. Functions run-synch/run-asynch ###
+### 8. Functions run-with-modes ###
 ```clj
 (run-with-mode <mode> <truff>)
 (run-with-mode <mode> <trufs> <facts>)
@@ -185,6 +185,14 @@ Examples:
 ```
 Returns a fact,
 - fact-id - identifier (integer-number) of a fact as frame.
+
+
+### 23. Function problem-solved ###
+```clj
+(problem-solved)
+```
+Function for clearing conflict set that can be used in the right hand side of the rule. Stops the expert system.
+
 
 While embedding Rete for Frames into your code you can use other functions. See [source code] (https://github.com/rururu/rete4frames/blob/master/src/rete/core.clj).
 
