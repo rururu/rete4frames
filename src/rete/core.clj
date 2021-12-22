@@ -652,6 +652,16 @@
         (print "FIRE:" pnam (get ctx :?fids))))
     (apply func (var-vals ctx vars))))
 
+(defn try-fire-resolved [[prod ctx] exfunc]
+  "Try fire resolved production with ctx
+   and catch exception."
+  ;;(println [:FIRE-RESOLVED prod ctx])
+  (let [[pnam sal vars func] prod]
+    (try
+      (apply func (var-vals ctx vars))
+      (catch Exception e
+        (exfunc prod ctx e)))))
+
 (defn fire
   "Fire!"
   ([]
@@ -661,6 +671,16 @@
     (dotimes [i n]
       (if-let [reso (resolve-conf-set (seq @CFSET))]
         (fire-resolved reso)))))
+
+(defn try-fire
+  "Try fire!"
+  ([exfunc]
+   (while (not (every? empty? (vals @CFSET)))
+     (try-fire 1 exfunc)))
+  ([n exfunc]
+    (dotimes [i n]
+      (if-let [reso (resolve-conf-set (seq @CFSET))]
+        (try-fire-resolved reso exfunc)))))
 
 (defn asser
   "Function for the facts assertion that can be used in the right hand side of the rule.

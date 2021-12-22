@@ -110,39 +110,48 @@ During modification the old fact is deleted and a new fact created with the chan
 ```
 Fire a number of active rules. If the number is ommited fire till the very end.
 
-### 14. Function reset ###
+### 14. Function try-fire ###
+```clj
+(try-fire <number> <exception-function>)
+(try-fire <exception-function>)
+```
+Try fire a number of active rules. If the number is ommited try fire till the very end.
+Catch an exception if arraised and handle with a provided exception function.
+The exception function has a form: (<exception-function> <production> <context> <exception>)
+
+### 15. Function reset ###
 ```clj
 (reset)
 ```
 Clear and initialize the working memory.
 
-### 15. Function strategy-depth ###
+### 16. Function strategy-depth ###
 ```clj
 (strategy-depth)
 ```
 Set conflict resolution strategy to depth.
 
-### 16. Function strategy-breadth ###
+### 17. Function strategy-breadth ###
 ```clj
 (strategy-breadth)
 ```
 Set conflict resolution strategy to breadth.
 
-### 17. Function run-loaded-facts ###
+### 18. Function run-loaded-facts ###
 ```clj
 (run-loaded-facts <path>)
 ```
 Load facts from path, assert all of them into working memory and run,
 - path - string representing a path to a file.
 
-### 18. Function only-load-facts ###
+### 19. Function only-load-facts ###
 ```clj
 (only-load-facts <path>)
 ```
 Load facts from path and assert all of them into working memory,
 - path - string representing a path to a file.
 
-### 19. Function save-facts ###
+### 20. Function save-facts ###
 ```clj
 (save-facts <path>)
 (save-facts <types> <path>)
@@ -151,7 +160,7 @@ Save all facts or facts of types to a file on a path in a format suitable to loa
 - path - string representing a path to a file,
 - types - collection of types of facts.
 
-### 20. Function slot-value ###
+### 21. Function slot-value ###
 ```clj
 (slot-value <slot> <fact>)
 ```
@@ -159,7 +168,7 @@ Returns value of a slot of a fact,
 - slot - symbol representing a slot of a fact,
 - fact - list representing a fact (as of item of result of the function fact-list).
 
-### 21. Function facts-with-slot-value ###
+### 22. Function facts-with-slot-value ###
 ```clj
 (facts-with-slot-value <slot> <function> <value>)
 (facts-with-slot-value <type> <slot> <function> <value>)
@@ -179,7 +188,7 @@ Examples:
 (facts-with-slot-value 'BloodPressure 'systolic > 140)
 (facts-with-slot-value 'BloodPressure 'systolic > 140 (facts-with-slot-value 'BloodPressure 'diastolic > 90))
 ```
-### 22. Function frame-by-id ###
+### 23. Function frame-by-id ###
 ```clj
 (frame-by-id <fact-id>)
 ```
@@ -187,7 +196,7 @@ Returns a fact,
 - fact-id - identifier (integer-number) of a fact as frame.
 
 
-### 23. Function problem-solved ###
+### 24. Function problem-solved ###
 ```clj
 (problem-solved)
 ```
