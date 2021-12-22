@@ -22,7 +22,7 @@ On the most difficult test rete4frames almost 4 times faster than CLIPS.
 [Leiningen](https://github.com/technomancy/leiningen) dependency information:
 
 ```clj
- [rete "5.3.0-SNAPSHOT"]
+ [rete "5.3.1-SNAPSHOT"]
 ```
 [Maven](http://maven.apache.org/) dependency information:
 
@@ -30,7 +30,7 @@ On the most difficult test rete4frames almost 4 times faster than CLIPS.
 <dependency>
   <groupId>rete</groupId>
   <artifactId>rete</artifactId>
-  <version>5.3.0-SNAPSHOT</version>
+  <version>5.3.1-SNAPSHOT</version>
 </dependency>
 ```
 To get the Manners Benchmark results run in REPL:
@@ -86,7 +86,7 @@ To get this functionality in ClojureScript see [cljs-rete4f] (https://github.com
 Copyright and license
 ----
 
-Copyright © 2014-2016 Ruslan Sorokin.
+Copyright © 2014-2021 Ruslan Sorokin.
 
 Licensed under the EPL (see the file epl.html).
 [License of Protege-3.5] (https://github.com/rururu/rete4frames/blob/master/LICENSE_PROTEGE)
